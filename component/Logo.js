@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Image, Pressable } from "react-native";
 import Buttons from "./Buttons";
-import { useNavigation } from "@react-navigation/native";
 
 const Logo = ({center}) => {
-  const navigation = useNavigation();
 
   const logoImgStyle = center
   ? { marginLeft: "auto", marginRight: "auto", marginBottom: "auto" }
   : {}; 
 
   return (
-    <Pressable style={[logoImgStyle]} onPress={() => navigation.navigate("Login")}>
+    <View style={[logoImgStyle]}>
       <Image
         source={{ uri: "https://cloftware.com/images/clof.png" }}
         style={styles.logoImg}
       />
-    </Pressable>
+    </View>
   );
 };
 

@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import Links from "../../component/Links";
-import { useNavigation } from "@react-navigation/native";
 import Logo from "../../component/Logo";
 import { fourColorBlack, secondaryColor, secondaryColorBlack } from "../../component/stylesheet";
 
 const WelcomeFooter = ({logoHide}) => {
-  const navigation = useNavigation();
   return (
       <View style={styles.welcomeFooter}>
         {!logoHide && <View style={styles.poweredBy}>
@@ -19,12 +17,12 @@ const WelcomeFooter = ({logoHide}) => {
           By using Our App, you agree and concept to our: 
           <Links 
           title={"Terms and Condition"}
-          onPress={() => navigation.navigate("Forgotpassword")}
+          onPress={() => {}}
           style={styles.link}
           />
           <Links 
             title={"Privacy Plocy"}
-            onPress={() => navigation.navigate("Forgotpassword")}
+            onPress={() => {}}
             style={styles.link}
             />
         </Text>
