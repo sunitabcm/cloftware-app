@@ -14,9 +14,8 @@ const FixedFooter = () => {
 	const pathname = usePathname();
 	useEffect(() => {
 		loadAuthToken().then(authToken => {
-			store.dispatch(setAuthToken(authToken));
+			dispatch(setAuthToken(authToken));
 		});
-
 	}, []);
 	const handleClose = () => {
 		setOpenMenu(false)
@@ -50,7 +49,7 @@ const FixedFooter = () => {
 			{openMenu === true &&
 				<BlurViewWrapper onClose={handleClose} isVisible={openMenu} outsideClick={true}>
 					<View className='mt-auto pl-2.5 mb-8 mx-auto flex flex-col justify-center items-center'>
-						<Pressable onPress={()=> {router.push('/dashboard'); handleClose()}} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
+						<Pressable onPress={() => { router.push('/dashboard'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 							<Image
 								source={require("../../assets/fees_icon.svg")}
 								style={{ width: 25, height: 25 }}
@@ -58,7 +57,7 @@ const FixedFooter = () => {
 							/>
 							<Text>Pay Fee</Text>
 						</Pressable>
-						<Pressable onPress={()=> {router.push('/requestLeave'); handleClose()}} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
+						<Pressable onPress={() => { router.push('/requestLeave'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 							<Image
 								source={require("../../assets/attendance_icon.svg")}
 								style={{ width: 25, height: 25 }}

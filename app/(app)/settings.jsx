@@ -5,16 +5,25 @@ import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteAuthToken } from '../../authStorage';
 import { setAuthToken } from '../../store/slices/authSlice';
+import { logout } from '../../ApiCalls';
 export default function Settings() {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.authToken)
 
-  const logout = () => {
+  const dispatch = useDispatch();
+  const fetchData = async () => {
+    try {
+      const response = await logout(authToken?.token);
+    } catch (error) {
+    }
+  };
+  const logoutFunction = () => {
+    fetchData()
+    dispatch(setAuthToken(null));
     deleteAuthToken()
     setTimeout(() => {
       router.replace('/validateOtp')
     }, 2000);
-    dispatch(setAuthToken(null));
   }
   return (
     <ScrollView className='bg-body'>
@@ -36,7 +45,7 @@ export default function Settings() {
             <View className='w-[40px] flex items-center'><AppIcon type='AntDesign' name='customerservice' size={28} color={'#535353'} /></View>
             <Text className='font-bold text-body ml-5 text-base'>Support</Text>
           </Pressable>
-          <Pressable onPress={logout} className='flex flex-row items-center'>
+          <Pressable onPress={logoutFunction} className='flex flex-row items-center'>
             <View className='w-[40px] flex items-center'><AppIcon type='AntDesign' name='logout' size={28} color={'#535353'} /></View>
             <Text className='font-bold text-body ml-5 text-base'>Logout</Text>
           </Pressable>

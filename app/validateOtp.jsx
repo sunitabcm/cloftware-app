@@ -80,10 +80,10 @@ const Otp = () => {
         toast.show(userLogin?.message, { type: "success" })
         router.push('/dashboard')
       } else {
-        toast.show(userLogin?.message, { type: "danger" })
+        // toast.show(userLogin?.message, { type: "danger" })
       }
     } catch (error) {
-      toast.show('An error occured, Please try again', { type: "danger" })
+      // toast.show('An error occured, Please try again', { type: "danger" })
       router.push('/')
     }
   };

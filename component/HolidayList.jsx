@@ -4,7 +4,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
 import { SmallPopup } from './GlobalComps/SmallPopup';
-const HolidayList = ({ data }) => {
+const HolidayList = ({ data, fetchData }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY'));
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,6 +30,7 @@ const HolidayList = ({ data }) => {
   const handleConfirm = (date) => {
     hideDatePicker();
     setLeaveDate(dayjs(date).format('YYYY'));
+    fetchData()
   };
 
   const organizeDataByMonth = () => {

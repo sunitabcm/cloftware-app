@@ -5,11 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
 import HolidayList from '../../component/HolidayList';
 import { useToast } from 'react-native-toast-notifications';
-
+import axios from 'axios';
 export default function Holidays() {
   const authToken = useSelector((state) => state.auth.authToken)
   const [showCalender, setShowCalender] = useState(false);
-  const [currentYear, setCurrentYear] = useState(dayjs().year());
   const toast = useToast();
 
   const [apiData, setApiData] = useState({
@@ -17,34 +16,34 @@ export default function Holidays() {
     "code": 200,
     "message": "Data found successfully",
     "body": [
-      {
-        "holiday_id": 2,
-        "year_id": 1,
-        "school_id": 1,
-        "title": "Diwali 2023 ",
-        "description": "jsdjffddfdfdfdf",
-        "date": "2023-12-21",
-        "status": "Active",
-        "created_by": 14,
-        "updated_by": 14,
-        "created_at": "2023-11-26T10:04:01.000Z",
-        "updated_at": "2023-12-21T11:42:53.000Z"
-      },
-      {
-        "holiday_id": 4,
-        "year_id": 1,
-        "school_id": 1,
-        "title": "Holi 2023 ",
-        "description": "jsdjffddfdfdfdf",
-        "date": "2023-12-21",
-        "status": "Active",
-        "created_by": 14,
-        "updated_by": 14,
-        "created_at": "2023-11-26T10:04:01.000Z",
-        "updated_at": "2023-12-21T11:42:53.000Z"
-      }
+        {
+            "holiday_id": 2,
+            "year_id": 1,
+            "school_id": 1,
+            "title": "Diwali 2023 ",
+            "description": "jsdjffddfdfdfdf",
+            "date": "2023-12-21",
+            "status": "Active",
+            "created_by": 14,
+            "updated_by": 14,
+            "created_at": "2023-11-26T10:04:01.000Z",
+            "updated_at": "2023-12-21T11:42:53.000Z"
+        },
+        {
+            "holiday_id": 4,
+            "year_id": 1,
+            "school_id": 1,
+            "title": "Holi 2023 ",
+            "description": "jsdjffddfdfdfdf",
+            "date": "2023-12-21",
+            "status": "Active",
+            "created_by": 14,
+            "updated_by": 14,
+            "created_at": "2023-11-26T10:04:01.000Z",
+            "updated_at": "2023-12-21T11:42:53.000Z"
+        }
     ]
-  });
+});
 
   const router = useRouter();
   useEffect(() => {
@@ -60,7 +59,6 @@ export default function Holidays() {
   const fetchData = async () => {
     try {
       const response = await getSchoolHolidayList(authToken?.token, authToken?.year_id);
-      console.log(response)
 
       if (response) {
         toast.show(response?.message, { type: "success" })
@@ -73,15 +71,11 @@ export default function Holidays() {
     }
   };
 
-
   return (
     <ScrollView className='h-full bg-light p-5'>
       <View>
-        {showCalender && Object.keys(apiData)?.length > 0 ?
-          <>
-            {/* <YearChanger onYearChange={handleYearChange} /> */}
-            <HolidayList data={apiData?.body} />
-          </>
+        {showCalender && apiData && Object.values(apiData?.body).length > 0 ?
+            <HolidayList data={apiData?.body} fetchData={fetchData} />
           :
           <Text>Loading</Text>
         }

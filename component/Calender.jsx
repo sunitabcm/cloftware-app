@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import { stylesGlobal } from '../styles/global';
 import GlobalInputs from './GlobalComps/GlobalInputs';
 import BtnGlobal from './GlobalComps/BtnGlobal';
+import { ActivityIndicator } from 'react-native-web';
 const MyCalendar = () => {
   const router = useRouter()
   const [selectedYear, setSelectedYear] = useState(dayjs().format('YYYY'));
@@ -17,37 +18,7 @@ const MyCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const authToken = useSelector((state) => state.auth.authToken)
-  const [apiData, setApiData] = useState({
-    "success": true,
-    "code": 200,
-    "message": "Data found successfully",
-    "body": {
-      "year": "2023",
-      "month": "November",
-      "attendance_percentage": "6.67%",
-      "attended": 2,
-      "absent": 1,
-      "leave": 1,
-      "attendance": [
-        {
-          "date": "2023-11-20",
-          "status": "Present"
-        },
-        {
-          "date": "2023-11-23",
-          "status": "Present"
-        },
-        {
-          "date": "2023-11-09",
-          "status": "Absent"
-        },
-        {
-          "date": "2023-11-09",
-          "status": "Leave"
-        }
-      ]
-    }
-  });
+  const [apiData, setApiData] = useState(null);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -89,8 +60,8 @@ const MyCalendar = () => {
   const renderCalendar = () => {
     const markedDates = {};
 
-    if (apiData) {
-      apiData.body.attendance.forEach((attendance) => {
+    if (apiData && Object.values(apiData).length > 0) {
+      apiData?.attendance.forEach((attendance) => {
         markedDates[attendance.date] = {
           selected: true,
           selectedColor:
@@ -149,52 +120,66 @@ const MyCalendar = () => {
           isDisabled={selectedMonth === '' || selectedYear === ''}
         />
       </View>
-
-      {renderCalendar()}
-      <View className='mt-5 border-t border-lightgrey p-5'>
-        <View className='flex flex-row items-center justify-between mb-5'>
-          <Text style={stylesGlobal.title}>Overview</Text>
-          <Text className='text-secondary text-base'>view activity</Text>
-        </View>
-        <View style={stylesGlobal.flexCenter} className=''>
-          <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'center', }]}>
-            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-success'></View>
-              <View className='flex flex-col'>
-                <Text className='text-body text-base'>Present</Text>
-                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.attended || 0 : 0}</Text>
+      {apiData && Object.values(apiData).length > 0 ?
+        <>
+          {renderCalendar()}
+          <View className='mt-5 border-t border-lightgrey p-5'>
+            <View className='flex flex-row items-center justify-between mb-5'>
+              <Text style={stylesGlobal.title}>Overview</Text>
+              <Text className='text-secondary text-base'>view activity</Text>
+            </View>
+            <View style={stylesGlobal.flexCenter} className=''>
+              <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'center', }]}>
+                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-success'></View>
+                  <View className='flex flex-col'>
+                    <Text className='text-body text-base'>Present</Text>
+                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.attended || 0 : 0}</Text>
+                  </View>
+                </View>
+                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-error'></View>
+                  <View className='flex flex-col'>
+                    <Text className='text-body text-base'>Absent</Text>
+                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.absent || 0 : 0}</Text>
+                  </View>
+                </View>
+                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-body'></View>
+                  <View className='flex flex-col'>
+                    <Text className='text-body text-base'>Leave</Text>
+                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.leave || 0 : 0}</Text>
+                  </View>
+                </View>
+                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-gold'></View>
+                  <View className='flex flex-col'>
+                    <Text className='text-body text-base'>Holiday</Text>
+                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.holidays || 0 : 0}</Text>
+                  </View>
+                </View>
               </View>
             </View>
-            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-error'></View>
-              <View className='flex flex-col'>
-                <Text className='text-body text-base'>Absent</Text>
-                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.absent || 0 : 0}</Text>
-              </View>
-            </View>
-            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-body'></View>
-              <View className='flex flex-col'>
-                <Text className='text-body text-base'>Leave</Text>
-                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.leave || 0 : 0}</Text>
-              </View>
-            </View>
-            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-gold'></View>
-              <View className='flex flex-col'>
-                <Text className='text-body text-base'>Holiday</Text>
-                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.holidays || 0 : 0}</Text>
-              </View>
-            </View>
+            <BtnGlobal
+              styleClassName="updatedbutton"
+              title="Request Leave"
+              onPress={() => router.push('/requestLeave')}
+              classNames={'w-full mt-5'}
+            />
           </View>
+        </>
+        :
+        <View className='flex justify-center items-center'>
+          {apiData === null ?
+            <Text>Please Search to see results</Text>
+            :
+            apiData && Object.values(apiData).length === 0 ?
+            <Text>No Results found</Text>
+            :
+            <Text>Please Search to see results</Text>
+          }
         </View>
-        <BtnGlobal
-          styleClassName="updatedbutton"
-          title="Request Leave"
-          onPress={() => router.push('/requestLeave')}
-          classNames={'w-full mt-5'}
-        />
-      </View>
+      }
     </View>
   );
 };

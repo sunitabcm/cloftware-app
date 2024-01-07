@@ -23,7 +23,7 @@ export default function Events() {
             "school_id": 1,
             "title": "Cricket Champiships",
             "description": "football",
-            "date": "2023-11-29T00:00:00.000Z",
+            "date": "2023-11-29",
             "event_status": "Active",
             "created_by": 1,
             "updated_by": null,
@@ -36,7 +36,7 @@ export default function Events() {
             "school_id": 1,
             "title": "Football Champiships",
             "description": "football",
-            "date": "2023-11-28T00:00:00.000Z",
+            "date": "2023-11-28",
             "event_status": "Active",
             "created_by": 1,
             "updated_by": null,
@@ -60,8 +60,6 @@ export default function Events() {
   const fetchData = async () => {
     try {
       const response = await getSchoolHolidayList(authToken?.token, authToken?.year_id);
-      console.log(response)
-
       if (response) {
         toast.show(response?.message, { type: "success" })
         setApiData(response)
@@ -77,10 +75,10 @@ export default function Events() {
   return (
     <ScrollView className='h-full bg-light p-5'>
       <View>
-        {showCalender && Object.keys(apiData)?.length > 0 ?
+        {showCalender && apiData && Object.values(apiData?.body).length > 0 ?
           <>
             {/* <YearChanger onYearChange={handleYearChange} /> */}
-            <HolidayList data={apiData?.body} />
+            <HolidayList data={apiData?.body} fetchData={fetchData}/>
           </>
           :
           <Text>Loading</Text>

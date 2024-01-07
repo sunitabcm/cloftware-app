@@ -179,7 +179,7 @@ export async function getSchoolEventList(accessToken) {
             },
             {
                 headers: {
-                    Authorization: accessToken,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
                 },
             }
@@ -204,7 +204,7 @@ export async function getSchoolHolidayList(accessToken, year, limit = '5', offse
             year_id: year,
         }, {
             headers: {
-                // 'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -228,7 +228,7 @@ export async function getStudentProfile(accessToken, year, limit = '5', offset =
             year_id: year,
         }, {
             headers: {
-                'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -252,7 +252,7 @@ export async function changePassword(accessToken) {
             'confirm_password': '12345678',
         }, {
             headers: {
-                'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
             },
         });
         if (response.status === 200 || response.status === 201) {
@@ -271,7 +271,7 @@ export async function logout(accessToken) {
     try {
         const response = await axios.get(`${baseURL}/logout`, {
             headers: {
-                'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
             },
         });
         if (response.status === 200 || response.status === 201) {
@@ -292,7 +292,7 @@ export async function getNoticeBoardList(accessToken) {
             'school_id': '30',
         }, {
             headers: {
-                'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -320,7 +320,7 @@ export async function addEditApplyLeave(accessToken, class_id, section_id, year_
             'reason': reason,
         }, {
             headers: {
-                'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -345,7 +345,7 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
             'month': month,
         }, {
             headers: {
-                'Authorization': accessToken,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -359,82 +359,3 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
         throw error;
     }
 }
-
-
-//with formdata 
-
-
-// export async function getNoticeBoardList(accessToken, school_id) {
-//     const formData = new FormData();
-//     formData.append('school_id', '1');
-//     try {
-//         const response = await axios.post(`${baseURL}/notice/notice_board_list`, formData, {
-//             headers: {
-//                 'Authorization': accessToken,
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-//         if (response.status === 200 || response.status === 201) {
-//             return response.data;
-//         } else {
-//             return response.data;
-//         }
-//     } catch (error) {
-//         console.error('Error getting notice board list:', error);
-//         throw error;
-//     }
-// }
-
-// // Function to add/edit apply leave
-// export async function addEditApplyLeave(accessToken, class_id, section_id, year_id, reason, leave_date, student_id) {
-//     const formData = new FormData();
-//     formData.append('leave_date', leave_date);
-//     formData.append('status', 'Leave');
-//     formData.append('student_id', '2');
-//     formData.append('class_id', class_id);
-//     formData.append('section_id', section_id);
-//     formData.append('year_id', year_id);
-//     formData.append('reason', reason);
-//     try {
-//         const response = await axios.post(`${baseURL}/leave/add_edit_apply_leave`, formData, {
-//             headers: {
-//                 'Authorization': accessToken,
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-//         if (response.status === 200 || response.status === 201) {
-//             return response.data;
-//         } else {
-//             return response.data;
-//         }
-//     } catch (error) {
-//         console.error('Error adding/editing leave:', error);
-//         throw error;
-//     }
-// }
-
-// // Function to get student attendance calendar
-// export async function getStudentAttendanceCalendar(accessToken, student_id, school_id, year, month) {
-//     const formData = new FormData();
-//     formData.append('student_id', '1');
-//     formData.append('school_id', school_id);
-//     formData.append('year', year);
-//     formData.append('month', month);
-//     try {
-
-//         const response = await axios.post(`${baseURL}/calender_student_attendance`, formData, {
-//             headers: {
-//                 'Authorization': accessToken,
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-//         if (response.status === 200 || response.status === 201) {
-//             return response.data;
-//         } else {
-//             return response.data;
-//         }
-//     } catch (error) {
-//         console.error('Error getting student attendance calendar:', error);
-//         throw error;
-//     }
-// }

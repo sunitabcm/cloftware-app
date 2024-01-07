@@ -79,7 +79,7 @@ const SlideShow = () => {
             classNames={'w-full'}
           />
         </View>
-        <View style={styles.below_logo}>
+        <View style={styles.below_logo} className='mx-auto'>
           <Image
             source={require("../assets/Frame-64.png")}
             contentFit="contain"
