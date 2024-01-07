@@ -25,15 +25,15 @@ const BlurViewWrapper = ({ isVisible, onClose, outsideClick, children }) => {
 
     return (
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
         >
             <TouchableWithoutFeedback style={{ flex: 1 }} onPress={handleCloseOut}>
                 <BlurView
                     style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}
-                    intensity={70}
-                    tint="dark"
+                    intensity={5}
+                    tint="light"
                 >
                     <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }} className='w-full relative'>
                         {children}

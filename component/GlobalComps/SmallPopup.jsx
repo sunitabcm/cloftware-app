@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import AppIcon from './AppIcon';
+import BtnGlobal from './BtnGlobal';
 
 export const SmallPopup = ({ isVisible, closeModal, children }) => {
     return (
@@ -12,14 +13,21 @@ export const SmallPopup = ({ isVisible, closeModal, children }) => {
             onRequestClose={closeModal}
         >
             <View style={styles.modalContainer}>
-                <BlurView  intensity={20} tint="dark" style={[StyleSheet.absoluteFill, styles.blurContainer]} >
+                <BlurView intensity={20} tint="dark" style={[StyleSheet.absoluteFill, styles.blurContainer]} >
                     <View style={styles.modalContent}>
-                        <View style={{marginTop: 15}}>
-                        {children}
+                        <View style={{ marginTop: 15 }}>
+                            {children}
                         </View>
-                        <TouchableOpacity onPress={closeModal} style={{position: 'absolute', top: 10, right: 10}}>
-                            <AppIcon type='Entypo' name='cross' size={30} color={'#000'}/>
-                        </TouchableOpacity>
+                        <BtnGlobal
+                            styleClassName="closeBtn"
+                            icon={true}
+                            onPress={closeModal}
+                            classNames={'absolute right-3 top-4'}
+                            iconName={'close'}
+                            iconType={'AntDesign'}
+                            iconSize={15}
+                            iconColor={'#2A2D32'}
+                        />
                     </View>
                 </BlurView>
             </View>

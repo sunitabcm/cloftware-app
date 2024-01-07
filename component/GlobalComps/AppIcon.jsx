@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 const iconMap = {
   Ionicons,
   AntDesign,
@@ -26,6 +27,7 @@ const iconMap = {
   Octicons,
   Foundation,
   Fontisto,
+  EvilIcons,
 };
 
 const AppIcon = ({ type, name, size, color }) => {

@@ -9,10 +9,8 @@ import {
 } from "react-native";
 import Buttons from "../component/Buttons";
 import InputeFields from "../component/InputeFields";
-import Links from "../component/Links";
-import WelcomeSchool from "../pageComponent/welcome/WelcomeSchool";
-import WelcomeFooter from "../pageComponent/welcome/WelcomeFooter";
-import Heading from "../component/Heading";
+import BtnGlobal from "../component/GlobalComps/BtnGlobal";
+import SchoolIcon from "../component/GlobalComps/SchoolIcon";
 import Messages from "../component/Messages";
 import { thirdColorBlack, fiveColorBlack } from "../component/stylesheet";
 import { stylesGlobal } from "../styles/global";
@@ -81,7 +79,7 @@ const ForgotPassword = () => {
     const verifyForgotPassOtp = async (email, otp) => {
 
         try {
-            const response = await verifyOtpPasswordReset(email , otp);
+            const response = await verifyOtpPasswordReset(email, otp);
 
             if (response) {
                 toast.show(response?.message, { type: "success" })
@@ -196,78 +194,92 @@ const ForgotPassword = () => {
     };
 
     return (
-        <ScrollView contentContainerStyle={{ backgroundColor: fiveColorBlack, flex: 1 }}>
-            <View style={styles.container}>
-                <View style={styles.backarrow}>
-                    <Links
-                        back
-                        onPress={() => router.push("/login")}
-                    />
-                </View>
-                <View style={styles.handlerBox}>
-                    <WelcomeSchool />
-                    <View style={styles.formFields}>
-                        <View style={styles.textcontainer}>
-                            <Text style={styles.title}>Forgot Password?</Text>
-                        </View>
-                        <View style={styles.inputFields}>
-                            <InputeFields
-                                label={"Email/Username"}
-                                placeholder={"Enter Email"}
-                                value={email}
-                                disabled={!showEmailButton}
-                                onChangeText={(e) => chnageemail(e)}
-                                ifEmailNumber
-                            />
-                            {err && <Messages title="Invalid Email" />}
-                        </View>
-                        {showEmailButton && (
-                            <View style={styles.button_2}>
-                                <Buttons title="Send OTP" onPress={handleEmailSubmit} disabled={buttondisabled} />
-                            </View>
-                        )}
-
-                        {showOtpButton && (
-                            <>
-                                <InputeFields
-                                    label={"Enter OTP"}
-                                    placeholder={"OTP"}
-                                    onChangeText={(e) => setOtp(e)}
-                                    value={otp}
-                                />
-                                <View style={styles.button_2}>
-                                    <Buttons title="Verify OTP" onPress={handleOtpSubmit} disabled={otp?.length === 0} />
-                                </View>
-                            </>
-                        )}
-
-                        {showPasswordFields && (
-                            <>
-                                <InputeFields
-                                    label={"Password"}
-                                    placeholder={"Enter Password"}
-                                    value={password}
-                                    secureTextEntry
-                                    onChangeText={(e) => changepasswd(e)}
-                                    ifEye
-                                />
-                                {passwderr && <Messages title="Invalid Password" />}
-                                <InputeFields
-                                    label={"Confirm Password"}
-                                    placeholder={"Confirm Password"}
-                                    value={confirmPassword}
-                                    secureTextEntry
-                                    onChangeText={(e) => changeConfirmPasswd(e)}
-                                    ifEye
-                                />
-                                {!confirmPasswordValid && <Messages title="Passwords do not match" />}
-                                <View style={styles.button_2}>
-                                    <Buttons title="Reset Password" onPress={handlePasswordSubmit} disabled={buttondisabledOtp} />
-                                </View>
-                            </>
-                        )}
-
+        <ScrollView className='bg-light h-full p-5'>
+            <View>
+                <BtnGlobal
+                    styleClassName="closeBtn"
+                    icon={true}
+                    onPress={() => router.push('/login')}
+                    classNames={'mb-5'}
+                    iconName={'arrowleft'}
+                    iconType={'AntDesign'}
+                    iconSize={22}
+                    iconColor={'#2A2D32'}
+                />
+                <SchoolIcon styleSize={60} />
+                <View style={styles.formFields}>
+                    <View style={styles.textcontainer}>
+                        <Text style={styles.title}>Forgot Password?</Text>
                     </View>
+                    <View style={styles.inputFields}>
+                        <InputeFields
+                            label={"Email/Username"}
+                            placeholder={"Enter Email"}
+                            value={email}
+                            disabled={!showEmailButton}
+                            onChangeText={(e) => chnageemail(e)}
+                            ifEmailNumber
+                        />
+                        {err && <Messages title="Invalid Email" />}
+                    </View>
+                    {showEmailButton && (
+                        <BtnGlobal
+                            styleClassName="button"
+                            title="Send Otp"
+                            onPress={handleEmailSubmit}
+                            classNames={'w-full'}
+                            isDisabled={buttondisabled}
+                        />
+                    )}
+
+                    {showOtpButton && (
+                        <>
+                            <InputeFields
+                                label={"Enter OTP"}
+                                placeholder={"OTP"}
+                                onChangeText={(e) => setOtp(e)}
+                                value={otp}
+                            />
+                            <BtnGlobal
+                                styleClassName="button"
+                                title="Verify Otp"
+                                onPress={handleOtpSubmit}
+                                classNames={'w-full'}
+                                isDisabled={otp?.length === 0}
+                            />
+                        </>
+                    )}
+
+                    {showPasswordFields && (
+                        <>
+                            <InputeFields
+                                label={"Password"}
+                                placeholder={"Enter Password"}
+                                value={password}
+                                secureTextEntry
+                                onChangeText={(e) => changepasswd(e)}
+                                ifEye
+                            />
+                            {passwderr && <Messages title="Invalid Password" />}
+                            <InputeFields
+                                label={"Confirm Password"}
+                                placeholder={"Confirm Password"}
+                                value={confirmPassword}
+                                secureTextEntry
+                                onChangeText={(e) => changeConfirmPasswd(e)}
+                                ifEye
+                            />
+                            {!confirmPasswordValid && <Messages title="Passwords do not match" />}
+                            <BtnGlobal
+                                styleClassName="button"
+                                title="Reset Password"
+                                onPress={handlePasswordSubmit}
+                                classNames={'w-full'}
+                                isDisabled={buttondisabledOtp}
+                            />
+                        </>
+                    )}
+
                 </View>
             </View>
         </ScrollView>

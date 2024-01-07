@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Text, Button, Alert, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getStudentAttendanceCalendar } from '../ApiCalls';
 import Buttons from './Buttons';
 import { useRouter } from 'expo-router';
+import { stylesGlobal } from '../styles/global';
+import GlobalInputs from './GlobalComps/GlobalInputs';
+import BtnGlobal from './GlobalComps/BtnGlobal';
 const MyCalendar = () => {
   const router = useRouter()
   const [selectedYear, setSelectedYear] = useState(dayjs().format('YYYY'));
@@ -19,32 +22,32 @@ const MyCalendar = () => {
     "code": 200,
     "message": "Data found successfully",
     "body": {
-        "year": "2023",
-        "month": "November",
-        "attendance_percentage": "6.67%",
-        "attended": 2,
-        "absent": 1,
-        "leave": 1,
-        "attendance": [
-            {
-                "date": "2023-11-20",
-                "status": "Present"
-            },
-            {
-                "date": "2023-11-23",
-                "status": "Present"
-            },
-            {
-                "date": "2023-11-09",
-                "status": "Absent"
-            },
-            {
-                "date": "2023-11-09",
-                "status": "Leave"
-            }
-        ]
+      "year": "2023",
+      "month": "November",
+      "attendance_percentage": "6.67%",
+      "attended": 2,
+      "absent": 1,
+      "leave": 1,
+      "attendance": [
+        {
+          "date": "2023-11-20",
+          "status": "Present"
+        },
+        {
+          "date": "2023-11-23",
+          "status": "Present"
+        },
+        {
+          "date": "2023-11-09",
+          "status": "Absent"
+        },
+        {
+          "date": "2023-11-09",
+          "status": "Leave"
+        }
+      ]
     }
-});
+  });
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -61,7 +64,7 @@ const MyCalendar = () => {
 
   const fetchApiData = async () => {
     try {
-      const data = await getStudentAttendanceCalendar(authToken?.token, authToken?.school_id, authToken?.school_id, selectedYear , selectedMonth);
+      const data = await getStudentAttendanceCalendar(authToken?.token, authToken?.school_id, authToken?.school_id, selectedYear, selectedMonth);
       setApiData(data?.body)
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -92,12 +95,12 @@ const MyCalendar = () => {
           selected: true,
           selectedColor:
             attendance.status === 'Present'
-              ? 'green'
+              ? '#10B981'
               : attendance.status === 'Absent'
-                ? 'red'
+                ? '#FE0A0A'
                 : attendance.status === 'Leave'
-                  ? 'pink'
-                  : 'gray',
+                  ? '#2A2D32'
+                  : '#FEC532',
         };
       });
     }
@@ -112,188 +115,88 @@ const MyCalendar = () => {
       <Calendar
         markedDates={markedDates}
         onDayPress={(day) => console.log('selected day', day)}
-        current={`${selectedYear}-${selectedMonth}-01`} // Set the current month
+        current={`${selectedYear}-${selectedMonth}-01`}
       />
     );
   };
+
   return (
-    <View style={styles.formFields}>
-      <View style={styles.normalInput}>
-        <TextInput
-          placeholder="Enter Year"
-          keyboardType="numeric"
-          style={styles.input}
-          onChangeText={onYearChange}
+    <View className='mt-5 mb-10'>
+      <View className='flex flex-col w-full gap-y-2 mb-10 p-5'>
+        <GlobalInputs
+          placeholder={`Enter Year`}
+          name="enterYear"
+          mainClass={''}
+          type='number'
+          onChangeText={(number) => onYearChange(number)}
           value={selectedYear}
+          blurOnSubmit={false}
         />
-      </View>
-      <View style={styles.normalInput}>
-        <TextInput
-          placeholder="Enter Month"
-          keyboardType="numeric"
-          style={styles.input}
-          onChangeText={onMonthChange}
+        <GlobalInputs
+          placeholder={`Enter Month`}
+          name="enterMonth"
+          mainClass={'mt-5'}
+          type='number'
+          onChangeText={(number) => onMonthChange(number)}
           value={selectedMonth}
+          blurOnSubmit={false}
+        />
+        <BtnGlobal
+          styleClassName="button"
+          title="Search"
+          onPress={onSearchPress}
+          classNames={'w-full mt-5'}
+          isDisabled={selectedMonth === '' || selectedYear === ''}
         />
       </View>
-      <Buttons title="Search" onPress={onSearchPress} />
-      {/* <Buttons title="Show Date Picker" onPress={showDatePicker} /> */}
-      {/* <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="year"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      /> */}
+
       {renderCalendar()}
-      <View className='absolute bottom-4'>
-      <Buttons title="Request Leaves" onPress={()=> router.push('/requestLeave')} />
+      <View className='mt-5 border-t border-lightgrey p-5'>
+        <View className='flex flex-row items-center justify-between mb-5'>
+          <Text style={stylesGlobal.title}>Overview</Text>
+          <Text className='text-secondary text-base'>view activity</Text>
+        </View>
+        <View style={stylesGlobal.flexCenter} className=''>
+          <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'center', }]}>
+            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-success'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Present</Text>
+                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.attended || 0 : 0}</Text>
+              </View>
+            </View>
+            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-error'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Absent</Text>
+                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.absent || 0 : 0}</Text>
+              </View>
+            </View>
+            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-body'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Leave</Text>
+                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.leave || 0 : 0}</Text>
+              </View>
+            </View>
+            <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-gold'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Holiday</Text>
+                <Text className='text-body text-base font-bold'>{apiData ? apiData?.body?.holidays || 0 : 0}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <BtnGlobal
+          styleClassName="updatedbutton"
+          title="Request Leave"
+          onPress={() => router.push('/requestLeave')}
+          classNames={'w-full mt-5'}
+        />
       </View>
     </View>
   );
 };
 
 export default MyCalendar;
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    marginBottom: 5,
-    width: "100%",
-  },
-  mobilelabel:{
-    flexDirection: "row",
-    marginBottom:10
-  },
-  mobile:{
-    fontSize:16,
-    fontWeight:'bold',
-    marginRight:5,
-    color:'#2A2D32'
-  },
-  masked:{
-    fontSize:16,
-    color:'#FF6F1B'
-  },
-
-  label: {
-    marginBottom: 5,
-    fontSize: 13,
-    //fontWeight: 400,
-    color: "#a4a4a4",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#f6f5fa",
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 13,
-    backgroundColor: "#f4f4f4",
-    color: "#444",
-    height: 41,
-  },
-  normalInput: {
-    width: "100%",
-  },
-  ifNumberBox: {
-    width: "100%",
-  },
-  emailNumberInput: {
-    borderWidth: 1,
-    borderColor: "#f4f4f4",
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    paddingLeft: 55,
-    fontSize: 13,
-    backgroundColor: "#f4f4f4",
-    color: "#444",
-    height: 41,
-  },
-
-  emailNumber: {
-    width: 46,
-    borderColor: "#f4f4f4",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    height: 41,
-    zIndex:7777,
-    borderRadius: 8,
-  },
-  flag:{
-    width:38,
-    height:16,
-    position:'absolute',
-    zIndex:999999
-  },
-  plusNine: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor:'#f4f4f4'
-  },
-  plusNineText: {
-    color: '#000',
-    fontSize: 16,
-    //fontWeight: 700,
-  },
-  container: {
-    flex: 1,
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20
-},
-backarrow: {
-    paddingTop: 20
-},
-handlerBox: {
-    width: "100%"
-},
-formFields: {
-    width: "100%",
-    paddingBottom: 20,
-    position: 'relative'
-},
-inputFields: {
-    paddingBottom: 15,
-    width: "100%",
-},
-textcontainer: {
-    paddingTop: 30,
-    paddingBottom: 30
-},
-title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000'
-},
-innertext: {
-    fontSize: 16,
-    color: '#999999'
-},
-button_2: {
-    alignItems: 'center',
-    paddingTop: 20
-},
-passwd: {
-    fontSize: 14,
-    color: '#FF6F1B'
-},
-inputFieldsLinks: {
-    paddingTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center'
-},
-logInText: {
-    marginBottom: 3,
-},
-logText: {
-    fontSize: 16,
-    paddingBottom: 20,
-    // color: thirdColorBlack,
-},
-btnLink: {
-    //fontWeight: 500,
-},
-
-});

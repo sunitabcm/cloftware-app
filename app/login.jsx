@@ -2,17 +2,16 @@ import React, { useState, useContext } from "react";
 import {
     View,
     Text,
-    Button,
     StyleSheet,
-    Image,
     ScrollView,
 } from "react-native";
 import Buttons from "../component/Buttons";
 import InputeFields from "../component/InputeFields";
 import Links from "../component/Links";
 import WelcomeSchool from "../pageComponent/welcome/WelcomeSchool";
-import WelcomeFooter from "../pageComponent/welcome/WelcomeFooter";
 import Heading from "../component/Heading";
+import SchoolIcon from "../component/GlobalComps/SchoolIcon";
+import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import Messages from "../component/Messages";
 import { thirdColorBlack, fiveColorBlack } from "../component/stylesheet";
 import { stylesGlobal } from "../styles/global";
@@ -131,61 +130,66 @@ const Login = () => {
     }
 
     return (
-        <ScrollView contentContainerStyle={{ backgroundColor: fiveColorBlack, flex: 1 }}>
-            <View style={styles.container}>
-                <View style={styles.backarrow}>
-                    <Links
-                        back
-                        onPress={() => router.push("/validateOtp")}
-                    />
-                </View>
-                <View style={styles.handlerBox}>
-                    <WelcomeSchool />
-                    <View style={styles.formFields}>
-                        <View style={styles.textcontainer}>
-                            <Text style={styles.title}>Login to your account</Text>
-                            <Text style={styles.innertext}>Welcome back please enter your details</Text>
-                        </View>
-                        <View style={styles.inputFields}>
-                            <InputeFields
-                                label={"Email/Username"}
-                                placeholder={"Enter Email"}
-                                value={email}
-                                onChangeText={(e) => chnageemail(e)}
-                                ifEmailNumber
-                            />
-                            {err && <Messages title="Email is Required" />}
-                            {errors.email && !err && <Messages title={errors.email} />}
-                        </View>
+        <ScrollView className='bg-light h-full p-5'>
+            <View>
+                <BtnGlobal
+                    styleClassName="closeBtn"
+                    icon={true}
+                    onPress={() => router.push('/validateOtp')}
+                    classNames={'mb-5'}
+                    iconName={'arrowleft'}
+                    iconType={'AntDesign'}
+                    iconSize={22}
+                    iconColor={'#2A2D32'}
+                />
+                <SchoolIcon styleSize={60} />
+                <View style={styles.formFields}>
+                    <View style={styles.textcontainer}>
+                        <Text style={styles.title}>Login to your account</Text>
+                        <Text style={styles.innertext}>Welcome back please enter your details</Text>
+                    </View>
+                    <View style={styles.inputFields}>
+                        <InputeFields
+                            label={"Email/Username"}
+                            placeholder={"Enter Email"}
+                            value={email}
+                            onChangeText={(e) => chnageemail(e)}
+                            ifEmailNumber
+                        />
+                        {err && <Messages title="Email is Required" />}
+                        {errors.email && !err && <Messages title={errors.email} />}
+                    </View>
 
-                        <View style={styles.inputFields}>
-                            <InputeFields
-                                label={"Password"}
-                                placeholder={"Enter Password"}
-                                value={password}
-                                secureTextEntry
-                                onChangeText={(e) => changepasswd(e)}
-                                ifEye
+                    <View style={styles.inputFields}>
+                        <InputeFields
+                            label={"Password"}
+                            placeholder={"Enter Password"}
+                            value={password}
+                            secureTextEntry
+                            onChangeText={(e) => changepasswd(e)}
+                            ifEye
+                        />
+                        {errormsg && (
+                            <Messages title={errormsg} />
+                        )}
+                        {passwderr && <Messages title="Password is Required" />}
+                        {errors.password && (password.length == 0) && <Messages title={errors.password} />}
+                        <View style={styles.inputFieldsLinks}>
+                            <Links
+                                title={"Don’t remember your password?"}
+                                onPress={() => router.push("/forgotPassword")}
+                                style={styles.btnLink}
                             />
-                            {errormsg && (
-                                <Messages title={errormsg} />
-                            )}
-                            {passwderr && <Messages title="Password is Required" />}
-                            {errors.password && (password.length == 0) && <Messages title={errors.password} />}
-                            <View style={styles.inputFieldsLinks}>
-                                <Links
-                                    title={"Don’t remember your password?"}
-                                    onPress={() => router.push("/forgotPassword")}
-                                    style={styles.btnLink}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.button_2}>
-                            <Buttons title="Login to account" onPress={handleSubmit} disabled={buttondisabled} />
                         </View>
                     </View>
+                    <BtnGlobal
+                        styleClassName="button"
+                        title="Login to account"
+                        onPress={handleSubmit}
+                        classNames={'w-full'}
+                        isDisabled={buttondisabled}
+                    />
                 </View>
-
             </View>
         </ScrollView>
     );

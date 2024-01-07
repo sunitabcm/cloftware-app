@@ -6,7 +6,7 @@ import AppIcon from './GlobalComps/AppIcon';
 
 const Footer = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.itemContainer}>
         <AppIcon type='MaterialCommunityIcons' name='library' size={18} color={'#000'} />
         <Text>Library</Text>

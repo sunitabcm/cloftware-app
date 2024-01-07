@@ -21,7 +21,7 @@ export default function Layout() {
     loadAuthToken().then(authToken => {
       store.dispatch(setAuthToken(authToken));
     });
-    
+
   }, []);
 
   const { top } = useSafeArea();
@@ -29,44 +29,52 @@ export default function Layout() {
 
   return (
     <Provider store={store}>
-      <View style={{ flex: 1, paddingTop: top, paddingBottom: bottom, fontSize: 14, color: '#37374E', position: 'relative' }}>
-        <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable>
-      <ToastProvider
-       placement="top"
-       duration={5000}
-       animationType='slide-in'
-       animationDuration={250}
-       successColor="#84e38d"
-       dangerColor="#ffa8a8"
-       warningColor="#ffe791"
-       normalColor="#fafafa"
-      //  successIcon={<AppIcon type='AntDesign' name='checkcircle' size={20} color='#242424' />}
-      //  dangerIcon={<AppIcon type='MaterialIcons' name='dangerous' size={20} color='#242424' />}
-      //  warningIcon={<AppIcon type='AntDesign' name='warning' size={20} color='#242424' />}
-       textStyle={{ fontSize: 14, color: '#242424', fontWeight:700 }}
-       offset={50}
-       offsetTop={30}
-       offsetBottom={40}
-       swipeEnabled={true}
-       >
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='index' />
-          <Stack.Screen name='slideshow' />
-          <Stack.Screen name='validateOtp' />
-          <Stack.Screen name='login' />
-          <Stack.Screen name='dashboard' />
-          <Stack.Screen name='attendance' />
-          <Stack.Screen name='forgotPassword' />
-          <Stack.Screen name='holidays' />
-          <Stack.Screen name='network' />
-          <Stack.Screen
-            name="requestLeave"
-            options={{
-              presentation: 'modal',
-            }}
-          />
-        </Stack>
+      <View style={{ flex: 1, paddingTop: top, paddingBottom: bottom, fontSize: 14, backgroundColor: '#fff', color: '#37374E', position: 'relative' }}>
+        {/* <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable> */}
+        <ToastProvider
+          placement="top"
+          duration={5000}
+          animationType='slide-in'
+          animationDuration={250}
+          successColor="#84e38d"
+          dangerColor="#ffa8a8"
+          warningColor="#ffe791"
+          normalColor="#fafafa"
+          //  successIcon={<AppIcon type='AntDesign' name='checkcircle' size={20} color='#242424' />}
+          //  dangerIcon={<AppIcon type='MaterialIcons' name='dangerous' size={20} color='#242424' />}
+          //  warningIcon={<AppIcon type='AntDesign' name='warning' size={20} color='#242424' />}
+          textStyle={{ fontSize: 14, color: '#242424', fontWeight: 700 }}
+          offset={50}
+          offsetTop={30}
+          offsetBottom={40}
+          swipeEnabled={true}
+        >
+          <StatusBar style="dark" />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='index' />
+            <Stack.Screen name='slideshow' />
+            <Stack.Screen name='validateOtp' />
+            <Stack.Screen name='login' />
+            {/* <Stack.Screen name='dashboard' /> */}
+            {/* <Stack.Screen name='attendance' /> */}
+            <Stack.Screen name='forgotPassword' />
+            {/* <Stack.Screen name='holidays' /> */}
+            {/* <Stack.Screen name='schedule' /> */}
+            {/* <Stack.Screen name='fees' /> */}
+            {/* <Stack.Screen name='contacts' /> */}
+            {/* <Stack.Screen name='alerts' /> */}
+            {/* <Stack.Screen name='settings' /> */}
+            {/* <Stack.Screen name='performance' /> */}
+            {/* <Stack.Screen name='events' /> */}
+            <Stack.Screen name='network' />
+
+            {/* <Stack.Screen
+              name="requestLeave"
+              options={{
+                presentation: 'modal',
+              }}
+            /> */}
+          </Stack>
         </ToastProvider>
       </View>
     </Provider>

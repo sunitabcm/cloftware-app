@@ -1,10 +1,9 @@
 // BtnGlobal.js
 import React, { useState } from 'react';
-import { Pressable, Text, StyleSheet, View } from 'react-native';
-import { globalstyles } from '../../styles/global';
+import { Pressable, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import AppIcon from './AppIcon';
-const BtnGlobal = ({ title, styleClassName, onPress, isDisabled = false, links, isLink = false, classNames, icon, iconName, iconType, iconColor, iconSize }) => {
+const BtnGlobal = ({ title, styleClassName, onPress, isDisabled = false, classNames, icon, iconName, iconType, iconColor, iconSize }) => {
     const [isPressed, setIsPressed] = useState(false);
 
     const handlePressIn = () => {
@@ -16,43 +15,117 @@ const BtnGlobal = ({ title, styleClassName, onPress, isDisabled = false, links, 
     };
 
     return (
-        <>
-            {isLink === true ?
-                <Link onPressIn={!isDisabled ? handlePressIn : undefined}
-                    onPressOut={handlePressOut} href={links} style={[
-                        globalstyles[styleClassName],
-                        isPressed && globalstyles[`${styleClassName}Hover`],
-                        isPressed && globalstyles[`${styleClassName}Active`]]}
-                    className={`${classNames}`}>
-                    {title !== undefined && <Text style={[globalstyles.ButtonText, globalstyles[`${styleClassName}Text`],
-                    isPressed && globalstyles[`${styleClassName}TextHover`],
-                    isPressed && globalstyles[`${styleClassName}TextActive`],
-                    isDisabled && globalstyles[`${styleClassName}TextDisabled`],]} className=''>{title}</Text>}
-                    {icon !== undefined && <AppIcon type={iconType} name={iconName} size={iconSize} color={iconColor} />}
-                </Link>
-                :
-                <Pressable
-                    style={[
-                        globalstyles[styleClassName],
-                        isPressed && globalstyles[`${styleClassName}Hover`],
-                        isPressed && globalstyles[`${styleClassName}Active`],
-                        isDisabled && globalstyles[`${styleClassName}Disabled`],
-                    ]}
-                    className={`${classNames}`}
-                    onPress={!isDisabled ? onPress : undefined}
-                    onPressIn={!isDisabled ? handlePressIn : undefined}
-                    onPressOut={handlePressOut}
-                    disabled={isDisabled}
-                >
-                    {title !== undefined && <Text style={[globalstyles.ButtonText, globalstyles[`${styleClassName}Text`],
-                    isPressed && globalstyles[`${styleClassName}TextHover`],
-                    isPressed && globalstyles[`${styleClassName}TextActive`],
-                    isDisabled && globalstyles[`${styleClassName}TextDisabled`],]} className='whitespace-nowrap'>{title}</Text>}
-                    {icon !== undefined && <AppIcon type={iconType} name={iconName} size={iconSize} color={iconColor} />}
-                </Pressable>
-            }
-        </>
+        <TouchableOpacity
+            style={[
+                styles[styleClassName],
+                isPressed && styles[`${styleClassName}Hover`],
+                isPressed && styles[`${styleClassName}Active`],
+                isDisabled && styles[`${styleClassName}Disabled`],
+            ]}
+            className={`${classNames} rounded-[56px]`}
+            onPress={!isDisabled ? onPress : undefined}
+            onPressIn={!isDisabled ? handlePressIn : undefined}
+            onPressOut={handlePressOut}
+            disabled={isDisabled}
+        >
+            {title !== undefined && <Text style={[styles[`${styleClassName}Text`],
+            isPressed && styles[`${styleClassName}TextHover`],
+            isPressed && styles[`${styleClassName}TextActive`],
+            isDisabled && styles[`${styleClassName}TextDisabled`],]} className='whitespace-nowrap'>{title}</Text>}
+            {icon !== undefined && <AppIcon type={iconType} name={iconName} size={iconSize} color={iconColor} />}
+        </TouchableOpacity>
     );
 };
 
 export default BtnGlobal;
+
+const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#2A2D32',
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    buttonDisabled: {
+        backgroundColor: '#ccc',
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    updatedbutton: {
+        backgroundColor: '#fff',
+        borderWidth: 1, // Border width
+        borderColor: '#2A2D32', // Border color
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    updatedbuttonDisabled: {
+        backgroundColor: '#ccc',
+        borderWidth: 1, // Border width
+        borderColor: '#2A2D32', // Border color
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        //fontWeight: 600,
+        alignItems: 'center',
+        display: "flex",
+    },
+
+    updatedbuttonText: {
+        color: '#535353',
+        fontSize: 16,
+        fontWeight: 600,
+        alignItems: 'center',
+        display: "flex",
+    },
+
+    buttonDisabledText: {
+        color: '#999',
+    },
+    updatedbuttonDisabledText: {
+        color: '#999',
+    },
+    closeBtn: {
+        backgroundColor: '#E1E1E1',
+        fontSize: 28,
+        lineHeight: 32,
+        color: '#2A2D32',
+        padding: 6,
+        borderRadius: 35,
+        fontFamily: 'Inter-Regular',
+        cursor: 'pointer',
+        borderWidth: 0,
+        // whiteSpace: 'nowrap',
+        fontWeight: '600',
+        alignSelf: 'flex-start',
+    },
+});

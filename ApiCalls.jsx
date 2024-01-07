@@ -196,12 +196,12 @@ export async function getSchoolEventList(accessToken) {
 }
 
 // Function to get school holiday list
-export async function getSchoolHolidayList(accessToken, year) {
+export async function getSchoolHolidayList(accessToken, year, limit = '5', offset = '0') {
     try {
         const response = await axios.post(`${baseURL}/event/get_holiday_list`, {
-            offset: '0',
-            limit: '5',
-            'year_id': '1',
+            offset: offset,
+            limit: limit,
+            year_id: year,
         }, {
             headers: {
                 // 'Authorization': accessToken,
@@ -220,12 +220,12 @@ export async function getSchoolHolidayList(accessToken, year) {
 }
 
 // Function to get student profile
-export async function getStudentProfile(accessToken) {
+export async function getStudentProfile(accessToken, year, limit = '5', offset = '0') {
     try {
         const response = await axios.post(`${baseURL}/get_profile`, {
-            offset: '0',
-            limit: '5',
-            'year_id': '1',
+            offset: offset,
+            limit: limit,
+            year_id: year,
         }, {
             headers: {
                 'Authorization': accessToken,
@@ -359,3 +359,82 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
         throw error;
     }
 }
+
+
+//with formdata 
+
+
+// export async function getNoticeBoardList(accessToken, school_id) {
+//     const formData = new FormData();
+//     formData.append('school_id', '1');
+//     try {
+//         const response = await axios.post(`${baseURL}/notice/notice_board_list`, formData, {
+//             headers: {
+//                 'Authorization': accessToken,
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+//         if (response.status === 200 || response.status === 201) {
+//             return response.data;
+//         } else {
+//             return response.data;
+//         }
+//     } catch (error) {
+//         console.error('Error getting notice board list:', error);
+//         throw error;
+//     }
+// }
+
+// // Function to add/edit apply leave
+// export async function addEditApplyLeave(accessToken, class_id, section_id, year_id, reason, leave_date, student_id) {
+//     const formData = new FormData();
+//     formData.append('leave_date', leave_date);
+//     formData.append('status', 'Leave');
+//     formData.append('student_id', '2');
+//     formData.append('class_id', class_id);
+//     formData.append('section_id', section_id);
+//     formData.append('year_id', year_id);
+//     formData.append('reason', reason);
+//     try {
+//         const response = await axios.post(`${baseURL}/leave/add_edit_apply_leave`, formData, {
+//             headers: {
+//                 'Authorization': accessToken,
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+//         if (response.status === 200 || response.status === 201) {
+//             return response.data;
+//         } else {
+//             return response.data;
+//         }
+//     } catch (error) {
+//         console.error('Error adding/editing leave:', error);
+//         throw error;
+//     }
+// }
+
+// // Function to get student attendance calendar
+// export async function getStudentAttendanceCalendar(accessToken, student_id, school_id, year, month) {
+//     const formData = new FormData();
+//     formData.append('student_id', '1');
+//     formData.append('school_id', school_id);
+//     formData.append('year', year);
+//     formData.append('month', month);
+//     try {
+
+//         const response = await axios.post(`${baseURL}/calender_student_attendance`, formData, {
+//             headers: {
+//                 'Authorization': accessToken,
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+//         if (response.status === 200 || response.status === 201) {
+//             return response.data;
+//         } else {
+//             return response.data;
+//         }
+//     } catch (error) {
+//         console.error('Error getting student attendance calendar:', error);
+//         throw error;
+//     }
+// }
