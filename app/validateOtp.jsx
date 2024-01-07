@@ -16,6 +16,7 @@ import SchoolIcon from "../component/GlobalComps/SchoolIcon";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import Loginpopup from "../component/Loginpopup";
 import { saveAuthToken } from "../authStorage";
+import { setAuthToken } from "../store/slices/authSlice";
 const Otp = () => {
   const router = useRouter();
   const toast = useToast();
