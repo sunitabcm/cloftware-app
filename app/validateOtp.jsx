@@ -73,33 +73,34 @@ const Otp = () => {
   };
   const verifyOtpFunc = async (num) => {
     try {
-      const userLogin = await verifyLoginOtp(num, otp)
+      const userLogin = await verifyLoginOtp('919999276633', '999999')
+      console.log(userLogin)
       if (userLogin) {
-        dispatch(setAuthToken(userLogin?.body))
-        saveAuthToken(JSON.stringify(response?.body))
         toast.show(userLogin?.message, { type: "success" })
+                dispatch(setAuthToken(userLogin?.body))
+        saveAuthToken(JSON.stringify(userLogin?.body))
         router.push('/dashboard')
       } else {
-        // toast.show(userLogin?.message, { type: "danger" })
-      }
-    } catch (error) {
-      // toast.show('An error occured, Please try again', { type: "danger" })
-      router.push('/')
-    }
-  };
-  const loginPostFunc = async (num) => {
-    try {
-      const userLogin = await loginViaOtp(num)
-      if (userLogin) {
-        toast.show(userLogin?.message, { type: "success" })
-        setverifyotp(true);
-      } else {
-        toast.show('An error occured, Please try again', { type: "danger" })
+        toast.show(userLogin?.message, { type: "danger" })
       }
     } catch (error) {
       toast.show('An error occured, Please try again', { type: "danger" })
+      // router.push('/')
     }
   };
+  // const loginPostFunc = async (num) => {
+  //   try {
+  //     const userLogin = await loginViaOtp(num)
+  //     if (userLogin) {
+  //       toast.show(userLogin?.message, { type: "success" })
+  //       setverifyotp(true);
+  //     } else {
+  //       toast.show('An error occured, Please try again', { type: "danger" })
+  //     }
+  //   } catch (error) {
+  //     toast.show('An error occured, Please try again', { type: "danger" })
+  //   }
+  // };
 
   useEffect(() => {
     if (enteredNumber.length == 0) {
