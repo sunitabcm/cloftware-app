@@ -15,6 +15,7 @@ import AppIcon from "../component/GlobalComps/AppIcon";
 import SchoolIcon from "../component/GlobalComps/SchoolIcon";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import Loginpopup from "../component/Loginpopup";
+import { saveAuthToken } from "../authStorage";
 const Otp = () => {
   const router = useRouter();
   const toast = useToast();
@@ -22,7 +23,7 @@ const Otp = () => {
   const [enteredNumber, setenteredNumber] = useState("9999276633");
   const [buttondisabled, setbuttondisabled] = useState(true);
   const [verifyotp, setverifyotp] = useState(false);
-  const [otp, setOtp] = useState("203399");
+  const [otp, setOtp] = useState("999999");
   const [otperror, setotperror] = useState(false);
   const [error, seterror] = useState(false);
   const [otpsuccessmsg, setotpsuccessmsg] = useState("");
@@ -74,6 +75,7 @@ const Otp = () => {
       const userLogin = await verifyLoginOtp(num, otp)
       if (userLogin) {
         dispatch(setAuthToken(userLogin?.body))
+        saveAuthToken(JSON.stringify(response?.body))
         toast.show(userLogin?.message, { type: "success" })
         router.push('/dashboard')
       } else {
@@ -81,6 +83,7 @@ const Otp = () => {
       }
     } catch (error) {
       toast.show('An error occured, Please try again', { type: "danger" })
+      router.push('/')
     }
   };
   const loginPostFunc = async (num) => {
