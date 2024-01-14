@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet, ScrollView, Pressable } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { View, Text, TouchableOpacity, Pressable } from 'react-native';
+import { Calendar, Agenda } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
 import { SmallPopup } from './GlobalComps/SmallPopup';
+
 const HolidayList = ({ data, fetchData }) => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY'));
+  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
 
@@ -15,22 +15,14 @@ const HolidayList = ({ data, fetchData }) => {
     setModalVisible(true);
   };
 
-
   const closeModal = () => {
     setModalVisible(false);
   };
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    hideDatePicker();
-    setLeaveDate(dayjs(date).format('YYYY'));
-    fetchData()
+  const onArrowPress = (increment) => {
+    const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM-DD');
+    setSelectedDate(newDate);
+    fetchData(newDate);
   };
 
   const organizeDataByMonth = () => {
@@ -74,53 +66,19 @@ const HolidayList = ({ data, fetchData }) => {
   };
 
   return (
-    <ScrollView className='h-full bg-light'>
-      <View className='flex justify-center items-center pb-4'>
-        <TouchableOpacity className='' onPress={showDatePicker}>
-          <Text className='text-body font-bold text-lg underline'>{dayjs(leaveDate).format('YYYY')}</Text>
+    <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
+        <TouchableOpacity onPress={() => onArrowPress(-1)}>
+          <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3'/>
         </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-        />
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{dayjs(selectedDate).format('MMMM YYYY')}</Text>
+        <TouchableOpacity onPress={() => onArrowPress(1)}>
+        <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3'/>
+        </TouchableOpacity>
       </View>
       {renderHolidays()}
-    </ScrollView>
-  )
+    </View>
+  );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  monthContainer: {
-    marginBottom: 20,
-  },
-  monthHeading: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  holidayContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  holidayDate: {
-    fontSize: 16,
-    marginRight: 10,
-    fontWeight: 'bold',
-  },
-  holidayTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  holidayDescription: {
-    fontSize: 14,
-    color: '#555',
-  },
-});
 
 export default HolidayList;

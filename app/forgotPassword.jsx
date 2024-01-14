@@ -92,7 +92,7 @@ const ForgotPassword = () => {
     const ResetPass = async (newPass, confirmPass) => {
 
         try {
-            const response = await resetPassword(newPass, confirmPass, authToken?.user_id);
+            const response = await resetPassword(newPass, confirmPass);
 
             if (response) {
                 toast.show(response?.message, { type: "success" })
@@ -225,7 +225,7 @@ const ForgotPassword = () => {
                     {showEmailButton && (
                         <BtnGlobal
                             styleClassName="button"
-                            title="Send Otp"
+                            title="Send OTP"
                             onPress={handleEmailSubmit}
                             classNames={'w-full'}
                             isDisabled={buttondisabled}
@@ -242,9 +242,9 @@ const ForgotPassword = () => {
                             />
                             <BtnGlobal
                                 styleClassName="button"
-                                title="Verify Otp"
+                                title="Verify OTP"
                                 onPress={handleOtpSubmit}
-                                classNames={'w-full'}
+                                classNames={'w-full mt-5'}
                                 isDisabled={otp?.length === 0}
                             />
                         </>
@@ -274,7 +274,7 @@ const ForgotPassword = () => {
                                 styleClassName="button"
                                 title="Reset Password"
                                 onPress={handlePasswordSubmit}
-                                classNames={'w-full'}
+                                classNames={'w-full mt-5'}
                                 isDisabled={buttondisabledOtp}
                             />
                         </>

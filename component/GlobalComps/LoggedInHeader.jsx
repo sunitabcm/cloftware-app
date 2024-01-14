@@ -21,7 +21,7 @@ export default function LoggedInHeader() {
                             <Text className='font-light text-light'>{authToken.class_name}</Text>
                         </View>
                         :
-                        <Text>Loading</Text>
+                        <Text></Text>
                     }
                 </View>
                 {/* <AppIcon type='MaterialCommunityIcons' name='arrow-down-drop-circle' size={35} color={'#fff'} /> */}

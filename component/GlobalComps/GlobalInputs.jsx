@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, Pressable, TouchableWithoutFeedback } from 'react-native';
 import AppIcon from './AppIcon';
 import { stylesGlobal } from '../../styles/global';
-const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secureTextEntry, value, onChangeText, error, disabled, width = 'w-full', onBlur, keyboardType, blurOnSubmit = false, touched, styleChange, clickable = false ,onClick = {} }) => {
+const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secureTextEntry, value, onChangeText, error, disabled, width = 'w-full', onBlur, keyboardType, blurOnSubmit = false, touched, styleChange, clickable = false, onClick = {} }) => {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -17,7 +17,7 @@ const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secu
             {label && (
                 <Text className='mb-1.5 capitalize text-sm font-bold text-body'>{label}</Text>
             )}
-            <TouchableWithoutFeedback onPress={clickable === true ? onClick : () => {}}>
+            <TouchableWithoutFeedback onPress={clickable === true ? onClick : () => { }}>
                 <View className="relative">
                     <TextInput
                         className={`${inputStyles} ${styleChange} ${value?.length < 2 ? 'capitalize' : ''}`}
@@ -26,6 +26,7 @@ const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secu
                         secureTextEntry={secureTextEntry && !isPasswordVisible}
                         keyboardType={type === 'number' ? 'numeric' : (keyboardType || 'default')}
                         value={value}
+                        type={type}
                         name={label ? label : ''}
                         autoCapitalize="none"
                         autoCorrect={false}

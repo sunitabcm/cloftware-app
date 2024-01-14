@@ -64,7 +64,7 @@ export async function forgotPassword(value) {
 }
 
 // Function to verify OTP for password reset
-export async function verifyOtpPasswordReset(value , otp) {
+export async function verifyOtpPasswordReset(value, otp) {
     try {
         const response = await axios.post(
             `${baseURL}/verifyotp`,
@@ -142,7 +142,7 @@ export async function loginViaOtp(num) {
 }
 
 // Function to verify login OTP
-export async function verifyLoginOtp(number , otp) {
+export async function verifyLoginOtp(number, otp) {
     try {
         const response = await axios.post(
             `${baseURL}/verify_login_otp`,
@@ -168,14 +168,14 @@ export async function verifyLoginOtp(number , otp) {
 }
 
 // Function to get school event list
-export async function getSchoolEventList(accessToken) {
+export async function getSchoolEventList(accessToken, year, limit = '5', offset = '0') {
     try {
         const response = await axios.post(
             `${baseURL}/event/get_event_list`,
             {
-                offset: '0',
-                limit: '5',
-                'year_id': '1',
+                offset: offset,
+                limit: limit,
+                year_id: year,
             },
             {
                 headers: {
@@ -244,12 +244,12 @@ export async function getStudentProfile(accessToken, year, limit = '5', offset =
 }
 
 // Function to change password
-export async function changePassword(accessToken) {
+export async function changePassword(oldPass, newPass, accessToken) {
     try {
         const response = await axios.post(`${baseURL}/change_password`, {
-            'old_password': '123456',
-            'new_password': '12345678',
-            'confirm_password': '12345678',
+            'old_password': oldPass,
+            'new_password': newPass,
+            'confirm_password': newPass,
         }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -285,11 +285,29 @@ export async function logout(accessToken) {
     }
 }
 
+export async function getSchoolDetails(accessToken) {
+    try {
+        const response = await axios.get(`${baseURL}/get_school_details`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        throw error;
+    }
+}
+
 // Function to get notice board list
-export async function getNoticeBoardList(accessToken) {
+export async function getNoticeBoardList(schoolId, accessToken) {
     try {
         const response = await axios.post(`${baseURL}/notice/notice_board_list`, {
-            'school_id': '30',
+            'school_id': schoolId,
         }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -357,5 +375,63 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
     } catch (error) {
         console.error('Error getting student attendance calendar:', error);
         throw error;
+    }
+}
+
+export async function updateProfile(accessToken, values) {
+    const formData = {
+        'current_address': values?.currentAddress,
+        'phone_number': values?.phoneNumber,
+        'emg_contact_number': values?.emgContactNumber,
+        'emg_contact_name': values?.emgContactName,
+        'emg_email_id': values?.emgEmailId,
+        'emg_relationship_to_student': values?.emgRelationshipToStudent,
+    }
+    try {
+        const response = await axios.post(`${baseURL}/calender_student_attendance`, formData, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error updating profile and fetching attendance calendar:', error);
+        throw error;
+    }
+}
+
+export async function imageUpload(fileUrl, fileName, loginWebToken) {
+    const formData = new FormData();
+    formData.append('file', {
+        uri: fileUrl,
+        type: 'image/*',
+        name: 'imageFile',
+        filename: fileName,
+    });
+    formData.append('folder', 'profile_images/student');
+
+    try {
+        const response = await axios.post(`${baseURL}/file_upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + loginWebToken,
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return 'Your Profile Picture has been updated Successfully';
+        } else {
+            return 'Something went wrong please try again later';
+        }
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return error.response.status;
+        }
     }
 }

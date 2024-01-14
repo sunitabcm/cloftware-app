@@ -11,6 +11,7 @@ module.exports = {
 			'primary': '#535353',
 			'menubg': '#E1E1E1',
 			'lightgrey': '#999999',
+			'lightergrey': '#EEEEEE',
 			'offwhite': '#F6F6F6',
 			'light': '#fff',
 			'body': '#2A2D32',

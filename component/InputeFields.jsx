@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput,Image, Text, StyleSheet, Pressable } from "react-native";
+import { View, TextInput, Image, Text, StyleSheet, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import { secondaryColor, sixColor } from "./stylesheet";
@@ -14,35 +14,36 @@ const InputeFields = ({
   ifEye,
   ifEmailNumber,
   disabled = false,
+  type = 'email'
 }) => {
 
   const inputType = secureTextEntry
     ? "password"
     : numeric
-    ? "numeric"
-    : "default";
+      ? "numeric"
+      : "default";
 
   const [isEye, setIsEye] = useState(false);
 
   return (
     <View style={styles.inputContainer}>
-      {label &&  <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
+      {label && <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
       {ifEye ? (
         <View style={styles.eyeOnOff}>
-            <Pressable
-              onPress={() => setIsEye(!isEye)}
-              style={[
-                styles.eyeOnOffBox,
-                value.length === 0 && { opacity: 0.6 },
-              ]}
-              disabled={value.length === 0}
-            >
-              <Icon2
-                name={isEye ? "eye" : "eye-off"}
-                size={17}
-                color={secondaryColor}
-              />
-            </Pressable>
+          <Pressable
+            onPress={() => setIsEye(!isEye)}
+            style={[
+              styles.eyeOnOffBox,
+              value.length === 0 && { opacity: 0.6 },
+            ]}
+            disabled={value.length === 0}
+          >
+            <Icon2
+              name={isEye ? "eye" : "eye-off"}
+              size={17}
+              color={secondaryColor}
+            />
+          </Pressable>
 
           <TextInput
             style={styles.input}
@@ -70,16 +71,18 @@ const InputeFields = ({
             <View style={styles.ifNumberBox}>
               <View style={styles.emailNumber}>
                 {!value.trim() ? (
-                  <Image
-                  source={require("../assets/flag-arrw.png")}
-                  style={styles.flag}
-                />
+                  type === 'number' ?
+                    <View style={styles.plusNine}>
+                      <Icon name="plus" size={17} color={secondaryColor} />
+                      <Text style={styles.plusNineText}>91</Text>
+                    </View>
+                    :
+                    <Icon name="email" size={20} color={secondaryColor} />
                   //<Icon name="email" size={20} color={whitte} />
                 ) : !isNaN(value) ? (
                   <View style={styles.plusNine}>
                     <Icon name="plus" size={17} color={secondaryColor} />
                     <Text style={styles.plusNineText}>91</Text>
-                    
                   </View>
                 ) : (
                   <Icon name="email" size={20} color={secondaryColor} />
@@ -109,19 +112,19 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: "100%",
   },
-  mobilelabel:{
+  mobilelabel: {
     flexDirection: "row",
-    marginBottom:10
+    marginBottom: 10
   },
-  mobile:{
-    fontSize:16,
-    fontWeight:'bold',
-    marginRight:5,
-    color:'#2A2D32'
+  mobile: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 5,
+    color: '#2A2D32'
   },
-  masked:{
-    fontSize:16,
-    color:'#FF6F1B'
+  masked: {
+    fontSize: 16,
+    color: '#FF6F1B'
   },
 
   label: {
@@ -167,20 +170,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     height: 41,
-    zIndex:7777,
+    zIndex: 7777,
     borderRadius: 8,
   },
-  flag:{
-    width:38,
-    height:16,
-    position:'absolute',
-    zIndex:999999
+  flag: {
+    width: 38,
+    height: 16,
+    position: 'absolute',
+    zIndex: 999999
   },
   plusNine: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor:'#f4f4f4'
+    backgroundColor: '#f4f4f4'
   },
   plusNineText: {
     color: '#000',

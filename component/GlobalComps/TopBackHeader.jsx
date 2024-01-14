@@ -11,6 +11,24 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
       if(pathname === '/requestLeave'){
         setPageName('Request Leaves')
       }
+      if(pathname === '/bookSchedule'){
+        setPageName('Book Schedules')
+      }
+      if(pathname === '/homeAssignment'){
+        setPageName('Home Assignments')
+      }
+      if(pathname === '/noticeBoard'){
+        setPageName('Notice Board')
+      }
+      if(pathname === '/updateProfile'){
+        setPageName('Update Profile')
+      }
+      if(pathname === '/updatePassword'){
+        setPageName('Update Password')
+      }
+      if(pathname === '/studentStats'){
+        setPageName('Student Stats')
+      }
       }, [pathname]);
       
     return (

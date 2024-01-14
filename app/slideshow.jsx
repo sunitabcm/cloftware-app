@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Image, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import Buttons from "../component/Buttons";
 import { useRouter } from "expo-router";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
+import { Image } from "expo-image";
 const SlideShow = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
@@ -81,7 +82,8 @@ const SlideShow = () => {
         </View>
         <View style={styles.below_logo} className='mx-auto'>
           <Image
-            source={require("../assets/Frame-64.png")}
+            source={require("../assets/CloftwareGroup.svg")}
+            style={{ width: 200, height: 15 }}
             contentFit="contain"
           />
         </View>

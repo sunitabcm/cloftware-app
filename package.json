@@ -44,6 +44,7 @@
     "react-dom": "18.2.0",
     "react-native": "0.72.6",
     "react-native-calendars": "^1.1303.0",
+    "react-native-document-picker": "^9.1.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-network-logger": "^1.15.0",

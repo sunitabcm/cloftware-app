@@ -14,10 +14,10 @@ export default function dashboard() {
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/attendance')}>
               <Image
                 source={require("../../assets/attendance_icon.svg")}
-                style={{ width: 50, height: 50 }}
+                style={[{ width: 50, height: 50 }]}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]}>Attendance</Text>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Attendance</Text>
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/holidays')}>
               <Image
@@ -25,7 +25,7 @@ export default function dashboard() {
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]}>Holidays</Text>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Holidays</Text>
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/events')}>
               <Image
@@ -33,32 +33,56 @@ export default function dashboard() {
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]}>Events</Text>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Events</Text>
             </Pressable>
-            <View style={[stylesGlobal.flexCenter, { width: '31%', padding: 12, marginTop: 10 }]}>
+            <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/bookSchedule')}>
               <Image
                 source={require("../../assets/schedules_icon.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]}>Schedules</Text>
-            </View>
-            <View style={[stylesGlobal.flexCenter, { width: '31%', padding: 12, marginTop: 10 }]}>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Schedules</Text>
+            </Pressable>
+            <Pressable style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled, { width: '31%', padding: 12 }]} onPress={() => router.push('/events')}>
               <Image
                 source={require("../../assets/fees_icon.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]}>Fees</Text>
-            </View>
-            <View style={[stylesGlobal.flexCenter, { width: '31%', padding: 12, marginTop: 10 }]}>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Fees</Text>
+            </Pressable>
+            <Pressable style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled,{ width: '31%', padding: 12 }]} onPress={() => router.push('/events')}>
               <Image
                 source={require("../../assets/discussion_icon.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]}>Discussion</Text>
-            </View>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Discussion</Text>
+            </Pressable>
+            <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/homeAssignment')}>
+              <Image
+                source={require("../../assets/discussion_icon.svg")}
+                style={{ width: 50, height: 50 }}
+                contentFit="cover"
+              />
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Home Assignment</Text>
+            </Pressable>
+            <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/noticeBoard')}>
+              <Image
+                source={require("../../assets/discussion_icon.svg")}
+                style={{ width: 50, height: 50 }}
+                contentFit="cover"
+              />
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Notice Board</Text>
+            </Pressable>
+            <Pressable style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled, { width: '31%', padding: 12 }]} onPress={() => router.push('/bookSchedule')}>
+              <Image
+                source={require("../../assets/discussion_icon.svg")}
+                style={{ width: 50, height: 50 }}
+                contentFit="cover"
+              />
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Discussion</Text>
+            </Pressable>
           </View>
         </View>
         <View className='w-full mt-10'>

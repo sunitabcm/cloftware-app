@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
         //fontWeight: 600,
         alignItems: 'center',
         display: "flex",
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 
     updatedbuttonText: {
         color: '#535353',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 600,
         alignItems: 'center',
         display: "flex",
@@ -121,11 +121,84 @@ const styles = StyleSheet.create({
         color: '#2A2D32',
         padding: 6,
         borderRadius: 35,
-        fontFamily: 'Inter-Regular',
         cursor: 'pointer',
         borderWidth: 0,
         // whiteSpace: 'nowrap',
         fontWeight: '600',
         alignSelf: 'flex-start',
+    },
+    buttonSmall: {
+        backgroundColor: '#2A2D32',
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    buttonSmallDisabled: {
+        backgroundColor: '#ccc',
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    updatedbuttonSmall: {
+        backgroundColor: '#fff',
+        borderWidth: 1, // Border width
+        borderColor: '#2A2D32', // Border color
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    updatedbuttonSmallDisabled: {
+        backgroundColor: '#ccc',
+        borderWidth: 1, // Border width
+        borderColor: '#2A2D32', // Border color
+        borderRadius: 56,
+        textAlign: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 40,
+        display: 'flex',
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+    },
+    buttonSmallText: {
+        color: 'white',
+        fontSize: 14,
+        //fontWeight: 600,
+        alignItems: 'center',
+        display: "flex",
+    },
+
+    updatedbuttonSmallText: {
+        color: '#535353',
+        fontSize: 14,
+        fontWeight: 600,
+        alignItems: 'center',
+        display: "flex",
+    },
+
+    buttonSmallDisabledText: {
+        color: '#999',
+    },
+    updatedbuttonDisabledText: {
+        color: '#999',
     },
 });

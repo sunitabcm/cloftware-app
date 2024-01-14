@@ -9,7 +9,7 @@ export default function Loginpopup({ closeModal }) {
         <View style={stylesGlobal.flexCenter}>
             <Text style={stylesGlobal.title}>Login with</Text>
             <View style={[{ display: 'flex', flexDirection: 'row', marginTop: 20 }]}>
-                <View style={[stylesGlobal.flexCenter, { width: '31%', backgroundColor: '#F6F6F6', padding: 20, marginRight: 15, borderRadius: 20 }]}>
+                <View style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled,{ width: '31%', backgroundColor: '#F6F6F6', padding: 20, marginRight: 15, borderRadius: 20 }]}>
                     <Image
                         source={require("../assets/microsoft.svg")}
                         style={{ width: 35, height: 35 }}
@@ -25,7 +25,7 @@ export default function Loginpopup({ closeModal }) {
                     />
                     <Text style={[stylesGlobal.innertext, { marginTop: 10 }]}>Mail</Text>
                 </Pressable>
-                <View style={[stylesGlobal.flexCenter, { width: '31%', backgroundColor: '#F6F6F6', padding: 20, borderRadius: 20 }]}>
+                <View style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled,{ width: '31%', backgroundColor: '#F6F6F6', padding: 20, borderRadius: 20 }]}>
                     <Image
                         source={require("../assets/google.svg")}
                         style={{ width: 35, height: 35 }}

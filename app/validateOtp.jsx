@@ -130,9 +130,10 @@ const Otp = () => {
             {!verifyotp ? (
               <InputeFields
                 label={"Mobile no"}
-                placeholder={"Enter Email or Mobile"}
+                placeholder={"Enter Mobile number"}
                 onChangeText={onChangeText}
                 value={enteredNumber}
+                type={'number'}
                 ifEmailNumber
               />
             ) : (
@@ -152,7 +153,7 @@ const Otp = () => {
                 <>
                   <BtnGlobal
                     styleClassName="button"
-                    title="Get Otp"
+                    title="Get OTP"
                     onPress={onPress}
                     classNames={' w-full'}
                   />
@@ -166,7 +167,7 @@ const Otp = () => {
               ) : (
                 <BtnGlobal
                   styleClassName="button"
-                  title="Verify Otp"
+                  title="Verify OTP"
                   onPress={handleVerify}
                   classNames={' w-full'}
                 />

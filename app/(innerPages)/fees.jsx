@@ -1,10 +1,10 @@
-import { View, Text } from 'react-native'
+import { View, Text,ScrollView } from 'react-native'
 import React from 'react'
 
 export default function Fees() {
   return (
-    <View>
+    <ScrollView className='h-full bg-light p-5'>
       <Text>Fees</Text>
-    </View>
+    </ScrollView>
   )
 }

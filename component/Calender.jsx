@@ -1,60 +1,47 @@
-import React, { useState } from 'react';
-import { View, TextInput, Text, Button, Alert, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getStudentAttendanceCalendar } from '../ApiCalls';
-import Buttons from './Buttons';
 import { useRouter } from 'expo-router';
-import { stylesGlobal } from '../styles/global';
-import GlobalInputs from './GlobalComps/GlobalInputs';
+import stylesGlobal from '../styles/global'
 import BtnGlobal from './GlobalComps/BtnGlobal';
-import { ActivityIndicator } from 'react-native-web';
 const MyCalendar = () => {
-  const router = useRouter()
-  const [selectedYear, setSelectedYear] = useState(dayjs().format('YYYY'));
-  const [selectedMonth, setSelectedMonth] = useState(dayjs().format('MM'));
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const authToken = useSelector((state) => state.auth.authToken)
+  const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
+  const authToken = useSelector((state) => state.auth.authToken);
   const [apiData, setApiData] = useState(null);
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
+  useEffect(() => {
+    // Fetch initial data when the component mounts
+    fetchApiData(selectedDate);
+  }, [selectedDate]);
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    hideDatePicker();
-    setSelectedDate(dayjs(date).format('YYYY-MM-DD'));
-  };
-
-  const fetchApiData = async () => {
+  const fetchApiData = async (date) => {
     try {
-      const data = await getStudentAttendanceCalendar(authToken?.token, authToken?.school_id, authToken?.school_id, selectedYear, selectedMonth);
-      setApiData(data?.body)
+      const data = await getStudentAttendanceCalendar(
+        authToken?.token,
+        authToken?.school_id,
+        authToken?.school_id,
+        dayjs(date).format('YYYY'),
+        dayjs(date).format('MM')
+      );
+      setApiData(data?.body);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-  const onYearChange = (text) => {
-    setSelectedYear(text);
+
+  const onDayPress = (day) => {
+    // Handle day press if needed
+    console.log('selected day', day);
   };
 
-  const onMonthChange = (text) => {
-    setSelectedMonth(text);
-  };
-  const onSearchPress = () => {
-    // Validate input fields and fetch data
-    if (selectedYear && selectedMonth) {
-      fetchApiData();
-    } else {
-      Alert.alert('Error', 'Please select both year and month.');
-    }
+  const onMonthChange = (month) => {
+    const newDate = dayjs(month.dateString).format('YYYY-MM-DD');
+    setSelectedDate(newDate);
+    fetchApiData(newDate);
   };
 
   const renderCalendar = () => {
@@ -85,101 +72,63 @@ const MyCalendar = () => {
     return (
       <Calendar
         markedDates={markedDates}
-        onDayPress={(day) => console.log('selected day', day)}
-        current={`${selectedYear}-${selectedMonth}-01`}
+        onDayPress={onDayPress}
+        onMonthChange={onMonthChange}
+        current={selectedDate}
+        hideExtraDays={true}
       />
     );
   };
 
   return (
-    <View className='mt-5 mb-10'>
-      <View className='flex flex-col w-full gap-y-2 mb-10 p-5'>
-        <GlobalInputs
-          placeholder={`Enter Year`}
-          name="enterYear"
-          mainClass={''}
-          type='number'
-          onChangeText={(number) => onYearChange(number)}
-          value={selectedYear}
-          blurOnSubmit={false}
-        />
-        <GlobalInputs
-          placeholder={`Enter Month`}
-          name="enterMonth"
-          mainClass={'mt-5'}
-          type='number'
-          onChangeText={(number) => onMonthChange(number)}
-          value={selectedMonth}
-          blurOnSubmit={false}
-        />
-        <BtnGlobal
-          styleClassName="button"
-          title="Search"
-          onPress={onSearchPress}
-          classNames={'w-full mt-5'}
-          isDisabled={selectedMonth === '' || selectedYear === ''}
-        />
+    <View className='mt-0 mb-10'>
+      <View className='p-2'>
+        {renderCalendar()}
       </View>
-      {apiData && Object.values(apiData).length > 0 ?
-        <>
-          {renderCalendar()}
-          <View className='mt-5 border-t border-lightgrey p-5'>
-            <View className='flex flex-row items-center justify-between mb-5'>
-              <Text style={stylesGlobal.title}>Overview</Text>
-              <Text className='text-secondary text-base'>view activity</Text>
-            </View>
-            <View style={stylesGlobal.flexCenter} className=''>
-              <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'center', }]}>
-                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-success'></View>
-                  <View className='flex flex-col'>
-                    <Text className='text-body text-base'>Present</Text>
-                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.attended || 0 : 0}</Text>
-                  </View>
-                </View>
-                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-error'></View>
-                  <View className='flex flex-col'>
-                    <Text className='text-body text-base'>Absent</Text>
-                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.absent || 0 : 0}</Text>
-                  </View>
-                </View>
-                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-body'></View>
-                  <View className='flex flex-col'>
-                    <Text className='text-body text-base'>Leave</Text>
-                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.leave || 0 : 0}</Text>
-                  </View>
-                </View>
-                <View className='p-3 w-[48%] flex flex-row border border-lightgrey rounded-3xl'>
-                  <View className='w-4 h-4 rounded-sm mt-1.5 mr-3 ml-1 bg-gold'></View>
-                  <View className='flex flex-col'>
-                    <Text className='text-body text-base'>Holiday</Text>
-                    <Text className='text-body text-base font-bold'>{apiData ? apiData?.holidays || 0 : 0}</Text>
-                  </View>
-                </View>
+      <View className='mt-5 border-t border-lightergrey p-5'>
+        <View className='flex flex-row items-center justify-between mb-5'>
+          <Text className='text-xl font-bold'>Overview</Text>
+          <Text className='text-secondary text-base'>view activity</Text>
+        </View>
+        <View className=''>
+          <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'center', }]}>
+            <View className='p-3 w-[48%] flex flex-row border border-lightergrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-md mt-1.5 mr-3 ml-1 bg-success'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Present</Text>
+                <Text className='text-body text-base font-bold'>{apiData && Object.values(apiData).length > 0 ? apiData?.attended || 0 : 0}</Text>
               </View>
             </View>
-            <BtnGlobal
-              styleClassName="updatedbutton"
-              title="Request Leave"
-              onPress={() => router.push('/requestLeave')}
-              classNames={'w-full mt-5'}
-            />
+            <View className='p-3 w-[48%] flex flex-row border border-lightergrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-md mt-1.5 mr-3 ml-1 bg-error'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Absent</Text>
+                <Text className='text-body text-base font-bold'>{apiData && Object.values(apiData).length > 0 ? apiData?.absent || 0 : 0}</Text>
+              </View>
+            </View>
+            <View className='p-3 w-[48%] flex flex-row border border-lightergrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-md mt-1.5 mr-3 ml-1 bg-body'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Leave</Text>
+                <Text className='text-body text-base font-bold'>{apiData && Object.values(apiData).length > 0 ? apiData?.leave || 0 : 0}</Text>
+              </View>
+            </View>
+            <View className='p-3 w-[48%] flex flex-row border border-lightergrey rounded-3xl'>
+              <View className='w-4 h-4 rounded-md mt-1.5 mr-3 ml-1 bg-gold'></View>
+              <View className='flex flex-col'>
+                <Text className='text-body text-base'>Holiday</Text>
+                <Text className='text-body text-base font-bold'>{apiData && Object.values(apiData).length > 0 ? apiData?.holidays || 0 : 0}</Text>
+              </View>
+            </View>
           </View>
-        </>
-        :
-        <View className='flex justify-center items-center'>
-          {apiData === null ?
-            <Text>Please Search to see results</Text>
-            :
-            apiData && Object.values(apiData).length === 0 ?
-            <Text>No Results found</Text>
-            :
-            <Text>Please Search to see results</Text>
-          }
         </View>
-      }
+        <BtnGlobal
+          styleClassName="button"
+          title="Request Leave"
+          onPress={() => router.push('/requestLeave')}
+          classNames={'w-full mt-5'}
+        />
+      </View>
     </View>
   );
 };

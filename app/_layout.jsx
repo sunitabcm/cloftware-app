@@ -30,7 +30,7 @@ export default function Layout() {
   return (
     <Provider store={store}>
       <View style={{ flex: 1, paddingTop: top, paddingBottom: bottom, fontSize: 14, backgroundColor: '#fff', color: '#37374E', position: 'relative' }}>
-        {/* <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable> */}
+        <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable>
         <ToastProvider
           placement="top"
           duration={5000}
@@ -55,17 +55,7 @@ export default function Layout() {
             <Stack.Screen name='slideshow' />
             <Stack.Screen name='validateOtp' />
             <Stack.Screen name='login' />
-            {/* <Stack.Screen name='dashboard' /> */}
-            {/* <Stack.Screen name='attendance' /> */}
             <Stack.Screen name='forgotPassword' />
-            {/* <Stack.Screen name='holidays' /> */}
-            {/* <Stack.Screen name='schedule' /> */}
-            {/* <Stack.Screen name='fees' /> */}
-            {/* <Stack.Screen name='contacts' /> */}
-            {/* <Stack.Screen name='alerts' /> */}
-            {/* <Stack.Screen name='settings' /> */}
-            {/* <Stack.Screen name='performance' /> */}
-            {/* <Stack.Screen name='events' /> */}
             <Stack.Screen name='network' />
 
             {/* <Stack.Screen

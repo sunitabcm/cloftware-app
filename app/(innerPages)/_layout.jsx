@@ -20,6 +20,14 @@ export default function _layout() {
         <Stack.Screen name='fees' />
         <Stack.Screen name='performance' />
         <Stack.Screen name='events' />
+        <Stack.Screen name='homeAssignment' />
+        <Stack.Screen name='noticeBoard' />
+        <Stack.Screen name='bookSchedule' />
+        <Stack.Screen name='updateProfile' />
+        <Stack.Screen name='reports' />
+        <Stack.Screen name='studentStats' />
+        <Stack.Screen name='support' />
+        <Stack.Screen name='updatePassword' />
         <Stack.Screen
           name="requestLeave"
           options={{
