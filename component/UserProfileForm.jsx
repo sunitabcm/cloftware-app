@@ -129,15 +129,6 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                             />
 
                             <GlobalInputs
-                                placeholder={`Phone Number`}
-                                name="phone_number"
-                                label="Phone Number"
-                                value={values.phone_number}
-                                mainClass={'mt-5'}
-                                disabled={true}
-                            />
-
-                            <GlobalInputs
                                 placeholder={`Current Address`}
                                 name="current_address"
                                 label="Current Address"
@@ -159,6 +150,8 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                                 value={values.phone_number}
                                 error={errors.phone_number}
                                 touched={touched}
+                                type='number'
+                                keyboardType={'number'}
                                 mainClass={'mt-5'}
                                 disabled={isSubmitting}
                             />
