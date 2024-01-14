@@ -380,15 +380,15 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
 
 export async function updateProfile(accessToken, values) {
     const formData = {
-        'current_address': values?.currentAddress,
-        'phone_number': values?.phoneNumber,
-        'emg_contact_number': values?.emgContactNumber,
-        'emg_contact_name': values?.emgContactName,
-        'emg_email_id': values?.emgEmailId,
-        'emg_relationship_to_student': values?.emgRelationshipToStudent,
+        'current_address': values?.current_address,
+        'phone_number': values?.phone_number,
+        'emg_contact_number': values?.emg_contact_number,
+        'emg_contact_name': values?.emg_contact_name,
+        'emg_email_id': values?.emg_email_id,
+        'emg_relationship_to_student': values?.emg_relationship_to_student,
     }
     try {
-        const response = await axios.post(`${baseURL}/calender_student_attendance`, formData, {
+        const response = await axios.post(`${baseURL}/edit_profile`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

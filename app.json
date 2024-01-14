@@ -2,7 +2,7 @@
   "expo": {
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/school.png"
+      "favicon": "./assets/schoolSmall.png"
     },
     "plugins": [
       "expo-router",
@@ -26,10 +26,10 @@
     "version": "1.0.0",
     "scheme": "com.cloftwaretech.cw",
     "orientation": "portrait",
-    "icon": "./assets/school.png",
+    "icon": "./assets/schoolSmall.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/school.png",
+      "image": "./assets/spachimageTest.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -59,7 +59,7 @@
       "package": "com.cloftwaretech.cw",
       "versionCode": 2,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/school.png",
+        "foregroundImage": "./assets/schoolSmall.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [

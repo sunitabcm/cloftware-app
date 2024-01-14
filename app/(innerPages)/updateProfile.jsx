@@ -26,22 +26,21 @@ export default function UpdateProfile() {
   useEffect(() => {
     getData()
   }, []);
-  const ResetPass = async () => {
+  const updatePro = async (values) => {
     try {
-      const response = await updateProfile(authToken?.token);
-      if (response.status === 200 || response.status === 201) {
+      const response = await updateProfile(authToken?.token, values);
+      // if (response.status === 200 || response.status === 201) {
         toast.show(response?.message, { type: "success" })
-      } else {
-        toast.show('Something went wrong', { type: "danger" })
-      }
+      // } else {
+        // toast.show('Something went wrong', { type: "danger" })
+      // }
     } catch (error) {
-      toast.show('Something went wrong', { type: "danger" })
+      // toast.show('Something went wrong', { type: "danger" })
     }
   };
 
   const handleProfileUpdate = (values) => {
-    // Add logic to send updated profile data to the server
-    console.log('Updated Profile:', values);
+    updatePro(values)
   };
 
   return (

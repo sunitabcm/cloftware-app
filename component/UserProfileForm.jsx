@@ -76,7 +76,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                     <AppIcon type='MaterialCommunityIcons' name='account-edit' size={30} color={'#FF6F1B'} />
                 </Pressable>
             </View>
-            <View className='mt-5'>
+            <View className='mt-5 pb-10 mb-10'>
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
