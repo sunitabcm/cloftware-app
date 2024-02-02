@@ -16,13 +16,12 @@ export const saveAuthToken = async (token) => {
 export const loadAuthToken = async (deleteToken = false) => {
   try {
     const storedTokenString = await AsyncStorage.getItem('authToken');
-    
     if (deleteToken) {
       await deleteAuthToken();
       return null;
     }
     
-    const storedToken = storedTokenString ? JSON.parse(storedTokenString) : null;
+    const storedToken = storedTokenString;
 
     return storedToken;
   } catch (error) {
@@ -57,3 +56,58 @@ export const checkAndReinstateAuthToken = async () => {
 
 // Listen for changes in app state
 AppState.addEventListener('change', checkAndReinstateAuthToken);
+
+
+export const saveAuthUserData = async (userData) => {
+  try {
+    await AsyncStorage.setItem('authUserData', userData);
+    
+  } catch (error) {
+    console.error('Error saving auth UserData:', error);
+  }
+};
+
+export const loadAuthUserData = async (deleteUserData = false) => {
+  try {
+    const storedUserDataString = await AsyncStorage.getItem('authUserData');
+    
+    if (deleteUserData) {
+      await deleteAuthUserData();
+      return null;
+    }
+    
+    const storedUserData = storedUserDataString ? JSON.parse(storedUserDataString) : null;
+
+    return storedUserData;
+  } catch (error) {
+    console.error('Error loading auth UserData:', error);
+    return null;
+  }
+};
+
+export const deleteAuthUserData = async () => {
+  try {
+    // await SecureStore.deleteItemAsync('authUserData');
+    await AsyncStorage.removeItem('authUserData');
+  } catch (error) {
+    console.error('Error deleting auth UserData:', error);
+  }
+};
+
+export const checkAndReinstateAuthUserData = async () => {
+  try {
+    const appState = await AppState.currentState;
+
+    if (appState === 'active') {
+      const storedUserData = await loadAuthUserData();
+      if (storedUserData) {
+        await saveAuthUserData(storedUserData);
+      }
+    }
+  } catch (error) {
+    console.error('Error checking and reinstating auth UserData:', error);
+  }
+};
+
+// Listen for changes in app state
+AppState.addEventListener('change', checkAndReinstateAuthUserData);

@@ -2,9 +2,11 @@
   "expo": {
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/schoolSmall.png"
+      "favicon": "./assets/adaptive_icon.png"
     },
     "plugins": [
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf",
       "expo-router",
       [
         "expo-build-properties",
@@ -26,10 +28,10 @@
     "version": "1.0.0",
     "scheme": "com.cloftwaretech.cw",
     "orientation": "portrait",
-    "icon": "./assets/schoolSmall.png",
+    "icon": "./assets/adaptive_icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/spachimageTest.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -48,9 +50,6 @@
         "com.apple.developer.applesignin": ["Default"],
         "com.apple.developer.networking.wifi-info": true
       },
-      "config": {
-
-      },
       "hermes": {
         "enabled": false
       }
@@ -59,16 +58,13 @@
       "package": "com.cloftwaretech.cw",
       "versionCode": 2,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/schoolSmall.png",
+        "foregroundImage": "./assets/adaptive_icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "config": {
-
-      },
       "hermes": {
         "enabled": false
       }

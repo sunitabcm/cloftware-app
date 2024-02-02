@@ -3,10 +3,8 @@ import { View, Text, Button, StyleSheet, Image, ScrollView, Pressable } from "re
 import Buttons from "../component/Buttons";
 import { useRouter } from "expo-router";
 import InputeFields from "../component/InputeFields";
-import { fiveColorBlack } from "../component/stylesheet";
-import WelcomeSchool from "../pageComponent/welcome/WelcomeSchool";
 import Messages from "../component/Messages";
-import { loginViaOtp, verifyLoginOtp } from "../ApiCalls";
+import { getStudentProfile, loginViaOtp, verifyLoginOtp } from "../ApiCalls";
 import { useToast } from 'react-native-toast-notifications';
 import { SmallPopup } from "../component/GlobalComps/SmallPopup";
 import { stylesGlobal } from "../styles/global";
@@ -74,11 +72,11 @@ const Otp = () => {
   const verifyOtpFunc = async (num) => {
     try {
       const userLogin = await verifyLoginOtp('919999276633', '999999')
-      console.log(userLogin)
       if (userLogin) {
         toast.show(userLogin?.message, { type: "success" })
-                dispatch(setAuthToken(userLogin?.body))
-        saveAuthToken(JSON.stringify(userLogin?.body))
+        dispatch(setAuthToken(userLogin?.body))
+        await getStudentProfile(dispatch, response.body)
+        saveAuthToken(userLogin?.body)
         router.push('/dashboard')
       } else {
         toast.show(userLogin?.message, { type: "danger" })
@@ -110,7 +108,7 @@ const Otp = () => {
   return (
     <ScrollView className='bg-light h-full p-5'>
       <View>
-      {verifyotp && <BtnGlobal
+        {verifyotp && <BtnGlobal
           styleClassName="closeBtn"
           icon={true}
           onPress={() => setverifyotp(false)}

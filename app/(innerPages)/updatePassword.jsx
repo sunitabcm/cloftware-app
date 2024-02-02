@@ -12,6 +12,7 @@ import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import { changePassword } from '../../ApiCalls';
 export default function UpdatePassword() {
   const authToken = useSelector((state) => state.auth.authToken);
+  const userCred = useSelector((state) => state.userDetails.user);
   const toast = useToast();
   const passwordValidationSchema = yup.object().shape({
     oldPassword: yup.string().required('Old Password is required'),
@@ -28,7 +29,7 @@ export default function UpdatePassword() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const ResetPass = async (oldPass, newPass, confirmPass) => {
     try {
-      const response = await changePassword(oldPass, newPass, authToken?.token);
+      const response = await changePassword(oldPass, newPass, authToken);
       if (response.status === 200 || response.status === 201) {
         toast.show(response?.message, { type: "success" })
       } else {

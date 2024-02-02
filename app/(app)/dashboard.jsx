@@ -3,8 +3,12 @@ import React, { useEffect } from 'react'
 import { stylesGlobal } from '../../styles/global';
 import { useRouter } from "expo-router";
 import { Image } from 'expo-image';
+import { useSelector, useDispatch } from 'react-redux';
+
 export default function dashboard() {
   const router = useRouter();
+  const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
 
   return (
     <ScrollView className='h-full bg-body'>
@@ -13,7 +17,7 @@ export default function dashboard() {
           <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'center', }]}>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/attendance')}>
               <Image
-                source={require("../../assets/attendance_icon.svg")}
+                source={require("../../assets/attendance_svg.svg")}
                 style={[{ width: 50, height: 50 }]}
                 contentFit="cover"
               />
@@ -21,7 +25,7 @@ export default function dashboard() {
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/holidays')}>
               <Image
-                source={require("../../assets/absense_icon.svg")}
+                source={require("../../assets/holidays_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
@@ -29,7 +33,7 @@ export default function dashboard() {
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/events')}>
               <Image
-                source={require("../../assets/performance_icon.svg")}
+                source={require("../../assets/events_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
@@ -37,31 +41,31 @@ export default function dashboard() {
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/bookSchedule')}>
               <Image
-                source={require("../../assets/schedules_icon.svg")}
+                source={require("../../assets/schedules_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
               <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Schedules</Text>
             </Pressable>
-            <Pressable style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled, { width: '31%', padding: 12 }]} onPress={() => router.push('/events')}>
+            <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/fees')}>
               <Image
-                source={require("../../assets/fees_icon.svg")}
+                source={require("../../assets/fees_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
               <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Fees</Text>
             </Pressable>
-            <Pressable style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled,{ width: '31%', padding: 12 }]} onPress={() => router.push('/events')}>
+            <Pressable style={[stylesGlobal.flexCenter,{ width: '31%', padding: 12 }]} onPress={() => router.push('/timeTable')}>
               <Image
-                source={require("../../assets/discussion_icon.svg")}
+                source={require("../../assets/timeTable_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
-              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Discussion</Text>
+              <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Time Table</Text>
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/homeAssignment')}>
               <Image
-                source={require("../../assets/discussion_icon.svg")}
+                source={require("../../assets/assignment_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
@@ -69,15 +73,15 @@ export default function dashboard() {
             </Pressable>
             <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/noticeBoard')}>
               <Image
-                source={require("../../assets/discussion_icon.svg")}
+                source={require("../../assets/notice_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />
               <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Notice Board</Text>
             </Pressable>
-            <Pressable style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled, { width: '31%', padding: 12 }]} onPress={() => router.push('/bookSchedule')}>
+            <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/discussion')}>
               <Image
-                source={require("../../assets/discussion_icon.svg")}
+                source={require("../../assets/discussion_svg.svg")}
                 style={{ width: 50, height: 50 }}
                 contentFit="cover"
               />

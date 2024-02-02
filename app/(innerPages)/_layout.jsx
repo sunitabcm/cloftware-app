@@ -28,6 +28,8 @@ export default function _layout() {
         <Stack.Screen name='studentStats' />
         <Stack.Screen name='support' />
         <Stack.Screen name='updatePassword' />
+        <Stack.Screen name='timeTable' />
+        <Stack.Screen name='discussion' />
         <Stack.Screen
           name="requestLeave"
           options={{

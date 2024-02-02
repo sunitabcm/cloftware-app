@@ -1,31 +1,56 @@
-import { View, Text, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'expo-router';
+import EventList from '../../component/EventList';
 import { useToast } from 'react-native-toast-notifications';
-import { stylesGlobal } from '../../styles/global';
-import AppIcon from '../../component/GlobalComps/AppIcon';
-import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
+import { getHomeAssignmentList } from '../../ApiCalls';
+import LoadingAnimation from '../../component/GlobalComps/loadingAnimation';
+import HomeAssigmentList from '../../component/HomeAssigmentList';
 export default function HomeAssignment() {
-  const authToken = useSelector((state) => state.auth.authToken);
+  const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
+  const [showCalender, setShowCalender] = useState(false);
+  const [currentYear, setCurrentYear] = useState(dayjs().year());
   const toast = useToast();
+
   const [apiData, setApiData] = useState(null);
+
+  const router = useRouter();
+  useEffect(() => {
+    if (userCred && Object.keys(userCred).length > 0) {
+      setShowCalender(true)
+      fetchData(dayjs(new Date()).format('YYYY-MM'))
+    } else {
+      setShowCalender(false)
+    }
+  }, [userCred]);
+
+
+  const fetchData = async (date) => {
+    try {
+      const response = await getHomeAssignmentList(authToken, userCred?.class_id, userCred?.section_id, userCred?.year_id, date);
+      if (response) {
+        // toast.show(response?.message, { type: "success" })
+        setApiData(response)
+      } else {
+        // toast.show('An error occured, Please try again', { type: "danger" })
+      }
+    } catch (error) {
+      // toast.show('An error occured, Please try again', { type: "danger" })
+    }
+  };
+
+
   return (
-    <ScrollView className='h-full bg-lightergrey p-5'>
-      <Text>Today's assignment</Text>
-      <View className='mt-7'>
-        <View className='bg-light rounded-lg p-4 w-full'>
-          <Text style={[stylesGlobal.title, { fontSize: 12 }]} className='mb-4'>Title</Text>
-          <Text style={stylesGlobal.innertext} className='mb-4'>
-            description
-          </Text>
-          <BtnGlobal
-            styleClassName="buttonSmall"
-            title="Mark as complete"
-            onPress={() => { }}
-            classNames={'w-full'}
-          />
-        </View>
+    <ScrollView className='h-full bg-lightergrey'>
+      <View>
+        {showCalender && apiData && apiData?.code === 200 ?
+          <HomeAssigmentList data={apiData?.body} fetchData={fetchData} />
+          :
+          <LoadingAnimation />
+        }
       </View>
     </ScrollView>
   )

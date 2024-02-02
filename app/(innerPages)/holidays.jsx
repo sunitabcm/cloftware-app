@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,44 +7,46 @@ import HolidayList from '../../component/HolidayList';
 import { useToast } from 'react-native-toast-notifications';
 import { getSchoolHolidayList } from '../../ApiCalls';
 import axios from 'axios';
+import LoadingAnimation from '../../component/GlobalComps/loadingAnimation';
 export default function Holidays() {
   const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
   const [showCalender, setShowCalender] = useState(false);
   const toast = useToast();
   const [apiData, setApiData] = useState(null);
   const router = useRouter();
   useEffect(() => {
-    if (authToken && Object.keys(authToken).length > 0) {
+    if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)
-      fetchData()
+      fetchData(dayjs(new Date()).format('YYYY-MM'))
     } else {
       setShowCalender(false)
     }
-  }, [authToken]);
+  }, [userCred]);
 
 
-  const fetchData = async () => {
+  const fetchData = async (date) => {
     try {
-      const response = await getSchoolHolidayList(authToken?.token, authToken?.year_id);
+      const response = await getSchoolHolidayList(authToken, userCred?.year_id, date);
 
       if (response) {
-        toast.show(response?.message, { type: "success" })
+        // toast.show(response?.message, { type: "success" })
         setApiData(response)
       } else {
-        toast.show('An error occured, Please try again', { type: "danger" })
+        // toast.show('An error occured, Please try again', { type: "danger" })
       }
     } catch (error) {
-      toast.show('An error occured, Please try again', { type: "danger" })
+      // toast.show('An error occured, Please try again', { type: "danger" })
     }
   };
 
   return (
     <ScrollView className='h-full bg-light p-5'>
-      <View>
-        {showCalender && apiData && Object.values(apiData?.body).length > 0 ?
-            <HolidayList data={apiData?.body} fetchData={fetchData} />
+      <View className='h-full'>
+        {showCalender && apiData && apiData?.code === 200 ?
+          <HolidayList data={apiData?.body} fetchData={fetchData} />
           :
-          <Text>Loading</Text>
+          <LoadingAnimation/>
         }
       </View>
     </ScrollView>

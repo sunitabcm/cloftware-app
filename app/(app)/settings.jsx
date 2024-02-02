@@ -3,18 +3,19 @@ import React from 'react'
 import AppIcon from '../../component/GlobalComps/AppIcon'
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteAuthToken } from '../../authStorage';
+import { deleteAuthToken, deleteAuthUserData } from '../../authStorage';
 import { setAuthToken } from '../../store/slices/authSlice';
 import { logout } from '../../ApiCalls';
 import { stylesGlobal } from '../../styles/global';
+import { updateUser } from '../../store/slices/userSlice';
 export default function Settings() {
   const router = useRouter();
   const authToken = useSelector((state) => state.auth.authToken)
-
+  const userCred = useSelector((state) => state.userDetails.user);
   const dispatch = useDispatch();
   const fetchData = async () => {
     try {
-      const response = await logout(authToken?.token);
+      const response = await logout(authToken);
     } catch (error) {
     }
   };
@@ -22,6 +23,8 @@ export default function Settings() {
     fetchData()
     dispatch(setAuthToken(null));
     deleteAuthToken()
+    dispatch(updateUser({}))
+    deleteAuthUserData()
     setTimeout(() => {
       router.replace('/validateOtp')
     }, 2000);
@@ -36,13 +39,13 @@ export default function Settings() {
           </Pressable>
           <Pressable onPress={()=> router.push('/studentStats')} className='flex flex-row items-center'>
             <View className='w-[40px] flex items-center'><AppIcon type='Ionicons' name='bar-chart-outline' size={25} color={'#535353'} /></View>
-            <Text className='font-bold text-body ml-5 text-base'>School Stats</Text>
+            <Text className='font-bold text-body ml-5 text-base'>School details</Text>
           </Pressable>
-          <Pressable style={stylesGlobal.primaryDisabled} onPress={()=> router.push('/reports')} className='flex flex-row items-center'>
+          {/* <Pressable onPress={()=> router.push('/reports')} className='flex flex-row items-center'>
             <View className='w-[40px] flex items-center'><AppIcon type='FontAwesome' name='file-text-o' size={25} color={'#535353'} /></View>
             <Text className='font-bold text-body ml-5 text-base'>Reports</Text>
-          </Pressable>
-          <Pressable style={stylesGlobal.primaryDisabled} onPress={()=> router.push('/support')} className='flex flex-row items-center'>
+          </Pressable> */}
+          <Pressable onPress={()=> router.push('/support')} className='flex flex-row items-center'>
             <View className='w-[40px] flex items-center'><AppIcon type='AntDesign' name='customerservice' size={28} color={'#535353'} /></View>
             <Text className='font-bold text-body ml-5 text-base'>Support</Text>
           </Pressable>

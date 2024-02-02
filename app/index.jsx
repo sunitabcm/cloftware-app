@@ -1,35 +1,40 @@
 import React, { useEffect } from "react";
-import { View, Image, StyleSheet, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import SchoolIcon from "../component/GlobalComps/SchoolIcon";
-import { stylesGlobal } from "../styles/global";
-import { loadAuthToken } from '../authStorage';
-import { setAuthToken } from "../store/slices/authSlice";
 import { useSelector, useDispatch } from 'react-redux';
+import LoadingAnimation from "../component/GlobalComps/loadingAnimation";
+import { getStudentProfile } from "../ApiCalls";
 const Index = () => {
   const router = useRouter();
+  const dispatch = useDispatch()
   const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
+  const fetchData = async () => {
+    try {
+      const response = await getStudentProfile(dispatch, response.body)
+      setTimeout(() => {
+        router.replace("/dashboard");
+      }, 1000);
+    } catch (error) {
+    }
+  };
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (authToken && Object.keys(authToken).length > 0) {
+      if (authToken && userCred && Object.keys(userCred).length > 0) {
         router.replace("/dashboard");
       } else {
-        router.replace("/slideshow");
+        if (authToken && Object.keys(userCred).length === 0) {
+          fetchData(authToken)
+        } else {
+          router.replace("/slideshow");
+        }
       }
-    }, 5000);
+    }, 500);
     return () => clearTimeout(timer);
-  }, [router, authToken]);
+  }, [router, authToken, userCred]);
 
   return (
-    <View className='h-full w-full bg-light justify-center items-center'>
-      <ActivityIndicator className='' size="large" color="#FF6F1B" />
-    </View>
-    // <View style={stylesGlobal.containerFlexWhite}>
-    //   <View style={stylesGlobal.circle_1} />
-    //   <View style={stylesGlobal.circle_2} />
-    //   <View style={stylesGlobal.circle_3} />
-    //   <SchoolIcon styleSize={115} />
-    // </View>
+    <LoadingAnimation />
   );
 };
 

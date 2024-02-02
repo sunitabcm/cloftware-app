@@ -1,17 +1,9 @@
 import axios from 'axios';
 import { setAuthToken } from './store/slices/authSlice';
+import { updateUser } from './store/slices/userSlice';
+import { saveAuthUserData } from './authStorage';
 const baseURL = "https://api.cloftware.com/api/app";
 
-// const fetchData = async () => {
-//   try {
-//     const data = await login(email, password);
-// console.log(data)
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//   }
-// };
-
-// Function to login
 export async function login(email, password) {
     try {
         const response = await axios.post(
@@ -168,7 +160,7 @@ export async function verifyLoginOtp(number, otp) {
 }
 
 // Function to get school event list
-export async function getSchoolEventList(accessToken, year, limit = '5', offset = '0') {
+export async function getSchoolEventList(accessToken, year, date, limit = '5', offset = '0') {
     try {
         const response = await axios.post(
             `${baseURL}/event/get_event_list`,
@@ -176,6 +168,7 @@ export async function getSchoolEventList(accessToken, year, limit = '5', offset 
                 offset: offset,
                 limit: limit,
                 year_id: year,
+                year_month: date,
             },
             {
                 headers: {
@@ -196,12 +189,13 @@ export async function getSchoolEventList(accessToken, year, limit = '5', offset 
 }
 
 // Function to get school holiday list
-export async function getSchoolHolidayList(accessToken, year, limit = '5', offset = '0') {
+export async function getSchoolHolidayList(accessToken, year, date, limit = '5', offset = '0') {
     try {
         const response = await axios.post(`${baseURL}/event/get_holiday_list`, {
             offset: offset,
             limit: limit,
             year_id: year,
+            year_month: date,
         }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -220,12 +214,11 @@ export async function getSchoolHolidayList(accessToken, year, limit = '5', offse
 }
 
 // Function to get student profile
-export async function getStudentProfile(accessToken, year, limit = '5', offset = '0') {
+export async function getStudentProfile(dispatch, accessToken, limit = '5', offset = '0') {
     try {
         const response = await axios.post(`${baseURL}/get_profile`, {
             offset: offset,
             limit: limit,
-            year_id: year,
         }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -233,12 +226,12 @@ export async function getStudentProfile(accessToken, year, limit = '5', offset =
             },
         });
         if (response.status === 200 || response.status === 201) {
-            return response.data;
-        } else {
-            return response.data;
+            dispatch(updateUser(response.data.body));
+            saveAuthUserData(JSON.stringify(response.data.body))
         }
     } catch (error) {
         console.error('Error getting student profile:', error);
+        dispatch(updateUser({}));
         throw error;
     }
 }
@@ -411,8 +404,8 @@ export async function imageUpload(fileUrl, fileName, loginWebToken) {
     formData.append('file', {
         uri: fileUrl,
         type: 'image/*',
-        name: 'imageFile',
-        filename: fileName,
+        name: fileName,
+        filename: 'imageFile',
     });
     formData.append('folder', 'profile_images/student');
 
@@ -423,15 +416,88 @@ export async function imageUpload(fileUrl, fileName, loginWebToken) {
                 'Authorization': 'Bearer ' + loginWebToken,
             },
         });
-
         if (response.status === 200 || response.status === 201) {
-            return 'Your Profile Picture has been updated Successfully';
+            return 'Image Uploaded';
         } else {
             return 'Something went wrong please try again later';
         }
     } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            return error.response.status;
+        return 'Something went wrong please try again later';
+    }
+}
+
+export async function getHomeAssignmentList(accessToken, classId, sectionId, yearid, date) {
+    try {
+        const response = await axios.get(`${baseURL}/home_assignment_list`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            params: {
+                class_id: classId,
+                section_id: sectionId,
+                // year_id: yearid,
+                year_month: date,
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
         }
+    } catch (error) {
+        console.error('Error getting Home Assignment List:', error);
+        throw error;
+    }
+}
+
+export async function getBookScheduleList(accessToken, schoolId, classId, sectionId) {
+    try {
+        const response = await axios.get(`${baseURL}/book_schedule_list`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            params: {
+                school_id: schoolId,
+                class_id: classId,
+                section_id: sectionId,
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error getting Book Schedule List:', error);
+        throw error;
+    }
+}
+
+export async function getTimeTableList(accessToken, schoolId, classId, sectionId) {
+    try {
+        const response = await axios.get(`${baseURL}/time-table`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            params: {
+                school_id: schoolId,
+                class_id: classId,
+                section_id: sectionId,
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error getting Book Schedule List:', error);
+        throw error;
     }
 }

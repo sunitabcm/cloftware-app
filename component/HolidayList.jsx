@@ -4,6 +4,7 @@ import { Calendar, Agenda } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
 import { SmallPopup } from './GlobalComps/SmallPopup';
+import EmptyScreen from './GlobalComps/EmptyScreen';
 
 const HolidayList = ({ data, fetchData }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
@@ -20,7 +21,7 @@ const HolidayList = ({ data, fetchData }) => {
   };
 
   const onArrowPress = (increment) => {
-    const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM-DD');
+    const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM');
     setSelectedDate(newDate);
     fetchData(newDate);
   };
@@ -50,7 +51,7 @@ const HolidayList = ({ data, fetchData }) => {
         {organizedData[month].map((holiday) => (
           <View key={holiday.holiday_id} className='flex flex-row justify-between items-center'>
             <View className='flex flex-row gap-3 mb-5 items-center'>
-              <Text className='text-body font-bold bg-gold p-4 text-2xl rounded-full'>{new Date(holiday.date).getDate()}</Text>
+              <View className='text-body font-bold bg-gold h-[60px] w-[60px] flex justify-center items-center text-2xl rounded-full'><Text className='text-body font-bold text-2xl'>{new Date(holiday.date).getDate()}</Text></View>
               <Text className='text-body font-bold'>{holiday.title}</Text>
             </View>
             <Pressable onPress={() => openModal(holiday)} className='-mt-3'>
@@ -66,6 +67,7 @@ const HolidayList = ({ data, fetchData }) => {
   };
 
   return (
+    <>
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
         <TouchableOpacity onPress={() => onArrowPress(-1)}>
@@ -78,6 +80,8 @@ const HolidayList = ({ data, fetchData }) => {
       </View>
       {renderHolidays()}
     </View>
+    {data.length === 0 && <EmptyScreen/>}
+    </>
   );
 };
 

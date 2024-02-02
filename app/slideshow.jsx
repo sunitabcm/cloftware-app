@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
-import Buttons from "../component/Buttons";
 import { useRouter } from "expo-router";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import { Image } from "expo-image";
@@ -8,9 +7,9 @@ const SlideShow = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
   const data = [
-    { id: 1, image: require("../assets/Isolation_Mode.png"), text: " Track Attendance, Real-Time Updates", descriptionText: 'Instant info on progress, assignments, and attendance.' },
-    { id: 2, image: require("../assets/Frame.png"), text: "Direct Teacher Communication", descriptionText: 'Connect directly, ask questions, and collaborate with teachers.' },
-    { id: 3, image: require("../assets/Group-23.png"), text: "Efficient School Management", descriptionText: 'Intuitive and efficient, tailors to manage your role seamlessly' },
+    { id: 1, image: require("../assets/SlideShow_calender.png"), text: " Track Attendance, Real-Time Updates", descriptionText: 'Instant info on progress, assignments, and attendance.' },
+    { id: 2, image: require("../assets/SlideShow_chat.png"), text: "Direct Teacher Communication", descriptionText: 'Connect directly, ask questions, and collaborate with teachers.' },
+    { id: 3, image: require("../assets/SlideShow_tools.png"), text: "Efficient School Management", descriptionText: 'Intuitive and efficient, tailors to manage your role seamlessly' },
   ];
 
   const flatListRef = useRef(null);

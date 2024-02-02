@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 export default function LoggedInHeader() {
     const authToken = useSelector((state) => state.auth.authToken)
+    const userCred = useSelector((state) => state.userDetails.user);
     return (
         <View className='bg-body p-5'>
             <View className='mt-6'>
@@ -15,10 +16,10 @@ export default function LoggedInHeader() {
             <View className='flex flex-row items-center justify-between mt-10'>
                 <View className='flex flex-row items-center mt-3'>
                     <AvatarIcon />
-                    {authToken && Object.keys(authToken).length > 0 ?
+                    {userCred && Object.keys(userCred).length > 0 ?
                         <View className='flex flex-col items-start ml-4'>
-                            <Text className='font-bold text-light'>{authToken.first_name} {authToken?.last_name}</Text>
-                            <Text className='font-light text-light'>{authToken.class_name}</Text>
+                            <Text className='font-bold text-light'>{userCred.first_name} {userCred?.last_name}</Text>
+                            <Text className='font-light text-light'>{userCred.class_name}</Text>
                         </View>
                         :
                         <Text></Text>

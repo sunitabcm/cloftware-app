@@ -6,10 +6,11 @@ import GlobalInputs from './GlobalComps/GlobalInputs';
 import BtnGlobal from './GlobalComps/BtnGlobal';
 import AppIcon from './GlobalComps/AppIcon';
 import AvatarIcon from './GlobalComps/AvatarIcon';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
 import { useToast } from 'react-native-toast-notifications';
-import { imageUpload } from '../ApiCalls';
+import { getStudentProfile, imageUpload } from '../ApiCalls';
+import { Image } from 'expo-image';
 const validationSchema = yup.object().shape({
     current_address: yup.string().required('Current Address is required'),
     phone_number: yup.string().required('Phone Number is required'),
@@ -21,7 +22,9 @@ const validationSchema = yup.object().shape({
 
 const UserProfileForm = ({ apiData, onSubmit }) => {
     const authToken = useSelector((state) => state.auth.authToken);
-    const toast = useToast()
+    const userCred = useSelector((state) => state.userDetails.user);
+    const toast = useToast();
+    const dispatch = useDispatch()
     const [isSubmitting, setIsSubmitting] = useState(true)
     const initialValues = {
         year_title: apiData?.year_title,
@@ -40,11 +43,9 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
             const result = await DocumentPicker.pick({
                 type: [DocumentPicker.types.images],
             });
-            console.log(result, result[0].uri)
-            imageUpload(result[0].uri, result[0].name, authToken?.token)
-            toast.show('Sucess', { type: "success" })
-            setTimeout(() => {
-            }, 2000);
+            const resultImage = await imageUpload(result[0].uri, result[0].name, authToken)
+            toast.show(resultImage, { type: "success" })
+            const data = await getStudentProfile(dispatch, authToken)
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 // Handle document picker cancellation
@@ -63,10 +64,10 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                             <AppIcon type='AntDesign' name='edit' size={20} color={'#fff'} />
                         </Pressable>
                     </View>
-                    {authToken && Object.keys(authToken).length > 0 ?
+                    {userCred && Object.keys(userCred).length > 0 ?
                         <View className='flex flex-col items-start ml-4'>
-                            <Text className='font-bold text-body'>{authToken.first_name} {authToken?.last_name}</Text>
-                            <Text className='font-light text-body'>{authToken.class_name}</Text>
+                            <Text className='font-bold text-body'>{userCred.first_name} {userCred?.last_name}</Text>
+                            <Text className='font-light text-body'>{userCred.class_name}</Text>
                         </View>
                         :
                         <Text>Loading</Text>

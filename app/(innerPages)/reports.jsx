@@ -8,6 +8,7 @@ import AppIcon from '../../component/GlobalComps/AppIcon';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
 export default function Reports() {
     const authToken = useSelector((state) => state.auth.authToken);
+    const userCred = useSelector((state) => state.userDetails.user);
     const toast = useToast();
     const [apiData, setApiData] = useState(null);
   return (

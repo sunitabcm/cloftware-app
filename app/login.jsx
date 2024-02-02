@@ -1,38 +1,38 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
     StyleSheet,
     ScrollView,
 } from "react-native";
-import Buttons from "../component/Buttons";
 import InputeFields from "../component/InputeFields";
 import Links from "../component/Links";
-import WelcomeSchool from "../pageComponent/welcome/WelcomeSchool";
-import Heading from "../component/Heading";
 import SchoolIcon from "../component/GlobalComps/SchoolIcon";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import Messages from "../component/Messages";
 import { thirdColorBlack, fiveColorBlack } from "../component/stylesheet";
-import { stylesGlobal } from "../styles/global";
 import { useToast } from 'react-native-toast-notifications';
-import { login, verifyLoginOtp } from "../ApiCalls";
+import { getStudentProfile, login, verifyLoginOtp } from "../ApiCalls";
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { setAuthToken } from "../store/slices/authSlice";
 import { saveAuthToken } from "../authStorage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = () => {
     const router = useRouter();
     const toast = useToast();
     const dispatch = useDispatch()
     const [errors, setErrors] = useState({});
-    const [email, setemail] = useState("");
-    const [password, setpassword] = useState("");
+    const [email, setemail] = useState("7406226857");
+    const [password, setpassword] = useState("123456");
     const [buttondisabled, setbuttondisabled] = useState(true);
     const [emailNum, setEmailNum] = useState("");
     const [errormsg, seterrormsg] = useState("");
     const [err, seterr] = useState(false);
     const [passwderr, setpasswderr] = useState(false);
+    const authToken = useSelector((state) => state.auth.authToken)
+    const userCred = useSelector((state) => state.userDetails.user);
+    
     const handleSubmit = (event) => {
         event.preventDefault();
         const formList = {
@@ -88,8 +88,9 @@ const Login = () => {
         try {
             const response = await login(valuee, password);
             if (response) {
-                dispatch(setAuthToken(response?.body))
-                saveAuthToken(JSON.stringify(response?.body))
+                dispatch(setAuthToken(response.body))
+                saveAuthToken(response.body)
+                await getStudentProfile(dispatch, response.body)
                 toast.show(response?.message, { type: "success" })
                 router.push('/dashboard')
             } else {
@@ -187,7 +188,7 @@ const Login = () => {
                         title="Login to account"
                         onPress={handleSubmit}
                         classNames={'w-full'}
-                        isDisabled={buttondisabled}
+                        // isDisabled={buttondisabled}
                     />
                 </View>
             </View>

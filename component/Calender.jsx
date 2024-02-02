@@ -11,6 +11,7 @@ const MyCalendar = () => {
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const authToken = useSelector((state) => state.auth.authToken);
+  const userCred = useSelector((state) => state.userDetails.user);
   const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
@@ -21,9 +22,9 @@ const MyCalendar = () => {
   const fetchApiData = async (date) => {
     try {
       const data = await getStudentAttendanceCalendar(
-        authToken?.token,
-        authToken?.school_id,
-        authToken?.school_id,
+        authToken,
+        userCred?.school_id,
+        userCred?.school_id,
         dayjs(date).format('YYYY'),
         dayjs(date).format('MM')
       );

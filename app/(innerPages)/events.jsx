@@ -3,11 +3,13 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
-import HolidayList from '../../component/HolidayList';
+import EventList from '../../component/EventList';
 import { useToast } from 'react-native-toast-notifications';
 import { getSchoolEventList } from '../../ApiCalls';
+import LoadingAnimation from '../../component/GlobalComps/loadingAnimation';
 export default function Events() {
   const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
   const [showCalender, setShowCalender] = useState(false);
   const [currentYear, setCurrentYear] = useState(dayjs().year());
   const toast = useToast();
@@ -16,26 +18,26 @@ export default function Events() {
 
   const router = useRouter();
   useEffect(() => {
-    if (authToken && Object.keys(authToken).length > 0) {
+    if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)
-      fetchData()
+      fetchData(dayjs(new Date()).format('YYYY-MM'))
     } else {
       setShowCalender(false)
     }
-  }, [authToken]);
+  }, [userCred]);
 
 
-  const fetchData = async () => {
+  const fetchData = async (date) => {
     try {
-      const response = await getSchoolEventList(authToken?.token, authToken?.year_id);
+      const response = await getSchoolEventList(authToken, userCred?.year_id, date);
       if (response) {
-        toast.show(response?.message, { type: "success" })
+        // toast.show(response?.message, { type: "success" })
         setApiData(response)
       } else {
-        toast.show('An error occured, Please try again', { type: "danger" })
+        // toast.show('An error occured, Please try again', { type: "danger" })
       }
     } catch (error) {
-      toast.show('An error occured, Please try again', { type: "danger" })
+      // toast.show('An error occured, Please try again', { type: "danger" })
     }
   };
 
@@ -43,13 +45,13 @@ export default function Events() {
   return (
     <ScrollView className='h-full bg-light p-5'>
       <View>
-        {showCalender && apiData && Object.values(apiData?.body).length > 0 ?
+        {showCalender && apiData && apiData?.code === 200 ?
           <>
             {/* <YearChanger onYearChange={handleYearChange} /> */}
-            <HolidayList data={apiData?.body} fetchData={fetchData}/>
+            <EventList data={apiData?.body} fetchData={fetchData} />
           </>
           :
-          <Text>Loading</Text>
+          <LoadingAnimation />
         }
       </View>
     </ScrollView>

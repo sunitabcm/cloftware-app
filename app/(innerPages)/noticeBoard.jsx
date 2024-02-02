@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Pressable, FlatList, Dimensions } from 'react-native';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useToast } from 'react-native-toast-notifications';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -8,16 +8,23 @@ import { getNoticeBoardList } from '../../ApiCalls';
 import { stylesGlobal } from '../../styles/global';
 import AppIcon from '../../component/GlobalComps/AppIcon';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
+import AttachedUibox from '../../component/GlobalComps/AttachedUibox';
+import EmptyScreen from '../../component/GlobalComps/EmptyScreen'
+import { Image } from 'expo-image';
+import { Video } from 'expo-av';
 
 export default function NoticeBoard() {
   const authToken = useSelector((state) => state.auth.authToken);
+  const userCred = useSelector((state) => state.userDetails.user);
+  const screenWidth = Dimensions.get('window').width - 40;
   const toast = useToast();
   const [apiData, setApiData] = useState(null);
   const [apiDataFilters, setApiDataFilters] = useState(null);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState('');
   const [page, setPage] = useState(null);
-
+  const videoRef = useRef(null);
+  const [status, setStatus] = useState({});
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -34,23 +41,23 @@ export default function NoticeBoard() {
   };
 
   useEffect(() => {
-    if (authToken && Object.keys(authToken).length > 0) {
+    if (userCred && Object.keys(userCred).length > 0) {
       fetchData();
     }
-  }, [authToken]);
+  }, [userCred]);
 
   const fetchData = async () => {
     try {
-      const response = await getNoticeBoardList(authToken?.school_id, authToken?.token);
+      const response = await getNoticeBoardList(userCred?.school_id, authToken);
       if (response) {
-        toast.show(response?.message, { type: 'success' });
+        // toast.show(response?.message, { type: 'success' });
         setApiData(response?.body);
         setApiDataFilters(response?.body)
       } else {
-        toast.show('An error occurred, Please try again', { type: 'danger' });
+        // toast.show('An error occurred, Please try again', { type: 'danger' });
       }
     } catch (error) {
-      toast.show('An error occurred, Please try again', { type: 'danger' });
+      // toast.show('An error occurred, Please try again', { type: 'danger' });
     }
   };
 
@@ -78,57 +85,76 @@ export default function NoticeBoard() {
               </TouchableOpacity>
             </View>
           </View>
-          <ScrollView className="p-5 bg-lightergrey">
+          <ScrollView className="p-5 bg-lightergrey pb-16">
             {apiDataFilters && apiDataFilters.length > 0 ? (
-              <View className='flex flex-col items-center w-full gap-y-5'>
+              <View className='flex flex-col items-center w-full '>
                 {Object.values(apiDataFilters).map((item) => (
-                  <Pressable key={item.notice_id} className='bg-light rounded-lg p-4 w-full' onPress={(e) => setPage(item)}>
-                    <Text style={[stylesGlobal.title, { fontSize: 16 }]} className='mb-2'>{item.title}</Text>
-                    <Text style={stylesGlobal.innertext} className='mb-4'>
-                      {item.description?.length > 30 ? `${item.description?.slice(0, 30)}...` : item.description}
-                    </Text>
-
-                    <View className='flex flex-row'>
-                      <AppIcon type='AntDesign' name='calendar' color='#000' size={20} />
-                      <Text style={[stylesGlobal.innertext, { fontSize: 12 }]} className='ml-4'>{dayjs(item.date).format('DD MMM, YYYY')}</Text>
-                    </View>
-                  </Pressable>
+                  <AttachedUibox press={(e) => setPage(item)} key={item.title} item={item} />
                 ))}
               </View>
             ) : (
-              <Text>No Data</Text>
+              <EmptyScreen />
             )}
           </ScrollView>
         </>
         :
         <ScrollView className='p-5'>
-          <BtnGlobal
-            styleClassName="closeBtn"
-            icon={true}
-            onPress={() => setPage(null)}
-            classNames={'mb-5'}
-            iconName={'arrowleft'}
-            iconType={'AntDesign'}
-            iconSize={22}
-            iconColor={'#2A2D32'}
-          />
-          <BtnGlobal
-            styleClassName="closeBtn"
-            icon={true}
-            onPress={() => setPage(null)}
-            classNames={'mb-5 p-3'}
-            iconName={'megaphone'}
-            iconType={'Entypo'}
-            iconSize={25}
-            iconColor={'#FF6F1B'}
-            isDisabled={true}
-          />
-          <Text style={[stylesGlobal.title]} className='mb-4'>{page.title}</Text>
-          <View className='flex flex-row pb-5 border-b border-lightergrey'>
-            <AppIcon type='AntDesign' name='calendar' color='#000' size={20} />
-            <Text style={[stylesGlobal.innertext, { fontSize: 12 }]} className='ml-4'>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
+
+          <View className='flex flex-row items-center'>
+            <BtnGlobal
+              styleClassName="closeBtn"
+              icon={true}
+              onPress={() => setPage(null)}
+              classNames={'mr-5 mt-2'}
+              iconName={'arrowleft'}
+              iconType={'AntDesign'}
+              iconSize={22}
+              iconColor={'#2A2D32'}
+            />
+            <Image
+              source={require("../../assets/speaker.svg")}
+              style={[{ width: 50, height: 50 }]}
+              contentFit="cover"
+            />
           </View>
-          <Text style={stylesGlobal.innertext} className='mt-5'>
+          <Text style={[stylesGlobal.title]} className='my-4'>{page.title}</Text>
+          <View className='flex flex-row pb-5 border-b border-lightergrey'>
+            <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
+            <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
+          </View>
+          {page.notice_images && page.notice_videos && (page.notice_images.length > 0 ||  page.notice_videos.length > 0) &&
+            <View className='flex flex-col justify-center items-center mt-5'>
+              <ScrollView className='h-[175px] w-full' persistentScrollbar={true} horizontal>
+                {page.notice_videos && page.notice_videos.length > 0 ? (
+                  <Video
+                    source={{ uri: page.notice_videos[0].media }}
+                    ref={videoRef}
+                    style={{ width: screenWidth, height: 170, borderRadius: 10, marginRight: 10 }}
+                    useNativeControls={true}
+                    onPlaybackStatusUpdate={status => setStatus(() => status)}
+
+                  />
+                ) : null}
+                {page.notice_images && page.notice_images.length > 0 ? (
+                  <Image
+                    source={{ uri: page.notice_images[0].media }}
+                    style={{ width: screenWidth, height: 170, borderRadius: 10 }}
+                  />
+                ) : null}
+              </ScrollView>
+              {page.notice_videos && page.notice_videos.length > 0 || page.notice_images && page.notice_images.length > 0 ? (
+                <ScrollView horizontal style={{ marginTop: 10 }}>
+                  {page.notice_videos && page.notice_videos.length > 0 && (
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
+                  )}
+                  {page.notice_images && page.notice_images.length > 0 && (
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
+                  )}
+                </ScrollView>
+              ) : null}
+            </View>
+          }
+          <Text className='mt-4 text-lightgrey text-sm'>
             {page.description}
           </Text>
         </ScrollView>

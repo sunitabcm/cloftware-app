@@ -27,7 +27,10 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
         setPageName('Update Password')
       }
       if(pathname === '/studentStats'){
-        setPageName('Student Stats')
+        setPageName('school details')
+      }
+      if(pathname === '/timeTable'){
+        setPageName('Timetable Management')
       }
       }, [pathname]);
       

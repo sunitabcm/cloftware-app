@@ -15,7 +15,8 @@ const RequestLeave = () => {
   const toast = useToast();
   const dispatch = useDispatch()
   const authToken = useSelector((state) => state.auth.authToken)
-  const [name, setName] = useState(authToken && Object.keys(authToken).length > 0 ? `${authToken?.first_name} ${authToken?.last_name}` : '');
+  const userCred = useSelector((state) => state.userDetails.user);
+  const [name, setName] = useState(userCred && Object.keys(userCred).length > 0 ? `${userCred?.first_name} ${userCred?.last_name}` : '');
   const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [reason, setReason] = useState('');
@@ -35,7 +36,7 @@ const RequestLeave = () => {
 
   const loginPostFunc = async () => {
     try {
-      const response = await addEditApplyLeave(authToken?.token, authToken?.class_id, authToken?.section_id, authToken?.year_id, reason, dayjs(leaveDate).format('YYYY-MM-DD'), authToken?.student_id);
+      const response = await addEditApplyLeave(authToken, userCred?.class_id, userCred?.section_id, userCred?.year_id, reason, dayjs(leaveDate).format('YYYY-MM-DD'), userCred?.student_id);
       if (response) {
         toast.show(response?.message, { type: "success" })
       } else {

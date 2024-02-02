@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const ForgotPassword = () => {
     const router = useRouter();
     const authToken = useSelector((state) => state.auth.authToken)
+    const userCred = useSelector((state) => state.userDetails.user);
     const toast = useToast();
     const dispatch = useDispatch()
     const [email, setemail] = useState("");
