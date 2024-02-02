@@ -9,7 +9,7 @@ import AvatarIcon from './GlobalComps/AvatarIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
 import { useToast } from 'react-native-toast-notifications';
-import { getStudentProfile, imageUpload } from '../ApiCalls';
+import { getStudentProfile, imageUpload, updateProfile } from '../ApiCalls';
 import { Image } from 'expo-image';
 const validationSchema = yup.object().shape({
     current_address: yup.string().required('Current Address is required'),
@@ -44,8 +44,15 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                 type: [DocumentPicker.types.images],
             });
             const resultImage = await imageUpload(result[0].uri, result[0].name, authToken)
-            toast.show(resultImage, { type: "success" })
-            const data = await getStudentProfile(dispatch, authToken)
+            if(resultImage){
+                const value = await updateProfile(authToken, resultImage.fileURL, true)
+                if(value){
+                    toast.show('Image Uploaded', { type: "success" })
+                    const data = await getStudentProfile(dispatch, authToken)
+                }
+            } else {
+                toast.show('Something went wrong ', { type: "success" })
+            }
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 // Handle document picker cancellation

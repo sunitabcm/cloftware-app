@@ -371,14 +371,21 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
     }
 }
 
-export async function updateProfile(accessToken, values) {
-    const formData = {
-        'current_address': values?.current_address,
-        'phone_number': values?.phone_number,
-        'emg_contact_number': values?.emg_contact_number,
-        'emg_contact_name': values?.emg_contact_name,
-        'emg_email_id': values?.emg_email_id,
-        'emg_relationship_to_student': values?.emg_relationship_to_student,
+export async function updateProfile(accessToken, values, image) {
+    let formData;
+    if(image !== undefined){
+        formData = {
+            'profile_image': values,
+        }
+    } else {
+        formData = {
+            'current_address': values?.current_address,
+            'phone_number': values?.phone_number,
+            'emg_contact_number': values?.emg_contact_number,
+            'emg_contact_name': values?.emg_contact_name,
+            'emg_email_id': values?.emg_email_id,
+            'emg_relationship_to_student': values?.emg_relationship_to_student,
+        }
     }
     try {
         const response = await axios.post(`${baseURL}/edit_profile`, formData, {
@@ -416,13 +423,14 @@ export async function imageUpload(fileUrl, fileName, loginWebToken) {
                 'Authorization': 'Bearer ' + loginWebToken,
             },
         });
+        const responseData = response.data
         if (response.status === 200 || response.status === 201) {
-            return 'Image Uploaded';
+            return responseData.body;
         } else {
-            return 'Something went wrong please try again later';
+            return null;
         }
     } catch (error) {
-        return 'Something went wrong please try again later';
+        return null;
     }
 }
 

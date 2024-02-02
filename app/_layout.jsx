@@ -41,7 +41,7 @@ export default function Layout() {
         <SplashScreen />
         :
         <View style={{ flex: 1, paddingTop: top, paddingBottom: bottom, fontSize: 14, backgroundColor: '#fff', color: '#37374E', position: 'relative' }}>
-          <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable>
+          {/* <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable> */}
           <ToastProvider
             placement="top"
             duration={5000}

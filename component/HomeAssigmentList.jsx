@@ -8,6 +8,7 @@ import BtnGlobal from './GlobalComps/BtnGlobal';
 import { stylesGlobal } from '../styles/global';
 import ModalScreen from './GlobalComps/ModalScreen';
 import PDFreader from './GlobalComps/PDFreader';
+import EmptyScreen from './GlobalComps/EmptyScreen';
 const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
   const startDate = dayjs(selectedDate).startOf('month');
   const endDate = dayjs(selectedDate).endOf('month');
@@ -52,6 +53,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
   const [selectedHoliday, setSelectedHoliday] = useState(null);
   const screenWidth = Dimensions.get('window').width - 40;
   const [showPDF, setShowPDF] = useState(false);
+  const [showEmpty, setShowEmpty] = useState(false);
   const [showPDFPath, setShowPDFPath] = useState('');
   const [showPDFName, setShowPDFName] = useState('');
   const [page, setPage] = useState(null);
@@ -82,6 +84,11 @@ const HomeAssigmentList = ({ data, fetchData }) => {
 
       organizedData[month].push(holiday);
     });
+    // if(Object.keys(organizedData).length === 0){
+    //   setShowEmpty(true)
+    // } else {
+    //   setShowEmpty(false)
+    // }
 
     return organizedData;
   };
@@ -103,7 +110,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
       {
         !page ?
           (
-            <View style={{ flex: 1 }} className='bg-light'>
+            <View style={{ flex: 1 }} className='bg-light h-full'>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 40 }}>
                 <TouchableOpacity onPress={() => onArrowPress(-1)}>
                   <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3' />
@@ -115,6 +122,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
               </View>
               <HorizontalDateScroll selectedDate={selectedDate} onDateSelect={(date) => setSelectedDate(date)} />
               <View className='bg-lightergrey p-5'>
+              {data && Array.isArray(data) && data.length === 0 && <EmptyScreen/>}
                 {renderHolidays()}
               </View>
             </View>
@@ -145,18 +153,22 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                 <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
               </View>
               <View className='flex flex-col justify-center items-center mt-5'>
-                {page.image && page.image !== '' ? (
+                {page.image && page.image !== '' && page.flag !== 0 ? (
+                  <>
+                  {page.flag === 2 &&
                   <Image
                     source={{ uri: page.image }}
                     style={{ width: screenWidth, height: 170, borderRadius: 10 }}
-                  />
-                  // <TouchableOpacity onPress={() => { setShowPDFName(page.title); setShowPDFPath(page.image); setShowPDF(true) }}>
-                  //   <Image
-                  //     source={require("../assets/pdfImage.svg")}
-                  //     style={{ width: 45, height: 60 }}
-                  //     contentFit="cover"
-                  //   />
-                  // </TouchableOpacity>
+                  />}
+                  {page.flag === 1 &&
+                  <TouchableOpacity onPress={() => { setShowPDFName(page.title); setShowPDFPath(page.image); setShowPDF(true) }}>
+                    <Image
+                      source={require("../assets/pdfImage.svg")}
+                      style={{ width: 45, height: 60 }}
+                      contentFit="cover"
+                    />
+                  </TouchableOpacity>}
+                  </>
                 ) : null}
               </View>
               <Text className='mt-4 text-lightgrey text-sm'>
