@@ -18,7 +18,7 @@ const FixedFooter = () => {
 		});
 		loadAuthUserData().then(authUserData => {
 			dispatch(updateUser(authUserData));
-		  });
+		});
 	}, []);
 	const handleClose = () => {
 		setOpenMenu(false)

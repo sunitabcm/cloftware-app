@@ -226,12 +226,16 @@ export async function getStudentProfile(dispatch, accessToken, limit = '5', offs
             },
         });
         if (response.status === 200 || response.status === 201) {
-            dispatch(updateUser(response.data.body));
-            saveAuthUserData(JSON.stringify(response.data.body))
+            const userData = response.data.body;
+
+            // Ensure userData is an object and stringify it if needed
+            const userDataString = typeof userData === 'object' ? JSON.stringify(userData) : userData;
+            dispatch(updateUser(userData));
+            saveAuthUserData(JSON.stringify(userData))
         }
     } catch (error) {
         console.error('Error getting student profile:', error);
-        dispatch(updateUser({}));
+        dispatch(updateUser(null));
         throw error;
     }
 }

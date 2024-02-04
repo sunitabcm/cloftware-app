@@ -23,7 +23,7 @@ export default function Settings() {
     fetchData()
     dispatch(setAuthToken(null));
     deleteAuthToken()
-    dispatch(updateUser({}))
+    dispatch(updateUser(null))
     deleteAuthUserData()
     setTimeout(() => {
       router.replace('/validateOtp')
