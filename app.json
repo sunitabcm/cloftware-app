@@ -23,7 +23,7 @@
         }
       ]
     ],
-    "name": "cw",
+    "name": "DPS Ajmer",
     "slug": "cw",
     "version": "1.0.0",
     "scheme": "com.cloftwaretech.cw",
@@ -49,6 +49,14 @@
       "entitlements": {
         "com.apple.developer.applesignin": ["Default"],
         "com.apple.developer.networking.wifi-info": true
+      },
+      "permissions": {
+        "camera": {
+          "description": "Allow app to use camera"
+        },
+        "mediaLibrary": {
+          "description": "Allow app to access media library"
+        }
       }
     },
     "android": {
@@ -58,10 +66,7 @@
         "foregroundImage": "./assets/adaptive_icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "permissions": [
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
-      ]
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "extra": {
       "eas": {

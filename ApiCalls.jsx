@@ -190,13 +190,23 @@ export async function getSchoolEventList(accessToken, year, date, limit = '5', o
 
 // Function to get school holiday list
 export async function getSchoolHolidayList(accessToken, year, date, limit = '5', offset = '0') {
-    try {
-        const response = await axios.post(`${baseURL}/event/get_holiday_list`, {
+    let formData;
+    if (date) {
+        formData = {
             offset: offset,
             limit: limit,
             year_id: year,
             year_month: date,
-        }, {
+        }
+    } else {
+        formData = {
+            offset: offset,
+            limit: limit,
+            year_id: year,
+        }
+    }
+    try {
+        const response = await axios.post(`${baseURL}/event/get_holiday_list`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -377,7 +387,7 @@ export async function getStudentAttendanceCalendar(accessToken, student_id, scho
 
 export async function updateProfile(accessToken, values, image) {
     let formData;
-    if(image !== undefined){
+    if (image !== undefined) {
         formData = {
             'profile_image': values,
         }

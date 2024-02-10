@@ -7,10 +7,11 @@ import BtnGlobal from './GlobalComps/BtnGlobal';
 import AppIcon from './GlobalComps/AppIcon';
 import AvatarIcon from './GlobalComps/AvatarIcon';
 import { useDispatch, useSelector } from 'react-redux';
-import DocumentPicker from 'react-native-document-picker';
+// import DocumentPicker from 'react-native-document-picker';
 import { useToast } from 'react-native-toast-notifications';
 import { getStudentProfile, imageUpload, updateProfile } from '../ApiCalls';
 import { Image } from 'expo-image';
+import ImagePicker from 'react-native-image-crop-picker';
 const validationSchema = yup.object().shape({
     current_address: yup.string().required('Current Address is required'),
     phone_number: yup.string().required('Phone Number is required'),
@@ -38,48 +39,112 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
         emg_email_id: apiData?.student_details.emg_email_id,
         emg_relationship_to_student: apiData?.student_details.emg_relationship_to_student,
     };
+    // const handleFilePicker = async () => {
+    //     try {
+    //         const result = await DocumentPicker.pick({
+    //             type: [DocumentPicker.types.images],
+    //         });
+    //         const resultImage = await imageUpload(result[0].uri, result[0].name, authToken)
+    //         if (resultImage) {
+    //             const value = await updateProfile(authToken, resultImage.fileURL, true)
+    //             if (value) {
+    //                 toast.show('Image Uploaded', { type: "success" })
+    //                 const data = await getStudentProfile(dispatch, authToken)
+    //             }
+    //         } else {
+    //             toast.show('Something went wrong ', { type: "success" })
+    //         }
+    //     } catch (err) {
+    //         if (DocumentPicker.isCancel(err)) {
+    //             // Handle document picker cancellation
+    //         } else {
+    //             console.error(err);
+    //         }
+    //     }
+    // };
+
     const handleFilePicker = async () => {
         try {
-            const result = await DocumentPicker.pick({
-                type: [DocumentPicker.types.images],
+            const result = await ImagePicker.openPicker({
+                width: 300,
+                height: 400,
+                cropping: true,
+                cropperToolbarTitle: 'Crop your image',
+                cropperActiveWidgetColor: '#3498db',
+                cropperStatusBarColor: '#3498db',
+                cropperToolbarColor: '#3498db',
             });
-            const resultImage = await imageUpload(result[0].uri, result[0].name, authToken)
-            if(resultImage){
-                const value = await updateProfile(authToken, resultImage.fileURL, true)
-                if(value){
-                    toast.show('Image Uploaded', { type: "success" })
-                    const data = await getStudentProfile(dispatch, authToken)
+            const resultImage = await imageUpload(result.path, 'choosenImage.jpg', authToken);
+
+            if (resultImage) {
+                const value = await updateProfile(authToken, resultImage.fileURL, true);
+
+                if (value) {
+                    toast.show('Image Uploaded', { type: 'success' });
+                    const data = await getStudentProfile(dispatch, authToken);
                 }
             } else {
-                toast.show('Something went wrong ', { type: "success" })
+                toast.show('Something went wrong ', { type: 'success' });
             }
         } catch (err) {
-            if (DocumentPicker.isCancel(err)) {
-                // Handle document picker cancellation
-            } else {
+            if (err.code !== 'E_PICKER_CANCELLED') {
                 console.error(err);
             }
         }
     };
+
+    const handleOpenCamera = async () => {
+        try {
+            const cameraResult = await ImagePicker.openCamera({
+                width: 300,
+                height: 400,
+                cropping: true,
+                cropperToolbarTitle: 'Crop your image',
+                cropperActiveWidgetColor: '#3498db',
+                cropperStatusBarColor: '#3498db',
+                cropperToolbarColor: '#3498db',
+            });
+            if (cameraResult) {
+                const resultImage = await imageUpload(cameraResult.path, 'cameraPic.jpg', authToken);
+
+                if (resultImage) {
+                    const value = await updateProfile(authToken, resultImage.fileURL, true);
+
+                    if (value) {
+                        toast.show('Image Uploaded', { type: 'success' });
+                        const data = await getStudentProfile(dispatch, authToken);
+                    }
+                } else {
+                    toast.show('Something went wrong ', { type: 'success' });
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <View className='relative w-full'>
             <View className='flex flex-row justify-between items-center'>
-                <View className='flex flex-row items-start'>
-                    <View className='relative h-[60px] w-[60px]'>
-                        <AvatarIcon styleChange={'rounded-full'} styleSize={60} />
-                        <Pressable onPress={handleFilePicker} className='absolute bottom-0 right-0 bg-body rounded-full p-0.5'>
-                            <AppIcon type='AntDesign' name='edit' size={20} color={'#fff'} />
-                        </Pressable>
-                    </View>
-                    {userCred && Object.keys(userCred).length > 0 ?
-                        <View className='flex flex-col items-start ml-4'>
-                            <Text className='font-bold text-body'>{userCred.first_name} {userCred?.last_name}</Text>
-                            <Text className='font-light text-body'>{userCred.class_name}</Text>
+                    <View className='flex flex-row items-start'>
+                        <View className='relative h-[60px] w-[60px]'>
+                            <AvatarIcon styleChange={'rounded-full'} styleSize={60} />
+                            <Pressable onPress={handleFilePicker} className='absolute bottom-0 right-0 bg-body rounded-full p-0.5'>
+                                <AppIcon type='AntDesign' name='edit' size={20} color={'#fff'} />
+                            </Pressable>
                         </View>
-                        :
-                        <Text>Loading</Text>
-                    }
+                        {userCred && Object.keys(userCred).length > 0 ?
+                            <View className='flex flex-col items-start ml-4'>
+                                <Text className='font-bold text-body'>{userCred.first_name} {userCred?.last_name}</Text>
+                                <Text className='font-light text-body'>{userCred.class_name}</Text>
+                            </View>
+                            :
+                            <Text>Loading</Text>
+                        }
                 </View>
+                <Pressable onPress={handleOpenCamera} className=''>
+                        <AppIcon type='Entypo' name='camera' size={30} color={'#9747FF'} />
+                    </Pressable>
                 <Pressable onPress={() => setIsSubmitting((prev) => !prev)} className=''>
                     <AppIcon type='MaterialCommunityIcons' name='account-edit' size={30} color={'#FF6F1B'} />
                 </Pressable>
@@ -219,12 +284,12 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                                 disabled={isSubmitting}
                             />
 
-                            <BtnGlobal
+                            {!isSubmitting && <BtnGlobal
                                 styleClassName="button"
                                 title="Update Profile"
                                 onPress={handleSubmit}
                                 classNames={'w-full mt-5'}
-                            />
+                            />}
                         </View>
                     )}
                 </Formik>

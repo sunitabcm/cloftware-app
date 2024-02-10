@@ -111,11 +111,11 @@ export default function NoticeBoard() {
               iconSize={22}
               iconColor={'#2A2D32'}
             />
-            <Image
+            {/* <Image
               source={require("../../assets/speaker.svg")}
               style={[{ width: 50, height: 50 }]}
               contentFit="cover"
-            />
+            /> */}
           </View>
           <Text style={[stylesGlobal.title]} className='my-4'>{page.title}</Text>
           <View className='flex flex-row pb-5 border-b border-lightergrey'>

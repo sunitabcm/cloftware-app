@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity,Image } from "react-native";
 import { useRouter } from "expo-router";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
-import { Image } from "expo-image";
+import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
 const SlideShow = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
@@ -79,13 +79,7 @@ const SlideShow = () => {
             classNames={'w-full'}
           />
         </View>
-        <View style={styles.below_logo} className='mx-auto'>
-          <Image
-            source={require("../assets/CloftwareGroup.svg")}
-            style={{ width: 200, height: 15 }}
-            contentFit="contain"
-          />
-        </View>
+       <CloftwareLogo/>
       </View>
     </View>
   );

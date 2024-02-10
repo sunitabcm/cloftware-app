@@ -15,14 +15,16 @@ import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import Loginpopup from "../component/Loginpopup";
 import { saveAuthToken } from "../authStorage";
 import { setAuthToken } from "../store/slices/authSlice";
+import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
+import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
 const Otp = () => {
   const router = useRouter();
   const toast = useToast();
   const dispatch = useDispatch();
-  const [enteredNumber, setenteredNumber] = useState("9999276633");
+  const [enteredNumber, setenteredNumber] = useState("7406226857");
   const [buttondisabled, setbuttondisabled] = useState(true);
   const [verifyotp, setverifyotp] = useState(false);
-  const [otp, setOtp] = useState("999999");
+  const [otp, setOtp] = useState("942575");
   const [otperror, setotperror] = useState(false);
   const [error, seterror] = useState(false);
   const [otpsuccessmsg, setotpsuccessmsg] = useState("");
@@ -71,7 +73,7 @@ const Otp = () => {
   };
   const verifyOtpFunc = async (num) => {
     try {
-      const userLogin = await verifyLoginOtp('919999276633', '999999')
+      const userLogin = await verifyLoginOtp('917406226857', '942575')
       if (userLogin) {
         toast.show(userLogin?.message, { type: "success" })
         dispatch(setAuthToken(userLogin?.body))
@@ -106,24 +108,14 @@ const Otp = () => {
     }
   }, [enteredNumber]);
   return (
-    <ScrollView className='bg-light h-full p-5'>
+    <ScrollView className='bg-light h-full'>
       <View>
-        {verifyotp && <BtnGlobal
-          styleClassName="closeBtn"
-          icon={true}
-          onPress={() => setverifyotp(false)}
-          classNames={'mb-5'}
-          iconName={'arrowleft'}
-          iconType={'AntDesign'}
-          iconSize={22}
-          iconColor={'#2A2D32'}
-        />}
-        <SchoolIcon styleSize={60} />
-        <View style={stylesGlobal.textcontainer}>
+        <NonLoggedInBlur onPressBtn={() => setverifyotp(false)} hidden={verifyotp}/>
+        <View style={stylesGlobal.textcontainer} className='p-5'>
           <Text style={stylesGlobal.title}>Join us via phone number</Text>
           <Text style={stylesGlobal.innertext}>We will text a code to verify you</Text>
         </View>
-        <View style={stylesGlobal.formFields}>
+        <View style={stylesGlobal.formFields} className='p-5'>
           <View style={stylesGlobal.inputFields}>
             {!verifyotp ? (
               <InputeFields
@@ -132,6 +124,8 @@ const Otp = () => {
                 onChangeText={onChangeText}
                 value={enteredNumber}
                 type={'number'}
+                numeric={true}
+                secureTextEntry={false}
                 ifEmailNumber
               />
             ) : (
@@ -140,6 +134,7 @@ const Otp = () => {
                 placeholder={"OTP"}
                 onChangeText={(e) => setOtp(e)}
                 value={otp}
+                numeric={true}
               />
             )}
             {error && <Messages title="Please Enter valid Number" />}
@@ -177,6 +172,7 @@ const Otp = () => {
       <SmallPopup isVisible={modalVisible} closeModal={closeModal}>
         <Loginpopup closeModal={closeModal} />
       </SmallPopup>
+      <CloftwareLogo/>
     </ScrollView>
   );
 };

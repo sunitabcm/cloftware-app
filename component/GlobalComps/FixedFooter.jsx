@@ -30,11 +30,11 @@ const FixedFooter = () => {
 				<View className='px-5 flex justify-between items-center flex-row'>
 					<Pressable onPress={() => router.push('/dashboard')} className='flex flex-col items-center justify-center'>
 						<AppIcon type='Ionicons' name='cube-outline' size={27} color={pathname === '/dashboard' ? '#2A2D32' : '#E1E1E1'} />
-						<Text className={` ${pathname === '/dashboard' ? 'text-body' : 'text-menubg'} font-bold text-center`}>Library</Text>
+						<Text className={` ${pathname === '/dashboard' ? 'text-body' : 'text-menubg'} font-bold text-center`}>DashBoard</Text>
 					</Pressable>
 					<Pressable onPress={() => router.push('/contacts')} className='flex flex-col items-center justify-center'>
 						<AppIcon type='FontAwesome' name='user-o' size={28} color={pathname === '/contacts' ? '#2A2D32' : '#E1E1E1'} />
-						<Text className={` ${pathname === '/contacts' ? 'text-body' : 'text-menubg'} font-bold text-center`}>Contacts</Text>
+						<Text className={` ${pathname === '/contacts' ? 'text-body' : 'text-menubg'} font-bold text-center`}>Contact</Text>
 					</Pressable>
 					<Pressable onPress={() => setOpenMenu(!openMenu)} className='flex flex-col items-center justify-center bg-body rounded-full p-2.5'>
 						<AppIcon type='AntDesign' name={openMenu ? 'close' : 'plus'} size={25} color={'#fff'} />

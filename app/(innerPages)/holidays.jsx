@@ -18,7 +18,7 @@ export default function Holidays() {
   useEffect(() => {
     if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)
-      fetchData(dayjs(new Date()).format('YYYY-MM'))
+      fetchData()
     } else {
       setShowCalender(false)
     }

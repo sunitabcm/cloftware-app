@@ -17,13 +17,14 @@ import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { setAuthToken } from "../store/slices/authSlice";
 import { saveAuthToken } from "../authStorage";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
+import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
 const Login = () => {
     const router = useRouter();
     const toast = useToast();
     const dispatch = useDispatch()
     const [errors, setErrors] = useState({});
-    const [email, setemail] = useState("7406226857");
+    const [email, setemail] = useState("rohit10aug88@gmail.com");
     const [password, setpassword] = useState("123456");
     const [buttondisabled, setbuttondisabled] = useState(true);
     const [emailNum, setEmailNum] = useState("");
@@ -39,36 +40,36 @@ const Login = () => {
             email: email,
             password: password,
         };
-        if (isNaN(formList.email) || formList.email == 0) {
+        // if (isNaN(formList.email) || formList.email == 0) {
             const validationErrors = validate(formList);
             if (Object.keys(validationErrors).length === 0) {
                 loginPostFunc(email);
             } else {
                 setErrors(validationErrors);
             }
-        }
-        else {
-            const validationErrors = validatenumberfield(formList);
-            var numm = '91' + email
-            if (Object.keys(validationErrors).length === 0) {
-                loginPostFunc(numm);
-            } else {
-                setErrors(validationErrors);
-            }
-        }
+        // }
+        // else {
+        //     const validationErrors = validatenumberfield(formList);
+        //     var numm = '91' + email
+        //     if (Object.keys(validationErrors).length === 0) {
+        //         loginPostFunc(numm);
+        //     } else {
+        //         setErrors(validationErrors);
+        //     }
+        // }
     };
-    const validatenumberfield = (values) => {
-        const errors = {};
-        if (values.email.length < 10) {
-            errors.email = "Valid Mobile Number is required!";
-        }
-        if (!values.password) {
-            errors.password = "Password is required";
-        } else if (values.password.length < 3) {
-            errors.password = "Password must be more than 3 characters";
-        }
-        return errors;
-    };
+    // const validatenumberfield = (values) => {
+    //     const errors = {};
+    //     if (values.email.length < 10) {
+    //         errors.email = "Valid Mobile Number is required!";
+    //     }
+    //     if (!values.password) {
+    //         errors.password = "Password is required";
+    //     } else if (values.password.length < 3) {
+    //         errors.password = "Password must be more than 3 characters";
+    //     }
+    //     return errors;
+    // };
     const validate = (values) => {
         const errors = {};
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -131,31 +132,20 @@ const Login = () => {
     }
 
     return (
-        <ScrollView className='bg-light h-full p-5'>
+        <ScrollView className='bg-light h-full'>
             <View>
-                <BtnGlobal
-                    styleClassName="closeBtn"
-                    icon={true}
-                    onPress={() => router.push('/validateOtp')}
-                    classNames={'mb-5'}
-                    iconName={'arrowleft'}
-                    iconType={'AntDesign'}
-                    iconSize={22}
-                    iconColor={'#2A2D32'}
-                />
-                <SchoolIcon styleSize={60} />
-                <View style={styles.formFields}>
+                <NonLoggedInBlur onPressBtn={() => router.push('/validateOtp')}/>
+                <View style={styles.formFields} className=' p-5'>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Login to your account</Text>
                         <Text style={styles.innertext}>Welcome back please enter your details</Text>
                     </View>
                     <View style={styles.inputFields}>
                         <InputeFields
-                            label={"Email/Username"}
+                            label={"Email"}
                             placeholder={"Enter Email"}
                             value={email}
                             onChangeText={(e) => chnageemail(e)}
-                            ifEmailNumber
                         />
                         {err && <Messages title="Email is Required" />}
                         {errors.email && !err && <Messages title={errors.email} />}
@@ -192,6 +182,7 @@ const Login = () => {
                     />
                 </View>
             </View>
+            <CloftwareLogo/>
         </ScrollView>
     );
 };

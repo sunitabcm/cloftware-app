@@ -54,11 +54,11 @@ export default function TimeTable() {
     <View>
       {showCalender && apiData && apiData.code === 200 ? (
         Object.values(apiData.body).length > 0 && apiData.body.map((item) => (
-          <View key={item.id} className='w-full flex flex-row items-center justify-between'>
+          <View key={item.id} className='w-full flex flex-row items-center justify-between mb-4'>
             <TouchableOpacity className='w-[90%]' onPress={() => { setShowPDFName(item.title); setShowPDFPath(item.file_upload); setShowPDF(true) }} style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginBottom: 15,
+              // marginBottom: 15,
             }}>
               <Image
                 source={require("../../assets/pdfImage.svg")}
@@ -67,7 +67,7 @@ export default function TimeTable() {
               />
               <Text className=' text-body ml-5 font-bold max-w-[85%]'>{item.title}</Text>
             </TouchableOpacity>
-            <Link href={item.file_upload}><AppIcon type='MaterialCommunityIcons' name='download' size={40} color={'#535353'} /></Link>
+            <Link href={item.file_upload}><View className='w-[35px] h-[35px] rounded-full bg-[#10B98129] flex justify-center items-center'><AppIcon type='Feather' name='download-outline' size={18} color={'#10B981'} /></View></Link>
           </View>
         ))
       ) : (

@@ -18,6 +18,8 @@ import { useToast } from 'react-native-toast-notifications';
 import { forgotPassword, verifyOtpPasswordReset, resetPassword } from '../ApiCalls'
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
+import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
+import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
 
 const ForgotPassword = () => {
     const router = useRouter();
@@ -195,31 +197,20 @@ const ForgotPassword = () => {
     };
 
     return (
-        <ScrollView className='bg-light h-full p-5'>
+        <ScrollView className='bg-light h-full'>
             <View>
-                <BtnGlobal
-                    styleClassName="closeBtn"
-                    icon={true}
-                    onPress={() => router.push('/login')}
-                    classNames={'mb-5'}
-                    iconName={'arrowleft'}
-                    iconType={'AntDesign'}
-                    iconSize={22}
-                    iconColor={'#2A2D32'}
-                />
-                <SchoolIcon styleSize={60} />
-                <View style={styles.formFields}>
+                <NonLoggedInBlur onPressBtn={() => router.push('/login')}/>
+                <View style={styles.formFields} className='p-5'>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Forgot Password?</Text>
                     </View>
                     <View style={styles.inputFields}>
                         <InputeFields
-                            label={"Email/Username"}
+                            label={"Email"}
                             placeholder={"Enter Email"}
                             value={email}
                             disabled={!showEmailButton}
                             onChangeText={(e) => chnageemail(e)}
-                            ifEmailNumber
                         />
                         {err && <Messages title="Invalid Email" />}
                     </View>
@@ -240,6 +231,7 @@ const ForgotPassword = () => {
                                 placeholder={"OTP"}
                                 onChangeText={(e) => setOtp(e)}
                                 value={otp}
+                                numeric={true}
                             />
                             <BtnGlobal
                                 styleClassName="button"
@@ -283,6 +275,7 @@ const ForgotPassword = () => {
 
                 </View>
             </View>
+            <CloftwareLogo/>
         </ScrollView>
     );
 };

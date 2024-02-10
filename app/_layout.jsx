@@ -29,7 +29,7 @@ export default function Layout() {
     });
     setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1800);
   }, []);
 
   const { top } = useSafeArea();

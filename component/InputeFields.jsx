@@ -51,6 +51,7 @@ const InputeFields = ({
             value={value}
             disabled={disabled}
             onChangeText={onChangeText}
+            keyboardType={inputType}
             secureTextEntry={!isEye ? secureTextEntry : false}
           />
         </View>
@@ -73,19 +74,40 @@ const InputeFields = ({
                 {!value.trim() ? (
                   type === 'number' ?
                     <View style={styles.plusNine}>
-                      <Icon name="plus" size={17} color={secondaryColor} />
-                      <Text style={styles.plusNineText}>91</Text>
+                      <Image
+                        source={require("../assets/ind-flag.png")}
+                        style={{ width: 24, height: 16 }}
+                        contentFit="cover"
+                      />
+
                     </View>
                     :
-                    <Icon name="email" size={20} color={secondaryColor} />
-                  //<Icon name="email" size={20} color={whitte} />
+                    <View style={styles.plusNine}>
+                      <Image
+                        source={require("../assets/ind-flag.png")}
+                        style={{ width: 24, height: 16 }}
+                        contentFit="cover"
+                      />
+
+                    </View>
                 ) : !isNaN(value) ? (
                   <View style={styles.plusNine}>
-                    <Icon name="plus" size={17} color={secondaryColor} />
-                    <Text style={styles.plusNineText}>91</Text>
+                    <Image
+                      source={require("../assets/ind-flag.png")}
+                      style={{ width: 24, height: 16 }}
+                      contentFit="cover"
+                    />
                   </View>
                 ) : (
-                  <Icon name="email" size={20} color={secondaryColor} />
+                  // <Icon name="email" size={20} color={secondaryColor} />
+                  <View style={styles.plusNine}>
+                    <Image
+                      source={require("../assets/ind-flag.png")}
+                      style={{ width: 24, height: 16 }}
+                      contentFit="cover"
+                    />
+
+                  </View>
                 )}
               </View>
               <TextInput
@@ -95,7 +117,7 @@ const InputeFields = ({
                 onChangeText={onChangeText}
                 disabled={disabled}
                 maxLength={!isNaN(value) ? 10 : 100}
-                keyboardType="default"
+                keyboardType={inputType}
               />
             </View>
           )}

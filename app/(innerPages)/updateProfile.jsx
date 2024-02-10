@@ -32,8 +32,8 @@ const dispatch = useDispatch()
 
   return (
     <ScrollView className='h-full bg-light p-5'>
-      {apiData && Object.values(apiData).length > 0 ?
-        <UserProfileForm apiData={apiData} onSubmit={handleProfileUpdate} />
+      {Object.values(userCred).length > 0 && userCred ?
+        <UserProfileForm apiData={userCred} onSubmit={handleProfileUpdate} />
         :
         <LoadingAnimation />
       }
