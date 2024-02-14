@@ -27,7 +27,7 @@ const ForgotPassword = () => {
     const userCred = useSelector((state) => state.userDetails.user);
     const toast = useToast();
     const dispatch = useDispatch()
-    const [email, setemail] = useState("");
+    const [email, setemail] = useState("studentaman@yopmail.com");
     const [otp, setOtp] = useState("");
     const [password, setpassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -222,7 +222,7 @@ const ForgotPassword = () => {
                             title="Send OTP"
                             onPress={handleEmailSubmit}
                             classNames={'w-full'}
-                            isDisabled={buttondisabled}
+                            // isDisabled={buttondisabled}
                         />
                     )}
 
@@ -240,7 +240,7 @@ const ForgotPassword = () => {
                                 title="Verify OTP"
                                 onPress={handleOtpSubmit}
                                 classNames={'w-full mt-5'}
-                                isDisabled={otp?.length === 0}
+                                // isDisabled={otp?.length === 0}
                             />
                         </>
                     )}
@@ -264,13 +264,13 @@ const ForgotPassword = () => {
                                 onChangeText={(e) => changeConfirmPasswd(e)}
                                 ifEye
                             />
-                            {!confirmPasswordValid && <Messages title="Passwords do not match" />}
+                            {!confirmPasswordValid && password.length > 0 && confirmPassword.length > 0 && <Messages title="Passwords do not match" />}
                             <BtnGlobal
                                 styleClassName="button"
                                 title="Reset Password"
                                 onPress={handlePasswordSubmit}
                                 classNames={'w-full mt-5'}
-                                isDisabled={buttondisabledOtp}
+                                // isDisabled={buttondisabledOtp}
                             />
                         </>
                     )}

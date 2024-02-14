@@ -60,7 +60,7 @@ const HolidayList = ({ data, fetchData }) => {
               </View>
             }
             <View className='flex flex-row w-full gap-3 mb-5 mt-1 items-start'>
-              <View className='text-body font-bold bg-body h-[60px] w-[46px] flex justify-center items-center text-2xl rounded-xl'>
+              <View className='text-body font-bold bg-[#38A7F6] h-[60px] w-[46px] flex justify-center items-center text-2xl rounded-xl'>
                 <Text className='text-light text-center text-xs'>{dayjs(holiday.date).format('ddd')}</Text>
                 <Text className='text-light text-center font-bold text-2xl'>{new Date(holiday.date).getDate()}</Text>
               </View>

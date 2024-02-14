@@ -75,10 +75,10 @@ const Otp = () => {
     try {
       const userLogin = await verifyLoginOtp('917406226857', '942575')
       if (userLogin) {
-        toast.show(userLogin?.message, { type: "success" })
         dispatch(setAuthToken(userLogin?.body))
         await getStudentProfile(dispatch, response.body)
         saveAuthToken(userLogin?.body)
+        toast.show(userLogin?.message, { type: "success" })
         router.push('/dashboard')
       } else {
         toast.show(userLogin?.message, { type: "danger" })
