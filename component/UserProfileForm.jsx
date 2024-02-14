@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Pressable } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -12,6 +12,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { getStudentProfile, imageUpload, updateProfile } from '../ApiCalls';
 import { Image } from 'expo-image';
 import ImagePicker from 'react-native-image-crop-picker';
+import { SmallPopup } from './GlobalComps/SmallPopup';
 const validationSchema = yup.object().shape({
     current_address: yup.string().required('Current Address is required'),
     phone_number: yup.string().required('Phone Number is required'),
@@ -27,6 +28,26 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
     const toast = useToast();
     const dispatch = useDispatch()
     const [isSubmitting, setIsSubmitting] = useState(true)
+    const [randomNumber, setRandomNumber] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const generateRandomNumber = () => {
+        const newRandomNumber = Math.floor(Math.random() * 100) + 1;
+        setRandomNumber(newRandomNumber);
+    };
+
+    useEffect(() => {
+        generateRandomNumber();
+    }, []);
+
+    const openModal = () => {
+        setModalVisible(true);
+      };
+    
+      const closeModal = () => {
+        setModalVisible(false);
+      };
+
     const initialValues = {
         year_title: apiData?.year_title,
         first_name: apiData?.first_name,
@@ -74,7 +95,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                 cropperStatusBarColor: '#3498db',
                 cropperToolbarColor: '#3498db',
             });
-            const resultImage = await imageUpload(result.path, 'choosenImage.jpg', authToken);
+            const resultImage = await imageUpload(result.path, `choosenImage${randomNumber}.jpg`, authToken);
 
             if (resultImage) {
                 const value = await updateProfile(authToken, resultImage.fileURL, true);
@@ -91,6 +112,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                 console.error(err);
             }
         }
+        generateRandomNumber();
     };
 
     const handleOpenCamera = async () => {
@@ -105,7 +127,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                 cropperToolbarColor: '#3498db',
             });
             if (cameraResult) {
-                const resultImage = await imageUpload(cameraResult.path, 'cameraPic.jpg', authToken);
+                const resultImage = await imageUpload(cameraResult.path, `cameraPic${randomNumber}.jpg`, authToken);
 
                 if (resultImage) {
                     const value = await updateProfile(authToken, resultImage.fileURL, true);
@@ -121,30 +143,28 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
         } catch (err) {
             console.error(err);
         }
+        generateRandomNumber();
     };
 
     return (
         <View className='relative w-full'>
             <View className='flex flex-row justify-between items-center'>
-                    <View className='flex flex-row items-start'>
-                        <View className='relative h-[60px] w-[60px]'>
-                            <AvatarIcon styleChange={'rounded-full'} styleSize={60} />
-                            <Pressable onPress={handleFilePicker} className='absolute bottom-0 right-0 bg-body rounded-full p-0.5'>
-                                <AppIcon type='AntDesign' name='edit' size={20} color={'#fff'} />
-                            </Pressable>
+                <View className='flex flex-row items-start'>
+                    <View className='relative h-[60px] w-[60px]'>
+                        <AvatarIcon styleChange={'rounded-full'} styleSize={60} />
+                        <Pressable onPress={()=> openModal()} className='absolute bottom-0 right-0 bg-body rounded-full p-0.5'>
+                            <AppIcon type='AntDesign' name='edit' size={20} color={'#fff'} />
+                        </Pressable>
+                    </View>
+                    {userCred && Object.keys(userCred).length > 0 ?
+                        <View className='flex flex-col items-start ml-4'>
+                            <Text className='font-bold text-body'>{userCred.first_name} {userCred?.last_name}</Text>
+                            <Text className='font-light text-body'>{userCred.class_name}</Text>
                         </View>
-                        {userCred && Object.keys(userCred).length > 0 ?
-                            <View className='flex flex-col items-start ml-4'>
-                                <Text className='font-bold text-body'>{userCred.first_name} {userCred?.last_name}</Text>
-                                <Text className='font-light text-body'>{userCred.class_name}</Text>
-                            </View>
-                            :
-                            <Text>Loading</Text>
-                        }
+                        :
+                        <Text>Loading</Text>
+                    }
                 </View>
-                <Pressable onPress={handleOpenCamera} className=''>
-                        <AppIcon type='Entypo' name='camera' size={30} color={'#9747FF'} />
-                    </Pressable>
                 <Pressable onPress={() => setIsSubmitting((prev) => !prev)} className=''>
                     <AppIcon type='MaterialCommunityIcons' name='account-edit' size={30} color={'#FF6F1B'} />
                 </Pressable>
@@ -294,6 +314,18 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                     )}
                 </Formik>
             </View>
+            <SmallPopup isVisible={modalVisible} closeModal={closeModal} customModalClass={'h-[20%]'}>
+                <View className='flex flex-col gap-5 items-start'>
+                <Pressable onPress={handleOpenCamera} className='flex flex-row items-center'>
+                    <AppIcon type='Entypo' name='camera' size={30} color={'#535353'} />
+                    <Text className='text-body pl-5'>Capture Picture</Text>
+                </Pressable>
+                <Pressable onPress={handleFilePicker} className='flex flex-row items-center'>
+                    <AppIcon type='Feather' name='image' size={30} color={'#535353'} />
+                    <Text className='text-body pl-5'>Import from files</Text>
+                </Pressable>
+                </View>
+            </SmallPopup>
         </View>
     );
 };

@@ -28,13 +28,13 @@ const MyCalendar = () => {
   useEffect(() => {
     // Fetch initial data when the component mounts
     fetchApiData(selectedDate);
-  }, [selectedDate]);
+  }, [selectedDate, router]);
 
   const fetchApiData = async (date) => {
     try {
       const data = await getStudentAttendanceCalendar(
         authToken,
-        userCred?.school_id,
+        userCred?.student_details?.stu_id,
         userCred?.school_id,
         dayjs(date).format('YYYY'),
         dayjs(date).format('MM')

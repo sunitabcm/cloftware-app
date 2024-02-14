@@ -30,6 +30,10 @@
     "orientation": "portrait",
     "icon": "./assets/adaptive_icon.png",
     "userInterfaceStyle": "light",
+    "notification": {
+      "icon": "./assets/adaptive_icon.png",
+      "color": "#ffffff"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

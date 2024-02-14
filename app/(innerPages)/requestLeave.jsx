@@ -36,7 +36,7 @@ const RequestLeave = () => {
 
   const loginPostFunc = async () => {
     try {
-      const response = await addEditApplyLeave(authToken, userCred?.class_id, userCred?.section_id, userCred?.year_id, reason, dayjs(leaveDate).format('YYYY-MM-DD'), userCred?.student_id);
+      const response = await addEditApplyLeave(authToken, userCred?.class_id, userCred?.section_id, userCred?.year_id, reason, dayjs(leaveDate).format('YYYY-MM-DD'), userCred?.student_details?.stu_id);
       if (response) {
         toast.show(response?.message, { type: "success" })
       } else {

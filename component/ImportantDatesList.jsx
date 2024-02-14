@@ -46,13 +46,13 @@ const HolidayList = ({ data, fetchData }) => {
     const organizedData = organizeDataByMonth();
 
     return Object.keys(organizedData).map((month) => (
-      <View key={month} className='my-4'>
+      <View key={month} className='mb-4'>
         {organizedData[month].map((holiday) => (
           <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey'>
-            {holiday.event_images.length !== 0 &&
+            {holiday.image && holiday.image.length !== 0 &&
               <View className='w-full'>
                 <Image
-                  source={holiday.event_images[0].images}
+                  source={holiday.image}
                   style={{ width: '100%', height: 190 }}
                   contentFit="contain"
                   className='rounded-xl border border-lightgrey'
@@ -77,7 +77,7 @@ const HolidayList = ({ data, fetchData }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
+      {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
         <TouchableOpacity onPress={() => onArrowPress(-1)}>
           <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3' />
         </TouchableOpacity>
@@ -85,7 +85,7 @@ const HolidayList = ({ data, fetchData }) => {
         <TouchableOpacity onPress={() => onArrowPress(1)}>
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>
-      </View>
+      </View> */}
       {data.length === 0 && <EmptyScreen/>}
       {renderHolidays()}
     </View>

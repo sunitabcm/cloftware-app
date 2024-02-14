@@ -4,7 +4,7 @@ import React from 'react'
 export default function Discussion() {
   return (
     <ScrollView className='h-full bg-light p-5'>
-      <Text>discussion</Text>
+      <Text>Discussion</Text>
     </ScrollView>
   )
 }

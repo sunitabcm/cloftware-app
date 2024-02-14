@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import AppIcon from './AppIcon';
 import BtnGlobal from './BtnGlobal';
 
-export const SmallPopup = ({ isVisible, closeModal, children }) => {
+export const SmallPopup = ({ isVisible, closeModal, children, customModalClass = 'h-[30%]' }) => {
     return (
         <Modal
             animationType="slide"
@@ -14,7 +14,7 @@ export const SmallPopup = ({ isVisible, closeModal, children }) => {
         >
             <View style={styles.modalContainer}>
                 <BlurView intensity={20} tint="dark" style={[StyleSheet.absoluteFill, styles.blurContainer]} >
-                    <View style={styles.modalContent}>
+                    <View style={styles.modalContent} className={customModalClass}>
                         <View style={{ marginTop: 15 }}>
                             {children}
                         </View>
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     modalContent: {
-        height: '30%',
         position: 'relative',
         backgroundColor: 'white',
         padding: 20,

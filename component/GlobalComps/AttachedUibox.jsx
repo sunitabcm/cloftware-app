@@ -5,11 +5,13 @@ import dayjs from 'dayjs';
 import AppIcon from './AppIcon';
 export default function AttachedUibox({ press, item, noticeBoard = true }) {
     return (
-        <Pressable className='bg-light rounded-lg p-4 w-full my-2.5' onPress={press}>
+        <Pressable className='bg-light rounded-xl p-4 w-full my-2.5' onPress={press}>
             <Text style={[stylesGlobal.title, { fontSize: 16 }]} className='mb-2 capitalize'>{item.title}</Text>
+            {item.description && 
             <Text style={stylesGlobal.innertext} className='mb-4'>
                 {item.description?.length > 150 ? `${item.description?.slice(0, 150)}...` : item.description}
             </Text>
+            }
 
             <View className='flex flex-row items-center justify-between w-full'>
                 <View className='flex flex-row items-center'>

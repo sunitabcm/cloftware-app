@@ -338,7 +338,7 @@ export async function addEditApplyLeave(accessToken, class_id, section_id, year_
         const response = await axios.post(`${baseURL}/leave/add_edit_apply_leave`, {
             'leave_date': leave_date,
             'status': 'Leave',
-            'student_id': '2',
+            'student_id': student_id,
             'class_id': class_id,
             'section_id': section_id,
             'year_id': year_id,
@@ -364,7 +364,7 @@ export async function addEditApplyLeave(accessToken, class_id, section_id, year_
 export async function getStudentAttendanceCalendar(accessToken, student_id, school_id, year, month) {
     try {
         const response = await axios.post(`${baseURL}/calender_student_attendance`, {
-            'student_id': '1',
+            'student_id': student_id,
             'school_id': school_id,
             'year': year,
             'month': month,
@@ -510,6 +510,51 @@ export async function getTimeTableList(accessToken, schoolId, classId, sectionId
                 school_id: schoolId,
                 class_id: classId,
                 section_id: sectionId,
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error getting Book Schedule List:', error);
+        throw error;
+    }
+}
+
+export async function getExamList(accessToken, schoolId, classId, sectionId) {
+    try {
+        const response = await axios.get(`${baseURL}/exam_list`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            params: {
+                // school_id: schoolId,
+                class_id: classId,
+                section_id: sectionId,
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error getting Book Schedule List:', error);
+        throw error;
+    }
+}
+
+export async function getSchoolImportantDatesList(accessToken) {
+    try {
+        const response = await axios.get(`${baseURL}/get_important_list`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
             },
         });
 

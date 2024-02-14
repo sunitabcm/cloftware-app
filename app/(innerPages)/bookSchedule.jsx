@@ -1,12 +1,9 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useRouter } from 'expo-router';
-import BookSchedules from '../../component/BookSchedules';
 import { useToast } from 'react-native-toast-notifications';
 import { getBookScheduleList } from '../../ApiCalls';
-import axios from 'axios';
 import { Image } from 'expo-image';
 import EmptyScreen from '../../component/GlobalComps/EmptyScreen';
 import AppIcon from '../../component/GlobalComps/AppIcon';

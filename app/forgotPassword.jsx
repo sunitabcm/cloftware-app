@@ -44,6 +44,7 @@ const ForgotPassword = () => {
     const [showPasswordFields, setShowPasswordFields] = useState(false);
     const [errors, setErrors] = useState({});
     const [errormsg, seterrormsg] = useState("");
+    const [ID, setID] = useState("");
     const [err, seterr] = useState(false);
     const [passwderr, setpasswderr] = useState(false);
 
@@ -85,6 +86,7 @@ const ForgotPassword = () => {
             const response = await verifyOtpPasswordReset(email, otp);
 
             if (response) {
+                setID(response?.body?.id)
                 toast.show(response?.message, { type: "success" })
             }
         } catch (error) {
@@ -95,7 +97,7 @@ const ForgotPassword = () => {
     const ResetPass = async (newPass, confirmPass) => {
 
         try {
-            const response = await resetPassword(newPass, confirmPass);
+            const response = await resetPassword(newPass, confirmPass, ID);
 
             if (response) {
                 toast.show(response?.message, { type: "success" })

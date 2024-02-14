@@ -33,6 +33,9 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
     else if (pathname === '/timeTable') {
       setPageName('Timetable Management')
     }
+    else if (pathname === '/importantDates') {
+      setPageName('Important Dates')
+    }
     else {
       setPageName(pathname)
     }
