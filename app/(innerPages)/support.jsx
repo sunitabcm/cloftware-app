@@ -65,15 +65,15 @@ export default function Support() {
         </View>
       </View>
       <ScrollView className='bg-lighergrey p-5 mb-10'>
-        <Text style={stylesGlobal.title}>Need help check these options</Text>
-        <TouchableOpacity className='flex justify-start flex-row mt-5 items-center max-w-[95%] border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+        <Text className='mb-5' style={stylesGlobal.title}>Need help check these options</Text>
+        <TouchableOpacity className='flex justify-start flex-row items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
           <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='Ionicons' name='call' size={25} color={'#fff'} /></View>
           <View className='flex flex-col'>
             <Text className='' style={styles.question}>Call Us</Text>
             <Text className='' style={styles.answer}>Get in a call with us</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className='flex justify-start flex-row mt-5 items-center max-w-[95%] border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+        <TouchableOpacity className='flex justify-start flex-row mt-5 items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
           <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='Ionicons' name='mail' size={25} color={'#fff'} /></View>
           <View className='flex flex-col'>
             <Text className='' style={styles.question}>Email Us</Text>

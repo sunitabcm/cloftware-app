@@ -14,7 +14,8 @@
           "android": {
             "compileSdkVersion": 33,
             "targetSdkVersion": 33,
-            "buildToolsVersion": "31.0.0"
+            "buildToolsVersion": "31.0.0",
+            "minSdkVersion": 26
           },
           "ios": {
             "deploymentTarget": "13.0",
@@ -70,7 +71,8 @@
         "foregroundImage": "./assets/adaptive_icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "minSdkVersion": 26
     },
     "extra": {
       "eas": {

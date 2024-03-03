@@ -46,9 +46,9 @@ const HolidayList = ({ data, fetchData }) => {
     const organizedData = organizeDataByMonth();
 
     return Object.keys(organizedData).map((month) => (
-      <View key={month} className='my-4'>
+      <View key={month} className='mb-4 bg-light p-4 rounded-xl'>
         {organizedData[month].map((holiday) => (
-          <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey'>
+          <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center'>
             {holiday.event_images.length !== 0 &&
               <View className='w-full'>
                 <Image
@@ -59,7 +59,7 @@ const HolidayList = ({ data, fetchData }) => {
                 />
               </View>
             }
-            <View className='flex flex-row w-full gap-3 mb-5 mt-1 items-start'>
+            <View className='flex flex-row w-full gap-3 mt-1 items-start'>
               <View className='text-body font-bold bg-body h-[60px] w-[46px] flex justify-center items-center text-2xl rounded-xl'>
                 <Text className='text-light text-center text-xs'>{dayjs(holiday.date).format('ddd')}</Text>
                 <Text className='text-light text-center font-bold text-2xl'>{new Date(holiday.date).getDate()}</Text>
@@ -77,7 +77,7 @@ const HolidayList = ({ data, fetchData }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, marginBottom: 20 }}>
         <TouchableOpacity onPress={() => onArrowPress(-1)}>
           <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3' />
         </TouchableOpacity>

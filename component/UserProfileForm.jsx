@@ -101,7 +101,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                 const value = await updateProfile(authToken, resultImage.fileURL, true);
 
                 if (value) {
-                    toast.show('Image Uploaded', { type: 'success' });
+                    toast.show(resultImage?.message, { type: 'success' });
                     const data = await getStudentProfile(dispatch, authToken);
                 }
             } else {
@@ -113,6 +113,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
             }
         }
         generateRandomNumber();
+        closeModal()
     };
 
     const handleOpenCamera = async () => {
@@ -133,7 +134,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                     const value = await updateProfile(authToken, resultImage.fileURL, true);
 
                     if (value) {
-                        toast.show('Image Uploaded', { type: 'success' });
+                        toast.show(resultImage?.message, { type: 'success' });
                         const data = await getStudentProfile(dispatch, authToken);
                     }
                 } else {
@@ -144,6 +145,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
             console.error(err);
         }
         generateRandomNumber();
+        closeModal()
     };
 
     return (

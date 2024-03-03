@@ -8,7 +8,7 @@ const Links = ({ title, onPress, iconName, iconPosition, style, back }) => {
     <View style={styles.button}>
     <TouchableOpacity onPress={onPress}>
       {back ? <View style={[styles.backButton, style && style]}><Image
-              source={require("../assets/ArrowLeft.png")}
+              source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ArrowLeft.png' }}
               // style={{ width: 49, height: 49 }}
             /></View>
       : 

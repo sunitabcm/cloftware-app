@@ -3,59 +3,93 @@ import { View, TextInput, Image, Text, StyleSheet, Pressable } from "react-nativ
 import Icon from "react-native-vector-icons/Entypo";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import { secondaryColor, sixColor } from "./stylesheet";
+import Messages from "./Messages";
 
-const InputeFields = ({
-  label,
-  placeholder,
-  value,
-  onChangeText,
-  secureTextEntry,
-  numeric,
-  ifEye,
-  ifEmailNumber,
-  disabled = false,
-  type = 'email'
-}) => {
-
-  const inputType = secureTextEntry
-    ? "password"
-    : numeric
-      ? "numeric"
-      : "default";
-
-  const [isEye, setIsEye] = useState(false);
-
-  return (
-    <View style={styles.inputContainer}>
-      {label && <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
-      {ifEye ? (
-        <View style={styles.eyeOnOff}>
-          <Pressable
-            onPress={() => setIsEye(!isEye)}
-            style={[
-              styles.eyeOnOffBox,
-              value.length === 0 && { opacity: 0.6 },
-            ]}
-            disabled={value.length === 0}
-          >
-            <Icon2
-              name={isEye ? "eye" : "eye-off"}
-              size={17}
-              color={secondaryColor}
+const InputeFieldsValidation = ({
+    label,
+    placeholder,
+    value,
+    onChangeText,
+    secureTextEntry,
+    numeric,
+    ifEye,
+    ifEmailNumber,
+    disabled = false,
+    type = 'email'
+  }) => {
+  
+    const inputType = secureTextEntry
+      ? "password"
+      : numeric
+        ? "numeric"
+        : "default";
+  
+    const [isEye, setIsEye] = useState(false);
+    const [passwordValidation, setPasswordValidation] = useState({
+      isValid: false,
+      message: "Password must contain 1 capital letter, 1 lowercase letter, 1 special character, 1 numeric, and be at least 8 characters long",
+    });
+  
+    const validatePassword = (password) => {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      const isValid = passwordRegex.test(password);
+      setPasswordValidation({
+        isValid,
+        message: isValid ? "" : "Password must contain 1 capital letter, 1 lowercase letter, 1 special character, 1 numeric, and be at least 8 characters long",
+      });
+    };
+  
+    const handleInputChange = (text) => {
+      if (ifEye) {
+        validatePassword(text);
+      }
+      onChangeText(text);
+    };
+  
+    const handleBlur = () => {
+      if (ifEye) {
+        validatePassword(value);
+      }
+    };
+  
+    return (
+      <View style={styles.inputContainer}>
+        {label && <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
+        {ifEye ? (
+          <View style={styles.eyeOnOff}>
+            <Pressable
+              onPress={() => setIsEye(!isEye)}
+              style={[
+                styles.eyeOnOffBox,
+                value.length === 0 && { opacity: 0.6 },
+              ]}
+              disabled={value.length === 0}
+            >
+              <Icon2
+                name={isEye ? "eye" : "eye-off"}
+                size={17}
+                color={secondaryColor}
+              />
+            </Pressable>
+  
+            <TextInput
+              style={[
+                styles.input,
+                passwordValidation.isValid ? null : { borderColor: "red" },
+              ]}
+              placeholder={placeholder}
+              value={value}
+              disabled={disabled}
+              onChangeText={handleInputChange}
+              onBlur={handleBlur} // Added onBlur event handler
+              keyboardType={inputType}
+              secureTextEntry={!isEye ? secureTextEntry : false}
             />
-          </Pressable>
-
-          <TextInput
-            style={styles.input}
-            placeholder={placeholder}
-            value={value}
-            disabled={disabled}
-            onChangeText={onChangeText}
-            keyboardType={inputType}
-            secureTextEntry={!isEye ? secureTextEntry : false}
-          />
-        </View>
-      ) : (
+            {passwordValidation.isValid ? null : (
+                <Messages title={passwordValidation.message} />
+            )}
+          </View>
+        ) : (
         <View style={styles.normalInput}>
           {!ifEmailNumber ? (
             <TextInput
@@ -127,7 +161,7 @@ const InputeFields = ({
   );
 };
 
-export default InputeFields;
+export default InputeFieldsValidation;
 
 const styles = StyleSheet.create({
   inputContainer: {

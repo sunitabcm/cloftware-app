@@ -112,7 +112,7 @@ export default function NoticeBoard() {
               iconColor={'#2A2D32'}
             />
             {/* <Image
-              source={require("../../assets/speaker.svg")}
+              source={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/speaker.svg}
               style={[{ width: 50, height: 50 }]}
               contentFit="cover"
             /> */}

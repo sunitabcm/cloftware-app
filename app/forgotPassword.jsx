@@ -20,6 +20,7 @@ import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
 import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
+import InputeFieldsValidation from "../component/InputWithValidation";
 
 const ForgotPassword = () => {
     const router = useRouter();
@@ -27,7 +28,7 @@ const ForgotPassword = () => {
     const userCred = useSelector((state) => state.userDetails.user);
     const toast = useToast();
     const dispatch = useDispatch()
-    const [email, setemail] = useState("studentaman@yopmail.com");
+    const [email, setemail] = useState("");
     const [otp, setOtp] = useState("");
     const [password, setpassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -84,13 +85,20 @@ const ForgotPassword = () => {
 
         try {
             const response = await verifyOtpPasswordReset(email, otp);
-
-            if (response) {
+            console.log(response)
+            if (response?.success === true) {
                 setID(response?.body?.id)
                 toast.show(response?.message, { type: "success" })
+                setShowOtpButton(false);
+                setButtondisabledOtp(true);
+                setShowPasswordFields(true);
+                setbuttondisabled(true);
+                setOtpValid(true);
+            } else {
+                toast.show(response?.message, { type: "danger" })
             }
         } catch (error) {
-            // toast.show('An error occured, Please try again', { type: "danger" })
+            toast.show('Unable to validate', { type: "danger" })
         }
     };
 
@@ -129,11 +137,7 @@ const ForgotPassword = () => {
         if (validateOtp(otp)) {
             // Call verify OTP API
             verifyForgotPassOtp(email, otp);
-            setShowOtpButton(false);
-            setButtondisabledOtp(true);
-            setShowPasswordFields(true);
-            setbuttondisabled(true);
-            setOtpValid(true);
+
         } else {
             setOtpValid(false);
         }
@@ -201,7 +205,7 @@ const ForgotPassword = () => {
     return (
         <ScrollView className='bg-light h-full'>
             <View>
-                <NonLoggedInBlur onPressBtn={() => router.push('/login')}/>
+                <NonLoggedInBlur onPressBtn={() => router.push('/login')} />
                 <View style={styles.formFields} className='p-5'>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Forgot Password?</Text>
@@ -222,7 +226,7 @@ const ForgotPassword = () => {
                             title="Send OTP"
                             onPress={handleEmailSubmit}
                             classNames={'w-full'}
-                            // isDisabled={buttondisabled}
+                            isDisabled={buttondisabled}
                         />
                     )}
 
@@ -240,14 +244,14 @@ const ForgotPassword = () => {
                                 title="Verify OTP"
                                 onPress={handleOtpSubmit}
                                 classNames={'w-full mt-5'}
-                                // isDisabled={otp?.length === 0}
+                                isDisabled={otp?.length !== 6}
                             />
                         </>
                     )}
 
                     {showPasswordFields && (
                         <>
-                            <InputeFields
+                            <InputeFieldsValidation
                                 label={"Password"}
                                 placeholder={"Enter Password"}
                                 value={password}
@@ -256,7 +260,7 @@ const ForgotPassword = () => {
                                 ifEye
                             />
                             {passwderr && <Messages title="Invalid Password" />}
-                            <InputeFields
+                            <InputeFieldsValidation
                                 label={"Confirm Password"}
                                 placeholder={"Confirm Password"}
                                 value={confirmPassword}
@@ -270,14 +274,14 @@ const ForgotPassword = () => {
                                 title="Reset Password"
                                 onPress={handlePasswordSubmit}
                                 classNames={'w-full mt-5'}
-                                // isDisabled={buttondisabledOtp}
+                                isDisabled={!confirmPasswordValid}
                             />
                         </>
                     )}
 
                 </View>
             </View>
-            <CloftwareLogo/>
+            <CloftwareLogo />
         </ScrollView>
     );
 };

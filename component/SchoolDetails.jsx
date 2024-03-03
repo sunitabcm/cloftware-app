@@ -39,7 +39,7 @@ const SchoolDetails = ({ schoolDetails }) => {
         {renderField('School PAN Number', schoolDetails.body.other_details.school_pan_number)}
       </View>
 
-      <View style={{ marginBottom: 5 }} className='flex flex-col items-start mb-3 mt-3'>
+      {/* <View style={{ marginBottom: 5 }} className='flex flex-col items-start mb-3 mt-3'>
         <Text className='capitalize text-body text-lg font-bold mb-2'>Commercial Details</Text>
         {renderField('Total Deal Value', schoolDetails.body.commercial_details.total_deal_value)}
         {renderField('Payment Receive', schoolDetails.body.commercial_details.payment_receive)}
@@ -65,21 +65,21 @@ const SchoolDetails = ({ schoolDetails }) => {
         {renderField('Authorized Signatory Email ID', schoolDetails.body.authorized_signatory_email_id)}
         {renderField('Authorized Signatory Contact Number', schoolDetails.body.authorized_signatory_contact_number)}
         {renderField('Curriculum Board', schoolDetails.body.curriculum_board)}
-      </View>
+      </View> */}
 
       <View style={{ marginBottom: 5 }} className='flex flex-col items-start mb-3 mt-3'>
         <Text className='capitalize text-body text-lg font-bold'>Social Channels</Text>
         <View className="flex-row items-center justify-center py-3 gap-5">
           <Pressable onPress={() => Linking.openURL('https://cloftware.com/')}>
             <Image
-              source={require("../assets/facebook-icon.png")}
+              source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/facebook-icon.png' }}
               style={{ width: 36, height: 36 }}
               className='bg-light rounded-[8px]'
             />
           </Pressable>
           <Pressable onPress={() => Linking.openURL('https://cloftware.com/')}>
             <Image
-              source={require("../assets/instagram.png")}
+              source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/instagram.png' }}
               style={{ width: 36, height: 36 }}
               className='bg-light rounded-[8px]'
             />

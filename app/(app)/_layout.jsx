@@ -6,7 +6,6 @@ import LoggedInHeader from '../../component/GlobalComps/LoggedInHeader'
 export default function _layout() {
   return (
     <View style={{ flex: 1, fontSize: 14, backgroundColor: '#fff', color: '#37374E', position: 'relative' }}>
-      <LoggedInHeader />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name='dashboard' />
         <Stack.Screen name='contacts' />

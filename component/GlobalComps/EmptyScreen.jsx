@@ -10,7 +10,7 @@ const EmptyScreen = ({ imageType = false }) => {
             {imageType === true ?
                 <>
                     <Image
-                        source={require("../../assets/emptyFolder.png")}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/emptyFolder.png' }}
                         style={{ width: 135, height: 135 }}
                         contentFit="cover"
                     />
@@ -20,7 +20,7 @@ const EmptyScreen = ({ imageType = false }) => {
                 :
                 <>
                     <Image
-                        source={require("../../assets/pencil.png")}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' }}
                         style={{ width: 135, height: 135 }}
                         contentFit="cover"
                     />

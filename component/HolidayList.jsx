@@ -6,8 +6,8 @@ import AppIcon from './GlobalComps/AppIcon';
 import { SmallPopup } from './GlobalComps/SmallPopup';
 import EmptyScreen from './GlobalComps/EmptyScreen';
 
-const HolidayList = ({ data, fetchData }) => {
-  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+const HolidayList = ({ data, fetchData, date }) => {
+  const [selectedDate, setSelectedDate] = useState(date !== '' ? date : dayjs(new Date()).format('YYYY-MM-DD'));
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
 

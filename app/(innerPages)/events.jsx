@@ -43,7 +43,7 @@ export default function Events() {
 
 
   return (
-    <ScrollView className='h-full bg-light p-5'>
+    <ScrollView className='h-full bg-[#F5F5F5] p-5'>
       <View>
         {showCalender && apiData && apiData?.code === 200 ?
           <>

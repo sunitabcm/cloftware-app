@@ -93,7 +93,7 @@ const Login = () => {
                 saveAuthToken(response.body)
                 await getStudentProfile(dispatch, response.body)
                 toast.show(response?.message, { type: "success" })
-                router.push('/dashboard')
+                router.replace('/dashboard')
             } else {
                 toast.show('An error occured, Please try again', { type: "danger" })
                 setErrors({});
@@ -178,7 +178,7 @@ const Login = () => {
                         title="Login to account"
                         onPress={handleSubmit}
                         classNames={'w-full'}
-                        // isDisabled={buttondisabled}
+                        isDisabled={buttondisabled}
                     />
                 </View>
             </View>

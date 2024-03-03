@@ -27,24 +27,44 @@ const FixedFooter = () => {
 	return (
 		<>
 			<View className='h-[90px] pt-2 bg-light border-t border-t-menubg z-10'>
-				<View className='px-5 flex justify-between items-center flex-row'>
-					<Pressable onPress={() => router.push('/dashboard')} className='flex flex-col items-center justify-center'>
-						<AppIcon type='Ionicons' name='cube-outline' size={27} color={pathname === '/dashboard' ? '#2A2D32' : '#E1E1E1'} />
+				<View className='px-2 flex justify-between items-center flex-row gap-1'>
+					<Pressable onPress={() => router.push('/dashboard')} className='flex flex-col items-center justify-center w-[20%]'>
+						<Image
+							source={{ uri: pathname === '/dashboard' ? 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/dashDark.png' : 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/dash.png' }}
+							style={{ width: 25, height: 25 }}
+							contentFit="cover"
+							className='mb-1.5'
+						/>
 						<Text className={` ${pathname === '/dashboard' ? 'text-body' : 'text-menubg'} font-bold text-center`}>DashBoard</Text>
 					</Pressable>
-					<Pressable onPress={() => router.push('/contacts')} className='flex flex-col items-center justify-center'>
-						<AppIcon type='FontAwesome' name='user-o' size={28} color={pathname === '/contacts' ? '#2A2D32' : '#E1E1E1'} />
-						<Text className={` ${pathname === '/contacts' ? 'text-body' : 'text-menubg'} font-bold text-center`}>Contact</Text>
+					<Pressable onPress={() => router.push('/contacts')} className='flex flex-col items-center justify-center w-[20%]'>
+						<Image
+							source={{ uri: pathname === '/contacts' ? 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/schlDark.png' : 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/schl.png' }}
+							style={{ width: 25, height: 25 }}
+							contentFit="cover"
+							className='mb-1.5'
+						/>
+						<Text className={` ${pathname === '/contacts' ? 'text-body' : 'text-menubg'} font-bold text-center`}>My School</Text>
 					</Pressable>
 					<Pressable onPress={() => setOpenMenu(!openMenu)} className='flex flex-col items-center justify-center bg-body rounded-full p-2.5'>
 						<AppIcon type='AntDesign' name={openMenu ? 'close' : 'plus'} size={25} color={'#fff'} />
 					</Pressable>
-					<Pressable onPress={() => router.push('/alerts')} className='flex flex-col items-center justify-center'>
-						<AppIcon type='Fontisto' name='bell' size={25} color={pathname === '/alerts' ? '#2A2D32' : '#E1E1E1'} />
+					<Pressable onPress={() => router.push('/alerts')} className='flex flex-col items-center justify-center w-[20%]'>
+						<Image
+							source={{ uri: pathname === '/alerts' ? 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/BellDark.png' : 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/Bell.png' }}
+							style={{ width: 25, height: 25 }}
+							contentFit="cover"
+							className='mb-1.5'
+						/>
 						<Text className={` ${pathname === '/alerts' ? 'text-body' : 'text-menubg'} font-bold text-center`}>Alerts</Text>
 					</Pressable>
-					<Pressable onPress={() => router.push('/settings')} className='flex flex-col items-center justify-center'>
-						<AppIcon type='SimpleLineIcons' name='settings' size={25} color={pathname === '/settings' ? '#2A2D32' : '#E1E1E1'} />
+					<Pressable onPress={() => router.push('/settings')} className='flex flex-col items-center justify-center w-[20%]'>
+						<Image
+							source={{ uri: pathname === '/settings' ? 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/GearDark.png' : 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/Gear.png' }}
+							style={{ width: 25, height: 25 }}
+							contentFit="cover"
+							className='mb-1.5'
+						/>
 						<Text className={` ${pathname === '/settings' ? 'text-body' : 'text-menubg'} font-bold text-center`}>Settings</Text>
 					</Pressable>
 				</View>
@@ -52,17 +72,17 @@ const FixedFooter = () => {
 			{openMenu === true &&
 				<BlurViewWrapper onClose={handleClose} isVisible={openMenu} outsideClick={true}>
 					<View className='mt-auto pl-2.5 mb-8 mx-auto flex flex-col justify-center items-center'>
-						<Pressable onPress={() => { router.push('/dashboard'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
+						{/* <Pressable onPress={() => { router.push('/dashboard'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 							<Image
 								source={require("../../assets/fees_svg.svg")}
 								style={{ width: 25, height: 25 }}
 								contentFit="cover"
 							/>
 							<Text>Pay Fee</Text>
-						</Pressable>
+						</Pressable> */}
 						<Pressable onPress={() => { router.push('/requestLeave'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 							<Image
-								source={require("../../assets/attendance_svg.svg")}
+								source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/attendance_svg.svg' }}
 								style={{ width: 25, height: 25 }}
 								contentFit="cover"
 							/>

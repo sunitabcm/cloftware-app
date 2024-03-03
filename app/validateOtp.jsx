@@ -21,10 +21,10 @@ const Otp = () => {
   const router = useRouter();
   const toast = useToast();
   const dispatch = useDispatch();
-  const [enteredNumber, setenteredNumber] = useState("7406226857");
+  const [enteredNumber, setenteredNumber] = useState("");
   const [buttondisabled, setbuttondisabled] = useState(true);
   const [verifyotp, setverifyotp] = useState(false);
-  const [otp, setOtp] = useState("942575");
+  const [otp, setOtp] = useState("");
   const [otperror, setotperror] = useState(false);
   const [error, seterror] = useState(false);
   const [otpsuccessmsg, setotpsuccessmsg] = useState("");
@@ -67,8 +67,8 @@ const Otp = () => {
       seterror(false);
 
       const newnum = "91" + enteredNumber;
-      // loginPostFunc(newnum);
-      setverifyotp(true);
+      loginPostFunc(newnum);
+      // setverifyotp(true);
     }
   };
   const verifyOtpFunc = async (num) => {
@@ -79,7 +79,7 @@ const Otp = () => {
         await getStudentProfile(dispatch, userLogin.body)
         saveAuthToken(userLogin?.body)
         toast.show(userLogin?.message, { type: "success" })
-        router.push('/dashboard')
+        router.replace('/dashboard')
       } else {
         toast.show(userLogin?.message, { type: "danger" })
       }
@@ -88,19 +88,19 @@ const Otp = () => {
       // router.push('/')
     }
   };
-  // const loginPostFunc = async (num) => {
-  //   try {
-  //     const userLogin = await loginViaOtp(num)
-  //     if (userLogin) {
-  //       toast.show(userLogin?.message, { type: "success" })
-  //       setverifyotp(true);
-  //     } else {
-  //       toast.show('An error occured, Please try again', { type: "danger" })
-  //     }
-  //   } catch (error) {
-  //     toast.show('An error occured, Please try again', { type: "danger" })
-  //   }
-  // };
+  const loginPostFunc = async (num) => {
+    try {
+      const userLogin = await loginViaOtp(num)
+      if (userLogin) {
+        toast.show(userLogin?.message, { type: "success" })
+        setverifyotp(true);
+      } else {
+        toast.show('An error occured, Please try again', { type: "danger" })
+      }
+    } catch (error) {
+      toast.show('An error occured, Please try again', { type: "danger" })
+    }
+  };
 
   useEffect(() => {
     if (enteredNumber.length == 0) {
@@ -135,6 +135,7 @@ const Otp = () => {
                 onChangeText={(e) => setOtp(e)}
                 value={otp}
                 numeric={true}
+                isDisabled={otp.length !== 6}
               />
             )}
             {error && <Messages title="Please Enter valid Number" />}
@@ -149,6 +150,7 @@ const Otp = () => {
                     title="Get OTP"
                     onPress={onPress}
                     classNames={' w-full'}
+                    isDisabled={enteredNumber.length < 9}
                   />
                   <BtnGlobal
                     styleClassName="updatedbutton"
@@ -163,6 +165,7 @@ const Otp = () => {
                   title="Verify OTP"
                   onPress={handleVerify}
                   classNames={' w-full'}
+                  isDisabled={otp.length !== 6}
                 />
               )}
             </View>

@@ -12,7 +12,7 @@ export default function NonLoggedInBlur({ onPressBtn, hidden = true }) {
     return (
         <View className='relative mb-16'>
             <ImageBackground
-                source={require("../../assets/schoolSmall.png")}
+                source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/schoolSmall.png' }}
                 style={{ width: screenWidth, height: 200 }}
                 contentFit="cover"
             >

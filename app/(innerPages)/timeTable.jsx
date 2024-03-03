@@ -61,7 +61,7 @@ export default function TimeTable() {
               // marginBottom: 15,
             }}>
               <Image
-                source={require("../../assets/pdfImage.svg")}
+                source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
                 style={{ width: 45, height: 60 }}
                 contentFit="cover"
               />

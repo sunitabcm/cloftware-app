@@ -99,7 +99,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
     return Object.keys(organizedData).map((month) => (
       <View key={month} className='mb-4'>
         {organizedData[month].map((item) => (
-          <AttachedUibox press={() => setPage(item)} key={item.title} item={item} noticeBoard={false} />
+          <AttachedUibox press={() => setPage(item)} key={item.title} item={item} noticeBoard={false} HomeAssigment={true}/>
         ))}
       </View>
     ));
@@ -120,7 +120,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                   <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
                 </TouchableOpacity>
               </View>
-              <HorizontalDateScroll selectedDate={selectedDate} onDateSelect={(date) => setSelectedDate(date)} />
+              {/* <HorizontalDateScroll selectedDate={selectedDate} onDateSelect={(date) => setSelectedDate(date)} /> */}
               <View className='bg-lightergrey p-5'>
               {data && Array.isArray(data) && data.length === 0 && <EmptyScreen/>}
                 {renderHolidays()}
@@ -142,7 +142,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                   iconColor={'#2A2D32'}
                 />
                 {/* <Image
-                  source={require("../assets/speaker.svg")}
+                  source={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/speaker.svg}
                   style={[{ width: 50, height: 50 }]}
                   contentFit="cover"
                 /> */}
@@ -163,7 +163,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                   {page.flag === 1 &&
                   <TouchableOpacity onPress={() => { setShowPDFName(page.title); setShowPDFPath(page.image); setShowPDF(true) }}>
                     <Image
-                      source={require("../assets/pdfImage.svg")}
+                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
                       style={{ width: 45, height: 60 }}
                       contentFit="cover"
                     />

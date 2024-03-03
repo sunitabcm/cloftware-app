@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { stylesGlobal } from "../../styles/global";
 import { useToast } from 'react-native-toast-notifications';
 import { addEditApplyLeave } from "../../ApiCalls";
-import { useRouter } from "expo-router";
+import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
 import GlobalDatePicker from '../../component/GlobalComps/GlobalDatePicker';
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
@@ -17,9 +17,10 @@ const RequestLeave = () => {
   const authToken = useSelector((state) => state.auth.authToken)
   const userCred = useSelector((state) => state.userDetails.user);
   const [name, setName] = useState(userCred && Object.keys(userCred).length > 0 ? `${userCred?.first_name} ${userCred?.last_name}` : '');
-  const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [reason, setReason] = useState('');
+  const params = useLocalSearchParams();
+  const [leaveDate, setLeaveDate] = useState(Object.keys(params).length > 0 ? params.date : dayjs(new Date()).format('YYYY-MM-DD'));
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);

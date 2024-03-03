@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity,Image } from "react-native";
+import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
@@ -39,49 +39,51 @@ const SlideShow = () => {
   };
 
   return (
-    <View className='flex flex-col justify-center items-center w-full mt-10'>
-      <View style={styles.imageContainer}>
-        <View style={styles.imageinner}>
-          <FlatList
-            ref={flatListRef}
-            horizontal
-            pagingEnabled
-            data={data}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            onMomentumScrollEnd={event => {
-              const slideIndex = Math.round(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
-              setCurrentIndex(slideIndex);
-            }}
-            snapToInterval={Dimensions.get('window').width} // Adjust this value as needed
-            decelerationRate="fast" // Experiment with different deceleration rates
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
-        <View style={styles.dotsContainer}>
-          {data.map((_, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[styles.dot, index === currentIndex && styles.activeDot]}
-              onPress={() => handleSlide(index)}
+    <ScrollView className='bg-light h-screen'>
+      <View className='flex flex-col justify-center items-center w-full h-screen'>
+        <View style={styles.imageContainer}>
+          <View style={styles.imageinner}>
+            <FlatList
+              ref={flatListRef}
+              horizontal
+              pagingEnabled
+              data={data}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderItem}
+              onMomentumScrollEnd={event => {
+                const slideIndex = Math.round(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+                setCurrentIndex(slideIndex);
+              }}
+              snapToInterval={Dimensions.get('window').width} // Adjust this value as needed
+              decelerationRate="fast" // Experiment with different deceleration rates
+              showsHorizontalScrollIndicator={false}
             />
-          ))}
+          </View>
+          <View style={styles.dotsContainer}>
+            {data.map((_, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[styles.dot, index === currentIndex && styles.activeDot]}
+                onPress={() => handleSlide(index)}
+              />
+            ))}
+          </View>
+          <Text style={styles.text}>{data[currentIndex].text}</Text>
+          <Text style={styles.newtext}>{data[currentIndex].descriptionText}</Text>
         </View>
-        <Text style={styles.text}>{data[currentIndex].text}</Text>
-        <Text style={styles.newtext}>{data[currentIndex].descriptionText}</Text>
-      </View>
-      <View style={styles.below_part} className='w-full px-5'>
-        <View classNames='w-full'>
-          <BtnGlobal
-            styleClassName="button"
-            title="Let's get started"
-            onPress={() => router.push("/validateOtp")}
-            classNames={'w-full'}
-          />
+        <View style={styles.below_part} className='w-full px-5'>
+          <View classNames='w-full'>
+            <BtnGlobal
+              styleClassName="button"
+              title="Let's get started"
+              onPress={() => router.push("/validateOtp")}
+              classNames={'w-full'}
+            />
+          </View>
+          <CloftwareLogo />
         </View>
-       <CloftwareLogo/>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 30,
+    // paddingTop: 30,
   },
   text: {
     fontSize: 24,

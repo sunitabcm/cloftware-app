@@ -9,9 +9,9 @@ export default function Loginpopup({ closeModal }) {
         <View style={stylesGlobal.flexCenter}>
             <Text style={stylesGlobal.title}>Login with</Text>
             <View style={[{ display: 'flex', flexDirection: 'row', marginTop: 20 }]}>
-                <View style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled,{ width: '31%', backgroundColor: '#F6F6F6', padding: 20, marginRight: 15, borderRadius: 20 }]}>
+                <View style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled, { width: '31%', backgroundColor: '#F6F6F6', padding: 20, marginRight: 15, borderRadius: 20 }]}>
                     <Image
-                        source={require("../assets/microsoft.svg")}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/microsoft.svg' }}
                         style={{ width: 35, height: 35 }}
                         contentFit="cover"
                     />
@@ -19,15 +19,15 @@ export default function Loginpopup({ closeModal }) {
                 </View>
                 <Pressable onPress={() => { router.push('/login'); closeModal() }} style={[stylesGlobal.flexCenter, { width: '31%', backgroundColor: '#F6F6F6', padding: 20, marginRight: 15, borderRadius: 20 }]}>
                     <Image
-                        source={require("../assets/mail.svg")}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/mail.svg' }}
                         style={{ width: 49, height: 35, borderRadius: 4 }}
                         contentFit="cover"
                     />
                     <Text style={[stylesGlobal.innertext, { marginTop: 10 }]}>Mail</Text>
                 </Pressable>
-                <View style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled,{ width: '31%', backgroundColor: '#F6F6F6', padding: 20, borderRadius: 20 }]}>
+                <View style={[stylesGlobal.flexCenter, stylesGlobal.primaryDisabled, { width: '31%', backgroundColor: '#F6F6F6', padding: 20, borderRadius: 20 }]}>
                     <Image
-                        source={require("../assets/google.svg")}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/google.svg' }}
                         style={{ width: 35, height: 35 }}
                         contentFit="cover"
                     />

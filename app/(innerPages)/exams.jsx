@@ -41,7 +41,7 @@ export default function Exams() {
   };
 
   return (
-    <ScrollView className='h-full bg-light'>
+    <ScrollView className='h-full bg-lightergrey'>
       {/* {!page ? */}
         <>
           <ScrollView className="p-5 bg-lightergrey pb-16">
@@ -51,9 +51,14 @@ export default function Exams() {
                   // onPress={() => setPage(item)}
                   <View className='bg-light rounded-xl p-4 w-full my-2.5' >
                     <Text style={[stylesGlobal.title, { fontSize: 16 }]} className='mb-2 capitalize'>{item.subject_name}</Text>
+                    {item.exam_name &&
+                      <Text style={stylesGlobal.innertext} className='mb-2'>
+                        Name: {item.exam_name}
+                      </Text>
+                    }
                     {item.exam_type &&
                       <Text style={stylesGlobal.innertext} className='mb-2'>
-                        {item.exam_type}
+                        Type: {item.exam_type}
                       </Text>
                     }
                     {item.class_name &&
