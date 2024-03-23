@@ -98,7 +98,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
             const resultImage = await imageUpload(result.path, `choosenImage${randomNumber}.jpg`, authToken);
 
             if (resultImage) {
-                const value = await updateProfile(authToken, resultImage.fileURL, true);
+                const value = await updateProfile(authToken, resultImage?.body.fileURL, true);
 
                 if (value) {
                     toast.show(resultImage?.message, { type: 'success' });
@@ -161,7 +161,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                     {userCred && Object.keys(userCred).length > 0 ?
                         <View className='flex flex-col items-start ml-4'>
                             <Text className='font-bold text-body'>{userCred.first_name} {userCred?.last_name}</Text>
-                            <Text className='font-light text-body'>{userCred.class_name}</Text>
+                            <Text className='font-light text-body'>{userCred.class_name} {userCred.section_name}</Text>
                         </View>
                         :
                         <Text>Loading</Text>
@@ -294,9 +294,9 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                             />
 
                             <GlobalInputs
-                                placeholder={`Relationship to Student`}
+                                placeholder={`Emergency Relationship to Student`}
                                 name="emg_relationship_to_student"
-                                label="Relationship to Student"
+                                label="Emergency Relationship to Student"
                                 onChangeText={handleChange('emg_relationship_to_student')}
                                 onBlur={handleBlur('emg_relationship_to_student')}
                                 value={values.emg_relationship_to_student}

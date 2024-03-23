@@ -46,9 +46,9 @@ const HolidayList = ({ data, fetchData }) => {
     const organizedData = organizeDataByMonth();
 
     return Object.keys(organizedData).map((month) => (
-      <View key={month} className='mb-4'>
+      <View key={month} className=''>
         {organizedData[month].map((holiday) => (
-          <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey'>
+          <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey mb-4'>
             {holiday.image && holiday.image.length !== 0 &&
               <View className='w-full'>
                 <Image

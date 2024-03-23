@@ -147,7 +147,8 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                   contentFit="cover"
                 /> */}
               </View>
-              <Text style={[stylesGlobal.title]} className='my-4 capitalize'>{page.title}</Text>
+              <Text style={[stylesGlobal.title]} className='mt-4 mb-2 capitalize'>{page.title}</Text>
+              <Text style={[stylesGlobal.title]} className='mb-4 capitalize'>{page.subject_name}</Text>
               <View className='flex flex-row pb-5 border-b border-lightergrey'>
                 <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
                 <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>

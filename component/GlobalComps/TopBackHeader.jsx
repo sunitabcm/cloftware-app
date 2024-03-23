@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Link, usePathname, useRouter } from 'expo-router'
 import BtnGlobal from './BtnGlobal';
@@ -13,7 +13,7 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
       setPageName('Request Leave')
     }
     else if (pathname === '/bookSchedule') {
-      setPageName('Book Schedules')
+      setPageName('Schedule Management')
     }
     else if (pathname === '/homeAssignment') {
       setPageName('Home Assignments')
@@ -34,7 +34,7 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
       setPageName('Timetable Management')
     }
     else if (pathname === '/importantDates') {
-      setPageName('Important Dates')
+      setPageName('Important Days')
     }
     else {
       setPageName(pathname)

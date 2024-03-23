@@ -21,7 +21,7 @@ export default function LoggedInHeader() {
                     {userCred && Object.keys(userCred).length > 0 ?
                         <View className='flex flex-col items-start ml-4'>
                             <Text className='font-bold text-light'>{userCred.first_name} {userCred?.last_name}</Text>
-                            <Text className='font-light text-light'>{userCred.class_name}</Text>
+                            <Text className='font-light text-light'>{userCred.class_name} {userCred.section_name}</Text>
                         </View>
                         :
                         <Text></Text>

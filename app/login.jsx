@@ -24,8 +24,8 @@ const Login = () => {
     const toast = useToast();
     const dispatch = useDispatch()
     const [errors, setErrors] = useState({});
-    const [email, setemail] = useState("rohit10aug88@gmail.com");
-    const [password, setpassword] = useState("123456");
+    const [email, setemail] = useState("");
+    const [password, setpassword] = useState("");
     const [buttondisabled, setbuttondisabled] = useState(true);
     const [emailNum, setEmailNum] = useState("");
     const [errormsg, seterrormsg] = useState("");

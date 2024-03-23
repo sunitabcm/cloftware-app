@@ -4,13 +4,15 @@ import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { getStudentAttendanceCalendar } from '../ApiCalls';
-import { Link, useRouter } from 'expo-router';
+import { Link, useRouter, useLocalSearchParams, usePathname } from 'expo-router';
 import stylesGlobal from '../styles/global'
 import BtnGlobal from './GlobalComps/BtnGlobal';
 import PieChart from 'react-native-pie-chart';
 import { SmallPopup } from './GlobalComps/SmallPopup';
 const MyCalendar = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const pathname = usePathname();
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const authToken = useSelector((state) => state.auth.authToken);
   const userCred = useSelector((state) => state.userDetails.user);
@@ -26,10 +28,11 @@ const MyCalendar = () => {
   const closeModal = () => {
     setModalVisible(false);
   };
+
   useEffect(() => {
-    // Fetch initial data when the component mounts
     fetchApiData(selectedDate);
-  }, [selectedDate, router]);
+  }, [selectedDate, router, pathname]);
+console.log(params)
 
   const fetchApiData = async (date) => {
     try {
@@ -108,14 +111,15 @@ const MyCalendar = () => {
       });
     }
 
-    const defaultSelectedDate = dayjs(selectedDate).format('YYYY-MM-DD');
-    markedDates[defaultSelectedDate] = {
-      // selected: true,
-      selectedColor: '#ccc',
-    };
+    // const defaultSelectedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+    // markedDates[defaultSelectedDate] = {
+    //   // selected: true,
+    //   // selectedColor: '#ccc',
+    // };
 
     return (
       <Calendar
+      key={pathname}
         markedDates={markedDates}
         onDayPress={onDayPress}
         onMonthChange={onMonthChange}
@@ -148,6 +152,7 @@ const MyCalendar = () => {
     return (
       <View className='flex items-center mb-5'>
         <PieChart
+        key={pathname}
           widthAndHeight={widthAndHeight}
           series={data}
           sliceColor={sliceColor}

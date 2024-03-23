@@ -7,6 +7,9 @@ export default function AttachedUibox({ press, item, noticeBoard = true, HomeAss
     return (
         <Pressable className='bg-light rounded-xl p-4 w-full my-2.5' onPress={press}>
             <Text style={[stylesGlobal.title, { fontSize: 16 }]} className='mb-2 capitalize'>{item.title}</Text>
+            {HomeAssigment === true &&
+                    <Text style={[stylesGlobal.innertext, { fontSize: 16 }]} className='mb-2 capitalize'>{item.subject_name}</Text>
+                }
             {item.description &&
                 <Text style={stylesGlobal.innertext} className='mb-4'>
                     {item.description?.length > 150 ? `${item.description?.slice(0, 150)}...` : item.description}

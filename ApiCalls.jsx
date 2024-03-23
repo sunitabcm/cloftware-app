@@ -2,7 +2,7 @@ import axios from 'axios';
 import { setAuthToken } from './store/slices/authSlice';
 import { updateUser } from './store/slices/userSlice';
 import { saveAuthUserData } from './authStorage';
-const baseURL = "https://api.cloftware.com/api/app";
+const baseURL = "https://apidev.cloftware.com/api/app";
 
 export async function login(email, password) {
     try {
@@ -439,7 +439,7 @@ export async function imageUpload(fileUrl, fileName, loginWebToken) {
         });
         const responseData = response.data
         if (response.status === 200 || response.status === 201) {
-            return responseData.body;
+            return responseData;
         } else {
             return null;
         }
@@ -552,6 +552,26 @@ export async function getExamList(accessToken, schoolId, classId, sectionId) {
 export async function getSchoolImportantDatesList(accessToken) {
     try {
         const response = await axios.get(`${baseURL}/get_important_list`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error getting Book Schedule List:', error);
+        throw error;
+    }
+}
+
+export async function getNotificationList(accessToken) {
+    try {
+        const response = await axios.get(`${baseURL}/notification_list`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

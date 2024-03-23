@@ -64,7 +64,7 @@ const HolidayList = ({ data, fetchData }) => {
                 <Text className='text-light text-center text-xs'>{dayjs(holiday.date).format('ddd')}</Text>
                 <Text className='text-light text-center font-bold text-2xl'>{new Date(holiday.date).getDate()}</Text>
               </View>
-              <View className='w-full'>
+              <View className='w-[80%]'>
                 <Text className='text-body font-bold capitalize'>{holiday.title}</Text>
                 <Text className='text-lightgrey text-sm capitalize mt-1'>{holiday.description}</Text>
               </View>

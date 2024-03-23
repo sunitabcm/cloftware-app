@@ -85,21 +85,23 @@ export default function NoticeBoard() {
               </TouchableOpacity>
             </View>
           </View>
-          <ScrollView className="p-5 bg-lightergrey pb-16">
-            {apiDataFilters && apiDataFilters.length > 0 ? (
-              <View className='flex flex-col items-center w-full '>
-                {Object.values(apiDataFilters).map((item) => (
-                  <AttachedUibox press={(e) => setPage(item)} key={item.title} item={item} />
-                ))}
-              </View>
-            ) : (
-              <EmptyScreen />
-            )}
+          <ScrollView className="p-5 bg-lightergrey">
+            <View className='pb-16 mb-10'>
+              {apiDataFilters && apiDataFilters.length > 0 ? (
+                <View className='flex flex-col items-center w-full '>
+                  {Object.values(apiDataFilters).map((item) => (
+                    <AttachedUibox press={(e) => setPage(item)} key={item.title} item={item} />
+                  ))}
+                </View>
+              ) : (
+                <EmptyScreen />
+              )}
+            </View>
           </ScrollView>
         </>
         :
         <ScrollView className='p-5'>
-
+          <View className='pb-16 mb-10'>
           <View className='flex flex-row items-center'>
             <BtnGlobal
               styleClassName="closeBtn"
@@ -122,7 +124,7 @@ export default function NoticeBoard() {
             <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
             <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
           </View>
-          {page.notice_images && page.notice_videos && (page.notice_images.length > 0 ||  page.notice_videos.length > 0) &&
+          {page.notice_images && page.notice_videos && (page.notice_images.length > 0 || page.notice_videos.length > 0) &&
             <View className='flex flex-col justify-center items-center mt-5'>
               <ScrollView className='h-[175px] w-full' persistentScrollbar={true} horizontal>
                 {page.notice_videos && page.notice_videos.length > 0 ? (
@@ -157,6 +159,7 @@ export default function NoticeBoard() {
           <Text className='mt-4 text-lightgrey text-sm'>
             {page.description}
           </Text>
+          </View>
         </ScrollView>
       }
     </View >
