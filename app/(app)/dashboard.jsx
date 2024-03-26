@@ -110,7 +110,7 @@ export default function dashboard() {
                   style={{ width: 50, height: 50 }}
                   contentFit="cover"
                 />
-                <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Important Dates</Text>
+                <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Important Days</Text>
               </Pressable>
               <Pressable style={[stylesGlobal.flexCenter, { width: '31%', padding: 12 }]} onPress={() => router.push('/exams')}>
                 <Image
