@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import LoggedInHeader from '../../component/GlobalComps/LoggedInHeader'
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
-import { getNotificationList } from '../../ApiCalls';
+import { getNotificationList, markNotificationAsRead } from '../../ApiCalls';
 import AlertsComp from '../../component/AlertsComp';
 export default function Alerts() {
   const authToken = useSelector((state) => state.auth.authToken)
@@ -27,12 +27,22 @@ export default function Alerts() {
     } catch (error) {
     }
   };
+
+  const ReadNotification = async (id) => {
+    try {
+      const response = await markNotificationAsRead(authToken, id);
+    } catch (error) {
+    }
+    fetchData()
+  };
+
   return (
     <>
       <LoggedInHeader />
       <ScrollView className='bg-body'>
         <View className='rounded-t-[24px] p-5 bg-light w-full h-full min-h-[600px]'>
-          <AlertsComp apiData={apiData}/>
+          <Text className='text-body font-bold text-lg mb-5'>Alerts and Notifications</Text>
+          <AlertsComp apiData={apiData} ReadNotification={ReadNotification}/>
         </View>
       </ScrollView>
     </>
