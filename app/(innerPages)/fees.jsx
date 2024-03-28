@@ -44,7 +44,7 @@ export default function Fees() {
               <TouchableOpacity onPress={() => toggleAccordion(index)} className='flex flex-row items-start justify-between'>
                 <View className='mr-5 flex flex-row items-center'>
                   <AppIcon type='AntDesign' name='checkcircle' size={25} color={'#10B981'} />
-                  <Text className='font-bold text-body ml-2 text-base'>{dayjs(fee.submission_date).format('MMM, YYYY')}</Text>
+                  <Text className='font-bold text-body ml-2 text-base'>{dayjs(fee.start_date).format('MMM, YYYY')}</Text>
                 </View>
                 <View>
                   <Text className='font-bold text-body text-base'>Rs. {fee.amount}</Text>
