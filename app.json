@@ -14,7 +14,7 @@
           "android": {
             "compileSdkVersion": 33,
             "targetSdkVersion": 33,
-            "buildToolsVersion": "31.0.0",
+            "buildToolsVersion": "0.0.10",
             "minSdkVersion": 26
           },
           "ios": {
@@ -26,7 +26,7 @@
     ],
     "name": "DPS Ajmer",
     "slug": "cw",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "scheme": "com.cloftware.dpss13",
     "orientation": "portrait",
     "icon": "./assets/adaptive_icon.png",
@@ -50,7 +50,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.cloftware.dpss13",
-      "buildNumber": "1.0.0",
+      "buildNumber": "0.0.1",
       "entitlements": {
         "com.apple.developer.applesignin": ["Default"],
         "com.apple.developer.networking.wifi-info": true
