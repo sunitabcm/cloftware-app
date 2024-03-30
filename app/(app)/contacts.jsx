@@ -47,7 +47,7 @@ export default function Contacts() {
           />
         </View>
         <View className='rounded-t-[24px] p-5 bg-light w-full h-full min-h-[600px]'>
-          <View className='mt-[-60px] '>
+          {/* <View className='mt-[-60px] '>
             {apiData && Object.values(apiData?.body).length > 0 &&
               <Image
                 source={{ uri: apiData.body.other_details.school_logo }}
@@ -55,7 +55,8 @@ export default function Contacts() {
                 contentFit='Cover'
               />
             }
-          </View>
+          </View> */}
+          <Text style={stylesGlobal.title}>School Details</Text>
           <View className='pb-10'>
             {apiData && Object.values(apiData?.body).length > 0 ?
               <SchoolDetails schoolDetails={apiData} />

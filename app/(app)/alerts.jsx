@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
 import { getNotificationList, markNotificationAsRead } from '../../ApiCalls';
 import AlertsComp from '../../component/AlertsComp';
+import { stylesGlobal } from '../../styles/global';
 export default function Alerts() {
   const authToken = useSelector((state) => state.auth.authToken)
   const userCred = useSelector((state) => state.userDetails.user);
@@ -41,7 +42,7 @@ export default function Alerts() {
       <LoggedInHeader />
       <ScrollView className='bg-body'>
         <View className='rounded-t-[24px] p-5 bg-light w-full h-full min-h-[600px]'>
-          <Text className='text-body font-bold text-lg mb-5'>Alerts and Notifications</Text>
+          <Text style={stylesGlobal.title} className='mb-5'>Alerts and Notifications</Text>
           <AlertsComp apiData={apiData} ReadNotification={ReadNotification}/>
         </View>
       </ScrollView>

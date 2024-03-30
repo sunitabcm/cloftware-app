@@ -52,7 +52,7 @@ const HolidayList = ({ data, fetchData, date }) => {
           <View key={holiday.holiday_id} className='flex flex-row justify-between items-center'>
             <View className='flex flex-row gap-3 mb-5 items-center'>
               <View className='text-body font-bold bg-gold h-[60px] w-[60px] flex justify-center items-center text-2xl rounded-full'><Text className='text-body font-bold text-2xl'>{new Date(holiday.date).getDate()}</Text></View>
-              <Text className='text-body font-bold'>{holiday.title}</Text>
+              <Text className='text-body font-bold w-[80%]'>{holiday.title}</Text>
             </View>
             {/* <Pressable onPress={() => openModal(holiday)} className='-mt-3'>
               <AppIcon type='MaterialIcons' name='sticky-note-2' size={32} color={'#999999'} />

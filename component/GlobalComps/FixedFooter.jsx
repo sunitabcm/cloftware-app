@@ -70,8 +70,9 @@ const FixedFooter = () => {
 				</View>
 			</View>
 			{openMenu === true &&
-				<BlurViewWrapper onClose={handleClose} isVisible={openMenu} outsideClick={true}>
-					<View className='mt-auto pl-2.5 mb-8 mx-auto flex flex-col justify-center items-center'>
+				<View className='absolute h-screen bg-[#0000005A] w-screen flex justify-end items-center'>
+					{/* onClose={handleClose} isVisible={openMenu} outsideClick={true} */}
+					<View className='flex flex-col justify-center items-center mb-32'>
 						{/* <Pressable onPress={() => { router.push('/dashboard'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 							<Image
 								source={require("../../assets/fees_svg.svg")}
@@ -88,11 +89,11 @@ const FixedFooter = () => {
 							/>
 							<Text>Apply Leave</Text>
 						</Pressable>
-						<Pressable onPress={() => setOpenMenu(!openMenu)} className='flex flex-col items-center justify-center bg-body rounded-full p-2.5'>
+						{/* <Pressable onPress={() => setOpenMenu(!openMenu)} className='flex flex-col items-center justify-center bg-body rounded-full p-2.5'>
 							<AppIcon type='AntDesign' name={openMenu ? 'close' : 'plus'} size={25} color={'#fff'} />
-						</Pressable>
+						</Pressable> */}
 					</View>
-				</BlurViewWrapper>
+				</View>
 			}
 		</>
 	)

@@ -76,7 +76,7 @@ const SlideShow = () => {
             <BtnGlobal
               styleClassName="button"
               title="Let's get started"
-              onPress={() => router.push("/validateOtp")}
+              onPress={() => router.push("/login")}
               classNames={'w-full'}
             />
           </View>

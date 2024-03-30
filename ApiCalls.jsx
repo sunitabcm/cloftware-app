@@ -5,28 +5,25 @@ import { saveAuthUserData } from './authStorage';
 const baseURL = "https://apidev.cloftware.com/api/app";
 
 export async function login(email, password) {
-    try {
-        const response = await axios.post(
-            `${baseURL}/login`,
-            {
-                'emailOrPhoneNumber': email,
-                'password': password,
+    const response = await axios.post(
+        `${baseURL}/login`,
+        {
+            'emailOrPhoneNumber': email,
+            'password': password,
+            'school_id': '13'
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-        if (response.status === 200 || response.status === 201) {
-            return response.data;
-
-        } else {
-            return response.data;
         }
-    } catch (error) {
-        console.error('Error logging in:', error);
-        throw error;
+    );
+
+    if (response.status === 200 || response.status === 201) {
+        return response.data;
+    } else {
+        console.error('Error logging in:', response.message);
+        throw new Error(response.message);
     }
 }
 
@@ -135,29 +132,28 @@ export async function loginViaOtp(num) {
 
 // Function to verify login OTP
 export async function verifyLoginOtp(number, otp) {
-    try {
-        const response = await axios.post(
-            `${baseURL}/verify_login_otp`,
-            {
-                'emailOrPhoneNumber': number,
-                'otp': otp,
+    const response = await axios.post(
+        `${baseURL}/verify_login_otp`,
+        {
+            'emailOrPhoneNumber': number,
+            'otp': otp,
+            'school_id': '13'
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-        if (response.status === 200 || response.status === 201) {
-            return response.data;
-        } else {
-            return response.data;
         }
-    } catch (error) {
-        console.error('Error verifying login OTP:', error);
-        throw error;
+    );
+
+    if (response.status === 200 || response.status === 201) {
+        return response.data;
+    } else {
+        console.error('Error verifying login OTP:', response.message);
+        throw new Error(response.message);
     }
 }
+
 
 // Function to get school event list
 export async function getSchoolEventList(accessToken, year, date, limit = '5', offset = '0') {

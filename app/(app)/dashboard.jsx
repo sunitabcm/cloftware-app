@@ -27,9 +27,9 @@ export default function dashboard() {
     deleteAuthToken()
     dispatch(updateUser(null))
     deleteAuthUserData()
-    setTimeout(() => {
-      router.replace('/validateOtp')
-    }, 2000);
+    // setTimeout(() => {
+      router.replace('/login')
+    // }, 2000);
   }
 
   return (

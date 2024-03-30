@@ -102,63 +102,66 @@ export default function NoticeBoard() {
         :
         <ScrollView className='p-5'>
           <View className='pb-16 mb-10'>
-          <View className='flex flex-row items-center'>
-            <BtnGlobal
-              styleClassName="closeBtn"
-              icon={true}
-              onPress={() => setPage(null)}
-              classNames={'mr-5 mt-2'}
-              iconName={'arrowleft'}
-              iconType={'AntDesign'}
-              iconSize={22}
-              iconColor={'#2A2D32'}
-            />
-            {/* <Image
+            <View className='flex flex-row items-center'>
+              <BtnGlobal
+                styleClassName="closeBtn"
+                icon={true}
+                onPress={() => setPage(null)}
+                classNames={'mr-5 mt-2'}
+                iconName={'arrowleft'}
+                iconType={'AntDesign'}
+                iconSize={22}
+                iconColor={'#2A2D32'}
+              />
+              {/* <Image
               source={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/speaker.svg}
               style={[{ width: 50, height: 50 }]}
               contentFit="cover"
             /> */}
-          </View>
-          <Text style={[stylesGlobal.title]} className='my-4'>{page.title}</Text>
-          <View className='flex flex-row pb-5 border-b border-lightergrey'>
-            <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
-            <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
-          </View>
-          {page.notice_images && page.notice_videos && (page.notice_images.length > 0 || page.notice_videos.length > 0) &&
-            <View className='flex flex-col justify-center items-center mt-5'>
-              <ScrollView className='h-[175px] w-full' persistentScrollbar={true} horizontal>
-                {page.notice_videos && page.notice_videos.length > 0 ? (
-                  <Video
-                    source={{ uri: page.notice_videos[0].media }}
-                    ref={videoRef}
-                    style={{ width: screenWidth, height: 170, borderRadius: 10, marginRight: 10 }}
-                    useNativeControls={true}
-                    onPlaybackStatusUpdate={status => setStatus(() => status)}
-
-                  />
-                ) : null}
-                {page.notice_images && page.notice_images.length > 0 ? (
-                  <Image
-                    source={{ uri: page.notice_images[0].media }}
-                    style={{ width: screenWidth, height: 170, borderRadius: 10 }}
-                  />
-                ) : null}
-              </ScrollView>
-              {page.notice_videos && page.notice_videos.length > 0 || page.notice_images && page.notice_images.length > 0 ? (
-                <ScrollView horizontal style={{ marginTop: 10 }}>
-                  {page.notice_videos && page.notice_videos.length > 0 && (
-                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
-                  )}
-                  {page.notice_images && page.notice_images.length > 0 && (
-                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
-                  )}
-                </ScrollView>
-              ) : null}
             </View>
-          }
-          <Text className='mt-4 text-lightgrey text-sm'>
-            {page.description}
-          </Text>
+            <Text style={[stylesGlobal.title]} className='my-4'>{page.title}</Text>
+            <View className='flex flex-row pb-5 border-b border-lightergrey'>
+              <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
+              <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
+            </View>
+            {page.notice_images && page.notice_videos && (page.notice_images.length > 0 || page.notice_videos.length > 0) &&
+              <View className='flex flex-col justify-center items-center mt-5'>
+                <ScrollView className='h-[175px] w-full' persistentScrollbar={true} horizontal>
+                  {page.notice_videos && page.notice_videos.length > 0 ? (
+                    <Video
+                      source={{ uri: page.notice_videos[0].media }}
+                      ref={videoRef}
+                      style={{ width: screenWidth, height: 170, borderRadius: 10, marginRight: 10 }}
+                      useNativeControls={true}
+                      onPlaybackStatusUpdate={status => setStatus(() => status)}
+
+                    />
+                  ) : null}
+                  {page.notice_images && page.notice_images.length > 0 ? (
+                    <View className='w-full'>
+                      <Image
+                        source={{ uri: page.notice_images[0].media }}
+                        style={{ width: screenWidth, height: 170, borderRadius: 10 }}
+                        contentFit="contain"
+                      />
+                    </View>
+                  ) : null}
+                </ScrollView>
+                {page.notice_videos && page.notice_videos.length > 0 || page.notice_images && page.notice_images.length > 0 ? (
+                  <ScrollView horizontal style={{ marginTop: 10 }}>
+                    {page.notice_videos && page.notice_videos.length > 0 && (
+                      <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
+                    )}
+                    {page.notice_images && page.notice_images.length > 0 && (
+                      <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
+                    )}
+                  </ScrollView>
+                ) : null}
+              </View>
+            }
+            <Text className='mt-4 text-lightgrey text-sm'>
+              {page.description}
+            </Text>
           </View>
         </ScrollView>
       }

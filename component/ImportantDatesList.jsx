@@ -86,7 +86,7 @@ const HolidayList = ({ data, fetchData }) => {
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>
       </View> */}
-      {data.length === 0 && <EmptyScreen/>}
+      {data.length === 0 && <EmptyScreen />}
       {renderHolidays()}
     </View>
   );

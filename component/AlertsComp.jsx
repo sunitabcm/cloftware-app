@@ -38,7 +38,7 @@ const AlertsComp = ({ apiData, ReadNotification }) => {
                                 <View className='absolute bg-secondary h-[15px] w-[15px] rounded-[50px] right-0'></View>
                             }
                         </View>
-                        <View>
+                        <View className='w-[80%]'>
                             <Text className='text-body text-lg font-bold'>{message.title}</Text>
                             <Text className='text-body text-sm mb-1'>{message.message}</Text>
                             <Text className='text-lightgrey text-sm'>{dayjs(message.createdAt).format('ddd, MMMM D, YYYY')}</Text>

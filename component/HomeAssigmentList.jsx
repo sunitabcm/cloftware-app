@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Pressable, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, ScrollView, Dimensions, ImageBackground } from 'react-native';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
 import { Image } from 'expo-image';
@@ -52,8 +52,9 @@ const HomeAssigmentList = ({ data, fetchData }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
   const screenWidth = Dimensions.get('window').width - 40;
+  const screenWidthFull = Dimensions.get('window').width;
   const [showPDF, setShowPDF] = useState(false);
-  const [showEmpty, setShowEmpty] = useState(false);
+  const [showImage, setShowImage] = useState(false);
   const [showPDFPath, setShowPDFPath] = useState('');
   const [showPDFName, setShowPDFName] = useState('');
   const [page, setPage] = useState(null);
@@ -99,7 +100,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
     return Object.keys(organizedData).map((month) => (
       <View key={month} className='mb-4'>
         {organizedData[month].map((item) => (
-          <AttachedUibox press={() => setPage(item)} key={item.title} item={item} noticeBoard={false} HomeAssigment={true}/>
+          <AttachedUibox press={() => setPage(item)} key={item.title} item={item} noticeBoard={false} HomeAssigment={true} />
         ))}
       </View>
     ));
@@ -122,7 +123,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
               </View>
               {/* <HorizontalDateScroll selectedDate={selectedDate} onDateSelect={(date) => setSelectedDate(date)} /> */}
               <View className='bg-lightergrey p-5'>
-              {data && Array.isArray(data) && data.length === 0 && <EmptyScreen/>}
+                {data && Array.isArray(data) && data.length === 0 && <EmptyScreen />}
                 {renderHolidays()}
               </View>
             </View>
@@ -156,19 +157,25 @@ const HomeAssigmentList = ({ data, fetchData }) => {
               <View className='flex flex-col justify-center items-center mt-5'>
                 {page.image && page.image !== '' && page.flag !== 0 ? (
                   <>
-                  {page.flag === 2 &&
-                  <Image
-                    source={{ uri: page.image }}
-                    style={{ width: screenWidth, height: 170, borderRadius: 10 }}
-                  />}
-                  {page.flag === 1 &&
-                  <TouchableOpacity onPress={() => { setShowPDFName(page.title); setShowPDFPath(page.image); setShowPDF(true) }}>
-                    <Image
-                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
-                      style={{ width: 45, height: 60 }}
-                      contentFit="cover"
-                    />
-                  </TouchableOpacity>}
+                    {page.flag === 2 &&
+                      <View className='w-full'>
+                        <TouchableOpacity className='w-full' onPress={() => { setShowPDFPath(page.image); setShowImage(true) }}>
+                          <Image
+                            source={{ uri: page.image }}
+                            style={{ width: screenWidth, height: 170, borderRadius: 10 }}
+                            contentFit="contain"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    }
+                    {page.flag === 1 &&
+                      <TouchableOpacity onPress={() => { setShowPDFName(page.title); setShowPDFPath(page.image); setShowPDF(true) }}>
+                        <Image
+                          source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
+                          style={{ width: 45, height: 60 }}
+                          contentFit="cover"
+                        />
+                      </TouchableOpacity>}
                   </>
                 ) : null}
               </View>
@@ -180,6 +187,12 @@ const HomeAssigmentList = ({ data, fetchData }) => {
       }
       <ModalScreen isVisible={showPDF} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowPDF(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
         <PDFreader path={showPDFPath} Heading={showPDFName} />
+      </ModalScreen>
+      <ModalScreen isVisible={showImage} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
+        <ImageBackground
+          source={{ uri: showPDFPath }}
+          style={{ width: screenWidthFull, flex: 1, borderRadius: 10, justifyContent: 'flex-start', marginTop: 70, marginBottom: 20 }}
+        />
       </ModalScreen>
     </>
   );

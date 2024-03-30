@@ -35,6 +35,7 @@ const Login = () => {
     const userCred = useSelector((state) => state.userDetails.user);
     
     const handleSubmit = (event) => {
+        setbuttondisabled(true)
         event.preventDefault();
         const formList = {
             email: email,
@@ -89,19 +90,22 @@ const Login = () => {
         try {
             const response = await login(valuee, password);
             if (response) {
-                dispatch(setAuthToken(response.body))
-                saveAuthToken(response.body)
-                await getStudentProfile(dispatch, response.body)
-                toast.show(response?.message, { type: "success" })
-                router.replace('/dashboard')
+                dispatch(setAuthToken(response.body));
+                saveAuthToken(response.body);
+                await getStudentProfile(dispatch, response.body);
+                toast.show(response.message, { type: "success" });
+                router.replace('/dashboard');
             } else {
-                toast.show('An error occured, Please try again', { type: "danger" })
-                setErrors({});
+                throw new Error('An error occurred. Please try again.');
             }
         } catch (error) {
-            toast.show('An error occured, Please try again', { type: "danger" })
+            const errorMessage = error.response ? error.response.data.message : error.message;
+            toast.show(errorMessage, { type: "danger" });
         }
+        // setbuttondisabled(false);
     };
+    
+    
 
     const chnageemail = (e) => {
         setErrors('');
@@ -134,7 +138,7 @@ const Login = () => {
     return (
         <ScrollView className='bg-light h-full'>
             <View>
-                <NonLoggedInBlur onPressBtn={() => router.push('/validateOtp')}/>
+                <NonLoggedInBlur hidden={false}/>
                 <View style={styles.formFields} className=' p-5'>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Login to your account</Text>
