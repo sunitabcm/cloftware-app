@@ -6,90 +6,91 @@ import { secondaryColor, sixColor } from "./stylesheet";
 import Messages from "./Messages";
 
 const InputeFieldsValidation = ({
-    label,
-    placeholder,
-    value,
-    onChangeText,
-    secureTextEntry,
-    numeric,
-    ifEye,
-    ifEmailNumber,
-    disabled = false,
-    type = 'email'
-  }) => {
-  
-    const inputType = secureTextEntry
-      ? "password"
-      : numeric
-        ? "numeric"
-        : "default";
-  
-    const [isEye, setIsEye] = useState(false);
-    const [passwordValidation, setPasswordValidation] = useState({
-      isValid: false,
-      message: "Password must contain 1 capital letter, 1 lowercase letter, 1 special character, 1 numeric, and be at least 8 characters long",
+  label,
+  placeholder,
+  value,
+  onChangeText,
+  secureTextEntry,
+  numeric,
+  ifEye,
+  ifEmailNumber,
+  disabled = false,
+  type = 'email'
+}) => {
+
+  const inputType = secureTextEntry
+    ? "password"
+    : numeric
+      ? "numeric"
+      : "default";
+
+  const [isEye, setIsEye] = useState(false);
+  const [passwordValidation, setPasswordValidation] = useState({
+    isValid: false,
+    message: "Password must contain 1 capital letter, 1 lowercase letter, 1 special character, 1 numeric, and be at least 8 characters long",
+  });
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValid = passwordRegex.test(password);
+    setPasswordValidation({
+      isValid,
+      message: isValid ? "" : "Password must contain 1 capital letter, 1 lowercase letter, 1 special character, 1 numeric, and be at least 8 characters long",
     });
-  
-    const validatePassword = (password) => {
-      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      const isValid = passwordRegex.test(password);
-      setPasswordValidation({
-        isValid,
-        message: isValid ? "" : "Password must contain 1 capital letter, 1 lowercase letter, 1 special character, 1 numeric, and be at least 8 characters long",
-      });
-    };
-  
-    const handleInputChange = (text) => {
-      if (ifEye) {
-        validatePassword(text);
-      }
-      onChangeText(text);
-    };
-  
-    const handleBlur = () => {
-      if (ifEye) {
-        validatePassword(value);
-      }
-    };
-  
-    return (
-      <View style={styles.inputContainer}>
-        {label && <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
-        {ifEye ? (
-          <View style={styles.eyeOnOff}>
+  };
+
+  const handleInputChange = (text) => {
+    if (ifEye) {
+      validatePassword(text);
+    }
+    onChangeText(text);
+  };
+
+  const handleBlur = () => {
+    if (ifEye) {
+      validatePassword(value);
+    }
+  };
+
+  return (
+    <View style={styles.inputContainer}>
+      {label && <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
+      {ifEye ? (
+        <View style={styles.eyeOnOff}>
+          <View className="absolute top-0 right-0 w-[40px] h-[45px] justify-center flex items-center z-[3]">
             <Pressable
               onPress={() => setIsEye(!isEye)}
-              style={[
-                styles.eyeOnOffBox,
-                value.length === 0 && { opacity: 0.6 },
-              ]}
-              disabled={value.length === 0}
+            // style={[
+            //   styles.eyeOnOffBox,
+            //   value.length === 0 && { opacity: 0.6 },
+            // ]}
+            // disabled={value.length === 0}
             >
-              <Icon2
-                name={isEye ? "eye" : "eye-off"}
-                size={17}
-                color={secondaryColor}
+              <AppIcon
+                type={'MaterialCommunityIcons'}
+                name={isEye ? "eye" : "eye-off"} size={20} color='#37374E'
               />
             </Pressable>
-  
-            <TextInput
-              style={[
-                styles.input,
-                passwordValidation.isValid ? null : { borderColor: "red" },
-              ]}
-              placeholder={placeholder}
-              value={value}
-              disabled={disabled}
-              onChangeText={handleInputChange}
-              onBlur={handleBlur} // Added onBlur event handler
-              keyboardType={inputType}
-              secureTextEntry={!isEye ? secureTextEntry : false}
-            />
-            {passwordValidation.isValid ? null : (
-                <Messages title={passwordValidation.message} />
-            )}
           </View>
-        ) : (
+
+          <TextInput
+            style={[
+              styles.input,
+              passwordValidation.isValid ? null : { borderColor: "red" },
+            ]}
+            placeholder={placeholder}
+            value={value}
+            disabled={disabled}
+            onChangeText={handleInputChange}
+            onBlur={handleBlur} // Added onBlur event handler
+            keyboardType={inputType}
+            secureTextEntry={!isEye ? secureTextEntry : false}
+          />
+          {passwordValidation.isValid ? null : (
+            <Messages title={passwordValidation.message} />
+          )}
+        </View>
+      ) : (
         <View style={styles.normalInput}>
           {!ifEmailNumber ? (
             <TextInput
@@ -109,7 +110,7 @@ const InputeFieldsValidation = ({
                   type === 'number' ?
                     <View style={styles.plusNine}>
                       <Image
-                        source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                         style={{ width: 24, height: 16 }}
                         contentFit="cover"
                       />
@@ -118,7 +119,7 @@ const InputeFieldsValidation = ({
                     :
                     <View style={styles.plusNine}>
                       <Image
-                        source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                         style={{ width: 24, height: 16 }}
                         contentFit="cover"
                       />
@@ -127,7 +128,7 @@ const InputeFieldsValidation = ({
                 ) : !isNaN(value) ? (
                   <View style={styles.plusNine}>
                     <Image
-                      source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                       style={{ width: 24, height: 16 }}
                       contentFit="cover"
                     />
@@ -136,7 +137,7 @@ const InputeFieldsValidation = ({
                   // <Icon name="email" size={20} color={secondaryColor} />
                   <View style={styles.plusNine}>
                     <Image
-                      source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                       style={{ width: 24, height: 16 }}
                       contentFit="cover"
                     />

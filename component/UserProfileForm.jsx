@@ -22,7 +22,7 @@ const validationSchema = yup.object().shape({
     emg_relationship_to_student: yup.string(),
 });
 
-const UserProfileForm = ({ apiData, onSubmit }) => {
+const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
     const authToken = useSelector((state) => state.auth.authToken);
     const userCred = useSelector((state) => state.userDetails.user);
     const toast = useToast();
@@ -60,29 +60,6 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
         emg_email_id: apiData?.student_details.emg_email_id,
         emg_relationship_to_student: apiData?.student_details.emg_relationship_to_student,
     };
-    // const handleFilePicker = async () => {
-    //     try {
-    //         const result = await DocumentPicker.pick({
-    //             type: [DocumentPicker.types.images],
-    //         });
-    //         const resultImage = await imageUpload(result[0].uri, result[0].name, authToken)
-    //         if (resultImage) {
-    //             const value = await updateProfile(authToken, resultImage.fileURL, true)
-    //             if (value) {
-    //                 toast.show('Image Uploaded', { type: "success" })
-    //                 const data = await getStudentProfile(dispatch, authToken)
-    //             }
-    //         } else {
-    //             toast.show('Something went wrong ', { type: "success" })
-    //         }
-    //     } catch (err) {
-    //         if (DocumentPicker.isCancel(err)) {
-    //             // Handle document picker cancellation
-    //         } else {
-    //             console.error(err);
-    //         }
-    //     }
-    // };
 
     const handleFilePicker = async () => {
         try {
@@ -311,6 +288,7 @@ const UserProfileForm = ({ apiData, onSubmit }) => {
                                 title="Update Profile"
                                 onPress={handleSubmit}
                                 classNames={'w-full mt-5'}
+                                isDisabled={disabled}
                             />}
                         </View>
                     )}

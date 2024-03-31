@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { TouchableWithoutFeedback } from 'react-native';
 import { globalstyles } from '../../styles/global';
 import BtnGlobal from './BtnGlobal';
@@ -37,10 +36,10 @@ const ModalScreen = ({ isVisible, onClose, outsideClick, children, heading, moda
 		// }}
 		>
 			<TouchableWithoutFeedback style={{ flex: 1 }} onPress={handleCloseOut}>
-				<BlurView
-					style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: top, paddingBottom: bottom }}
-					intensity={70}
-					tint={modalWidth === 'w-full' ? 'light' : "dark"}
+				<View
+					style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: top, paddingBottom: bottom, backgroundColor: '#0000005A' }}
+					// intensity={70}
+					// tint={modalWidth === 'w-full' ? 'light' : "dark"}
 				>
 					<View style={{ borderRadius: 10 }} className={` p-5 ${modalWidth} ${otherClasses} bg-light relative`}>
 						{heading !== undefined && <View className="w-full border-b pb-3 border-b-primary text-center flex items-center"><Text style={globalstyles.subHead}>{heading}</Text></View>}
@@ -58,7 +57,7 @@ const ModalScreen = ({ isVisible, onClose, outsideClick, children, heading, moda
 							/>
 						}
 					</View>
-				</BlurView>
+				</View>
 			</TouchableWithoutFeedback>
 		</Modal>
 	);

@@ -49,8 +49,8 @@ const AlertsComp = ({ apiData, ReadNotification }) => {
                 <Text className='text-body font-bold text-lg'>No Data Found</Text>
             )}
             {selectedMessage && (
-                <ModalScreen isVisible={true} onClose={() => { ReadNotification(selectedMessage.id); closeModal() }} outsideClick={false} modalWidth={'w-[80%]'} otherClasses={``}>
-                    <View>
+                <ModalScreen isVisible={true} onClose={() => { ReadNotification(selectedMessage.id); closeModal() }} outsideClick={false} modalWidth={'w-[94%]'} otherClasses={``}>
+                    <View className='w-[92%]'>
                         <Text className='text-body text-lg font-bold'>{selectedMessage.title}</Text>
                         <Text className='text-body text-sm mb-1'>{selectedMessage.message}</Text>
                         <Text className='text-lightgrey text-sm'>{dayjs(selectedMessage.createdAt).format('ddd, MMMM D, YYYY')}</Text>

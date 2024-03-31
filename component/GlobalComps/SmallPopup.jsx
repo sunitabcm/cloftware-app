@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { BlurView } from 'expo-blur';
 import AppIcon from './AppIcon';
 import BtnGlobal from './BtnGlobal';
 
@@ -13,7 +12,7 @@ export const SmallPopup = ({ isVisible, closeModal, children, customModalClass =
             onRequestClose={closeModal}
         >
             <View style={styles.modalContainer}>
-                <BlurView intensity={20} tint="dark" style={[StyleSheet.absoluteFill, styles.blurContainer]} >
+                <View style={[StyleSheet.absoluteFill, styles.blurContainer]} >
                     <View style={styles.modalContent} className={customModalClass}>
                         <View style={{ marginTop: 15 }}>
                             {children}
@@ -29,7 +28,7 @@ export const SmallPopup = ({ isVisible, closeModal, children, customModalClass =
                             iconColor={'#2A2D32'}
                         />
                     </View>
-                </BlurView>
+                </View>
             </View>
         </Modal>
     );

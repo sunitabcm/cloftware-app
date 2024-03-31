@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, TouchableOpacity, Linking, Button, Alert } from 'react-native';
 import AppIcon from '../../component/GlobalComps/AppIcon';
 import { stylesGlobal } from '../../styles/global';
 import ModalScreen from '../../component/GlobalComps/ModalScreen';
+import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
+import { useDispatch, useSelector } from 'react-redux';
+import { useToast } from 'react-native-toast-notifications';
+import { RaiseIssue } from '../../ApiCalls';
 
 const dummyData = [
   { id: '1', question: 'What is Lorem Ipsum?', answer: 'Lorem ipsum is placeholder text' },
@@ -23,6 +27,34 @@ export default function Support() {
   const [filteredData, setFilteredData] = useState(dummyData);
   const [selectedFAQ, setSelectedFAQ] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [form, openForm] = useState(false);
+  const [text, setText] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const userCred = useSelector((state) => state.userDetails.user);
+  const authToken = useSelector((state) => state.auth.authToken);
+  const toast = useToast();
+
+  const handleTextChange = (inputText) => {
+    setText(inputText);
+    setIsButtonDisabled(inputText.trim().length === 0);
+  };
+
+  const handleSubmit = async () => {
+    if (text.trim().length === 0) {
+      toast.show('Add issue to proceed Issue', { type: "danger" })
+    } else {
+      try {
+        const response = await RaiseIssue(authToken, text, userCred?.school_id ,userCred?.phone_number ,userCred?.last_name ,userCred?.first_name ,userCred?.email_id);
+        if(response){
+          toast.show(response?.message, { type: "success" })
+          setText('')
+          openForm(false)
+        }
+      } catch (error) {
+        toast.show('Some error occured while sending the request', { type: "danger" })
+      }
+    }
+  };
 
   const handleSearch = (query) => {
     const filtered = dummyData.filter((item) =>
@@ -48,6 +80,16 @@ export default function Support() {
     </TouchableOpacity>
   );
 
+  const openWhatsAppChat = () => {
+    const phoneNumber = '+918287140514';
+    const whatsappLink = `https://wa.me/${phoneNumber}`;
+    Linking.openURL(whatsappLink);
+  };
+
+  const OpenModalEmail = () => {
+    openForm(!form)
+  };
+
   return (
     <View style={styles.container} className='bg-offwhite'>
       <View className='bg-light p-5'>
@@ -66,18 +108,25 @@ export default function Support() {
       </View>
       <ScrollView className='bg-lighergrey p-5 mb-10'>
         <Text className='mb-5' style={stylesGlobal.title}>Need help check these options</Text>
-        <TouchableOpacity className='flex justify-start flex-row items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+        <TouchableOpacity onPress={openWhatsAppChat} className='flex justify-start flex-row items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+          <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='FontAwesome' name='whatsapp' size={25} color={'#fff'} /></View>
+          <View className='flex flex-col'>
+            <Text className='' style={styles.question}>Chat with Us</Text>
+            {/* <Text className='' style={styles.answer}>Get in a call with us</Text> */}
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => Linking.openURL('tel:+918287140514')} className='flex justify-start flex-row items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
           <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='Ionicons' name='call' size={25} color={'#fff'} /></View>
           <View className='flex flex-col'>
             <Text className='' style={styles.question}>Call Us</Text>
-            <Text className='' style={styles.answer}>Get in a call with us</Text>
+            {/* <Text className='' style={styles.answer}>Get in a call with us</Text> */}
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className='flex justify-start flex-row mt-5 items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
-          <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='Ionicons' name='mail' size={25} color={'#fff'} /></View>
+        <TouchableOpacity onPress={() => OpenModalEmail()} className='flex justify-start flex-row mt-5 items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+          <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='FontAwesome' name='wpforms' size={25} color={'#fff'} /></View>
           <View className='flex flex-col'>
-            <Text className='' style={styles.question}>Email Us</Text>
-            <Text className='' style={styles.answer}>Ask us anything</Text>
+            <Text className='' style={styles.question}>Raise a ticket</Text>
+            {/* <Text className='' style={styles.answer}>Ask us anything</Text> */}
           </View>
         </TouchableOpacity>
         <Text style={stylesGlobal.title} className='my-5'>Frequently asked questions</Text>
@@ -94,6 +143,40 @@ export default function Support() {
         <View className="w-full h-full px-[20px] bg-light relative mt-16">
           <Text style={styles.modalHeading}>{selectedFAQ?.question}</Text>
           <Text style={styles.modalDescription}>{selectedFAQ?.answer}</Text>
+        </View>
+      </ModalScreen>
+      <ModalScreen isVisible={form} onClose={() => OpenModalEmail()} outsideClick={false} modalWidth={'w-[90%]'} otherClasses={``}>
+        <View className="w-full px-[20px] bg-light relative mt-12 mb-10">
+          <TextInput
+            multiline
+            numberOfLines={4}
+            placeholder="Mention your Issue"
+            value={text}
+            onChangeText={handleTextChange}
+            style={{
+              borderWidth: 1,
+              borderRadius: 8,
+              color: '#2A2D32',
+              lineHeight: 16,
+              textAlignVertical: 'center',
+              outlineWidth: 0,
+              borderWidth: 1,
+              borderColor: "#f6f5fa",
+              borderRadius: 8,
+              paddingHorizontal: 14,
+              paddingVertical: 12,
+              fontSize: 13,
+              backgroundColor: "#f4f4f4",
+              color: "#444",
+            }}
+          />
+          <BtnGlobal
+            styleClassName="button"
+            title="Submit"
+            onPress={handleSubmit}
+            classNames={'w-full mt-5'}
+            isDisabled={isButtonDisabled}
+          />
         </View>
       </ModalScreen>
     </View>

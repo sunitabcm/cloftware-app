@@ -38,8 +38,10 @@ export default function UpdatePassword() {
     } catch (error) {
       toast.show('Credentials didnt matched', { type: "danger" })
     }
+    setButtonDisabled(false)
   };
   const handlePasswordSubmit = (values) => {
+    setButtonDisabled(true)
     ResetPass(values.oldPassword, values.newPassword, values.confirmPassword)
   };
 

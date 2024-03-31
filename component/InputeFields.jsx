@@ -3,6 +3,7 @@ import { View, TextInput, Image, Text, StyleSheet, Pressable } from "react-nativ
 import Icon from "react-native-vector-icons/Entypo";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import { secondaryColor, sixColor } from "./stylesheet";
+import AppIcon from "./GlobalComps/AppIcon";
 
 const InputeFields = ({
   label,
@@ -30,20 +31,21 @@ const InputeFields = ({
       {label && <View style={styles.mobilelabel}><Text style={styles.mobile}>{label}</Text><Text style={styles.masked}>*</Text></View>}
       {ifEye ? (
         <View style={styles.eyeOnOff}>
-          <Pressable
-            onPress={() => setIsEye(!isEye)}
-            style={[
-              styles.eyeOnOffBox,
-              value.length === 0 && { opacity: 0.6 },
-            ]}
-            disabled={value.length === 0}
-          >
-            <Icon2
-              name={isEye ? "eye" : "eye-off"}
-              size={17}
-              color={secondaryColor}
-            />
-          </Pressable>
+          <View className="absolute top-0 right-0 w-[40px] h-[45px] justify-center flex items-center z-[3]">
+            <Pressable
+              onPress={() => setIsEye(!isEye)}
+            // style={[
+            //   styles.eyeOnOffBox,
+            //   value.length === 0 && { opacity: 0.6 },
+            // ]}
+            // disabled={value.length === 0}
+            >
+              <AppIcon
+                type={'MaterialCommunityIcons'}
+                name={isEye ? "eye" : "eye-off"} size={20} color='#37374E'
+              />
+            </Pressable>
+          </View>
 
           <TextInput
             style={styles.input}
@@ -75,7 +77,7 @@ const InputeFields = ({
                   type === 'number' ?
                     <View style={styles.plusNine}>
                       <Image
-                        source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                         style={{ width: 24, height: 16 }}
                         contentFit="cover"
                       />
@@ -84,7 +86,7 @@ const InputeFields = ({
                     :
                     <View style={styles.plusNine}>
                       <Image
-                        source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                         style={{ width: 24, height: 16 }}
                         contentFit="cover"
                       />
@@ -93,7 +95,7 @@ const InputeFields = ({
                 ) : !isNaN(value) ? (
                   <View style={styles.plusNine}>
                     <Image
-                      source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                       style={{ width: 24, height: 16 }}
                       contentFit="cover"
                     />
@@ -102,7 +104,7 @@ const InputeFields = ({
                   // <Icon name="email" size={20} color={secondaryColor} />
                   <View style={styles.plusNine}>
                     <Image
-                      source={{uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png'}}
+                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/ind-flag.png' }}
                       style={{ width: 24, height: 16 }}
                       contentFit="cover"
                     />

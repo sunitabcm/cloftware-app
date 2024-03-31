@@ -1,6 +1,5 @@
 import { View, ImageBackground, Dimensions } from 'react-native'
 import React from 'react'
-import { BlurView } from 'expo-blur';
 import BtnGlobal from './BtnGlobal';
 import { Image } from 'expo-image';
 import SchoolIcon from './SchoolIcon';
@@ -12,15 +11,15 @@ export default function NonLoggedInBlur({ onPressBtn, hidden = true }) {
     return (
         <View className='relative mb-16'>
             <ImageBackground
-                source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/schoolSmall.png' }}
+                source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/BannerSchoolBlur.png' }}
                 style={{ width: screenWidth, height: 200 }}
                 contentFit="cover"
             >
-                <BlurView
+                <View
                     style={{ width: screenWidth, height: 200 }}
-                    blurType="light"
-                    blurAmount={100}
-                    reducedTransparencyFallbackColor="dark"
+                    // blurType="light"
+                    // blurAmount={100}
+                    // reducedTransparencyFallbackColor="dark"
                 />
                 <View className='absolute w-full h-full'>
                     {hidden ? <BtnGlobal

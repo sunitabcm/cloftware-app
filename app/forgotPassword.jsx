@@ -144,6 +144,7 @@ const ForgotPassword = () => {
     };
 
     const handlePasswordSubmit = () => {
+        setConfirmPasswordValid(true)
         if (validatePassword(password) && validateConfirmPassword(confirmPassword)) {
             // Call reset password API
             ResetPass(password, confirmPassword);

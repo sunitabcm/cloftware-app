@@ -615,3 +615,28 @@ export async function markNotificationAsRead(token, notificationId) {
         throw error;
     }
 }
+
+export async function RaiseIssue(token, issue, schoolId, phone, lastname, firstName, email) {
+    const response = await axios.post(
+        `${baseURL}/raise_a_issue`,
+        {
+            'email': email,
+            'issue': issue,
+            'school_id': schoolId,
+            'phone': phone,
+            'username': firstName + ' ' + lastname,
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }
+    );
+
+    if (response.status === 200 || response.status === 201) {
+        return response.data;
+    } else {
+        return null;
+    }
+}
