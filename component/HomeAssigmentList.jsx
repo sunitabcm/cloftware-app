@@ -163,7 +163,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                           <Image
                             source={{ uri: page.image }}
                             style={{ width: screenWidth, height: 170, borderRadius: 10 }}
-                            contentFit="contain"
+                            contentFit="fill"
                           />
                         </TouchableOpacity>
                       </View>

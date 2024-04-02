@@ -54,7 +54,7 @@ const HolidayList = ({ data, fetchData }) => {
                 <Image
                   source={holiday.image}
                   style={{ width: '100%', height: 190 }}
-                  contentFit="contain"
+                  contentFit="fill"
                   className='rounded-xl border border-lightgrey'
                 />
               </View>

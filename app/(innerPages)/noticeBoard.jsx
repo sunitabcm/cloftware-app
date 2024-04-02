@@ -63,7 +63,7 @@ export default function NoticeBoard() {
 
   const filterData = (selectedDate) => {
     // Filter the existing data based on the selected date
-    const filteredData = apiData.filter((item) => dayjs(item.date).format('MMM, YYYY') === selectedDate);
+    const filteredData = apiData.filter((item) => dayjs(item.created_at).format('MMM, YYYY') === selectedDate);
     setApiDataFilters(filteredData);
   };
 
@@ -142,7 +142,7 @@ export default function NoticeBoard() {
                       <Image
                         source={{ uri: page.notice_images[0].media }}
                         style={{ width: screenWidth, height: 170, borderRadius: 10 }}
-                        contentFit="contain"
+                        contentFit="fill"
                       />
                     </View>
                   ) : null}

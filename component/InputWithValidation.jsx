@@ -4,7 +4,7 @@ import Icon from "react-native-vector-icons/Entypo";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import { secondaryColor, sixColor } from "./stylesheet";
 import Messages from "./Messages";
-
+import AppIcon from "./GlobalComps/AppIcon";
 const InputeFieldsValidation = ({
   label,
   placeholder,

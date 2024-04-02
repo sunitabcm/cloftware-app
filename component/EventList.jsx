@@ -49,12 +49,12 @@ const HolidayList = ({ data, fetchData }) => {
       <View key={month} className='mb-4 bg-light p-4 rounded-xl'>
         {organizedData[month].map((holiday) => (
           <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center'>
-            {holiday.event_images.length !== 0 &&
+            {holiday.image && holiday.image !== '' &&
               <View className='w-full'>
                 <Image
-                  source={holiday.event_images[0].images}
+                  source={holiday.image}
                   style={{ width: '100%', height: 190 }}
-                  contentFit="contain"
+                  contentFit="fill"
                   className='rounded-xl border border-lightgrey'
                 />
               </View>

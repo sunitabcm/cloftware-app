@@ -28,7 +28,7 @@ const dispatch = useDispatch()
     }
     setTimeout(() => {
       setDisabled(false)
-    }, 3000);
+    }, 5000);
   };
 
   const handleProfileUpdate = (values) => {
