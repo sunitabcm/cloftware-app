@@ -2,7 +2,6 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppState } from 'react-native';
-// import * as SecureStore from 'expo-secure-store';
 
 export const saveAuthToken = async (token) => {
   try {
@@ -32,7 +31,6 @@ export const loadAuthToken = async (deleteToken = false) => {
 
 export const deleteAuthToken = async () => {
   try {
-    // await SecureStore.deleteItemAsync('authToken');
     await AsyncStorage.removeItem('authToken');
   } catch (error) {
     console.error('Error deleting auth token:', error);
@@ -87,7 +85,6 @@ export const loadAuthUserData = async (deleteUserData = false) => {
 
 export const deleteAuthUserData = async () => {
   try {
-    // await SecureStore.deleteItemAsync('authUserData');
     await AsyncStorage.removeItem('authUserData');
   } catch (error) {
     console.error('Error deleting auth UserData:', error);

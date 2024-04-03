@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
-// import { BlurView } from 'expo-blur';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { TouchableWithoutFeedback } from 'react-native';
 

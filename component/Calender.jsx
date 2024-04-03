@@ -32,7 +32,6 @@ const MyCalendar = () => {
   useEffect(() => {
     fetchApiData(selectedDate);
   }, [selectedDate, router, pathname]);
-console.log(params)
 
   const fetchApiData = async (date) => {
     try {
@@ -56,19 +55,15 @@ console.log(params)
       const status = clickedDateInfo.type;
       if (status) {
         if (status === 'Present') {
-          console.log('Present day clicked:', day.dateString);
         } else if (status === 'Absent') {
-          console.log('Absent day clicked:', day.dateString);
         } else if (status === 'Leave') {
           router.push({ pathname: "/requestLeave", params: { date: day.dateString } })
         } else if (status === 'Holiday') {
           router.push({ pathname: "/holidays", params: { date: day.dateString } })
         } else {
-          console.log('Other status day clicked:', day.dateString);
         }
       }
     } else {
-      console.log('Type information not found for:', day.dateString);
     }
   };
 

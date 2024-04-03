@@ -41,7 +41,7 @@ export default function Support() {
 
   const handleSubmit = async () => {
     if (text.trim().length === 0) {
-      toast.show('Add issue to proceed Issue', { type: "danger" })
+      toast.show('Add issue to proceed', { type: "danger" })
     } else {
       try {
         const response = await RaiseIssue(authToken, text, userCred?.school_id ,userCred?.phone_number ,userCred?.last_name ,userCred?.first_name ,userCred?.email_id);
@@ -54,6 +54,7 @@ export default function Support() {
         toast.show('Some error occured while sending the request', { type: "danger" })
       }
     }
+    setIsButtonDisabled(true)
   };
 
   const handleSearch = (query) => {
@@ -71,6 +72,7 @@ export default function Support() {
 
   const closeModal = () => {
     setModalVisible(false);
+    setIsButtonDisabled(true)
   };
 
   const renderFAQItem = ({ item }) => (

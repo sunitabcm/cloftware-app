@@ -20,12 +20,29 @@ import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
 import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
-import InputeFieldsValidation from "../component/InputWithValidation";
-
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import GlobalInputs from "../component/GlobalComps/GlobalInputs";
 const ForgotPassword = () => {
+    const passwordValidationSchema = yup.object().shape({
+        Password: yup
+            .string()
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 numeric digit, and be at least 8 characters long'
+            )
+            .required('New Password is required'),
+        confirmPassword: yup
+            .string()
+            .oneOf([yup.ref('Password'), null], 'Passwords must match')
+            .required('Confirm Password is required'),
+    });
+
     const router = useRouter();
     const authToken = useSelector((state) => state.auth.authToken)
     const userCred = useSelector((state) => state.userDetails.user);
+    const [buttonDisabled, setButtonDisabled] = useState(true);
+
     const toast = useToast();
     const dispatch = useDispatch()
     const [email, setemail] = useState("");
@@ -48,6 +65,9 @@ const ForgotPassword = () => {
     const [ID, setID] = useState("");
     const [err, seterr] = useState(false);
     const [passwderr, setpasswderr] = useState(false);
+    const enableButton = () => {
+        setButtonDisabled(false);
+    };
 
     const validateEmail = (value) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -85,7 +105,6 @@ const ForgotPassword = () => {
 
         try {
             const response = await verifyOtpPasswordReset(email, otp);
-            console.log(response)
             if (response?.success === true) {
                 setID(response?.body?.id)
                 toast.show(response?.message, { type: "success" })
@@ -93,13 +112,13 @@ const ForgotPassword = () => {
                 setButtondisabledOtp(true);
                 setShowPasswordFields(true);
                 setbuttondisabled(true);
-                setOtpValid(true);
             } else {
                 toast.show(response?.message, { type: "danger" })
             }
         } catch (error) {
             toast.show('Unable to validate', { type: "danger" })
         }
+        setOtpValid(true);
     };
 
     const ResetPass = async (newPass, confirmPass) => {
@@ -134,24 +153,9 @@ const ForgotPassword = () => {
     };
 
     const handleOtpSubmit = () => {
+        setOtpValid(true);
         if (validateOtp(otp)) {
-            // Call verify OTP API
             verifyForgotPassOtp(email, otp);
-
-        } else {
-            setOtpValid(false);
-        }
-    };
-
-    const handlePasswordSubmit = () => {
-        setConfirmPasswordValid(true)
-        if (validatePassword(password) && validateConfirmPassword(confirmPassword)) {
-            // Call reset password API
-            ResetPass(password, confirmPassword);
-            // Additional logic if needed
-        } else {
-            setPasswordValid(!validatePassword(password));
-            setConfirmPasswordValid(!validateConfirmPassword(confirmPassword));
         }
     };
 
@@ -203,6 +207,11 @@ const ForgotPassword = () => {
         setConfirmPassword(e);
     };
 
+    const handlePasswordSubmit = (values) => {
+        setButtonDisabled(true)
+        ResetPass(values.Password, values.confirmPassword)
+    };
+
     return (
         <ScrollView className='bg-light h-full'>
             <View>
@@ -236,7 +245,7 @@ const ForgotPassword = () => {
                             <InputeFields
                                 label={"Enter OTP"}
                                 placeholder={"OTP"}
-                                onChangeText={(e) => setOtp(e)}
+                                onChangeText={(e) => { setOtp(e); setOtpValid(false) }}
                                 value={otp}
                                 numeric={true}
                             />
@@ -245,38 +254,61 @@ const ForgotPassword = () => {
                                 title="Verify OTP"
                                 onPress={handleOtpSubmit}
                                 classNames={'w-full mt-5'}
-                                isDisabled={otp?.length !== 6}
+                                isDisabled={otp?.length === 6 ? !otpValid ? false : true : true}
                             />
                         </>
                     )}
 
                     {showPasswordFields && (
                         <>
-                            <InputeFieldsValidation
-                                label={"Password"}
-                                placeholder={"Enter Password"}
-                                value={password}
-                                secureTextEntry
-                                onChangeText={(e) => changepasswd(e)}
-                                ifEye
-                            />
-                            {passwderr && <Messages title="Invalid Password" />}
-                            <InputeFieldsValidation
-                                label={"Confirm Password"}
-                                placeholder={"Confirm Password"}
-                                value={confirmPassword}
-                                secureTextEntry
-                                onChangeText={(e) => changeConfirmPasswd(e)}
-                                ifEye
-                            />
-                            {!confirmPasswordValid && password.length > 0 && confirmPassword.length > 0 && <Messages title="Passwords do not match" />}
-                            <BtnGlobal
-                                styleClassName="button"
-                                title="Reset Password"
-                                onPress={handlePasswordSubmit}
-                                classNames={'w-full mt-5'}
-                                isDisabled={!confirmPasswordValid}
-                            />
+                            <Formik
+                                initialValues={{ Password: '', confirmPassword: '' }}
+                                validationSchema={passwordValidationSchema}
+                                onSubmit={handlePasswordSubmit}
+                            >
+                                {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                                    <View>
+
+                                        <GlobalInputs
+                                            placeholder={`Password`}
+                                            name="Password"
+                                            label="Password"
+                                            onChangeText={handleChange('Password')}
+                                            onBlur={handleBlur('Password')}
+                                            value={values.Password}
+                                            secureTextEntry
+                                            error={errors.Password}
+                                            touched={touched}
+                                            styleChange={'mb-1'}
+                                            mainClass={'mt-4'}
+                                            enableButton={enableButton}
+                                        />
+
+                                        <GlobalInputs
+                                            placeholder={`Confirm Password`}
+                                            name="confirmPassword"
+                                            label="Confirm Password"
+                                            onChangeText={handleChange('confirmPassword')}
+                                            onBlur={handleBlur('confirmPassword')}
+                                            value={values.confirmPassword}
+                                            secureTextEntry
+                                            error={errors.confirmPassword}
+                                            touched={touched}
+                                            styleChange={'mb-1'}
+                                            mainClass={'mt-4'}
+                                            enableButton={enableButton}
+                                        />
+
+                                        <BtnGlobal
+                                            styleClassName="button"
+                                            title="Reset Password"
+                                            onPress={handleSubmit}
+                                            classNames={'w-full mt-5'}
+                                            isDisabled={buttonDisabled}
+                                        />
+                                    </View>
+                                )}
+                            </Formik>
                         </>
                     )}
 

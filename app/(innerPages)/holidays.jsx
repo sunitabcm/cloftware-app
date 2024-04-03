@@ -16,7 +16,7 @@ export default function Holidays() {
   const params = useLocalSearchParams();
   const [apiData, setApiData] = useState(null);
   const router = useRouter();
-  console.log(params)
+
   useEffect(() => {
     if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)

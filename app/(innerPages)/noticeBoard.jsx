@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Pressable, FlatList, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Pressable, FlatList, Dimensions, ImageBackground } from 'react-native';
 import dayjs from 'dayjs';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,8 @@ import AttachedUibox from '../../component/GlobalComps/AttachedUibox';
 import EmptyScreen from '../../component/GlobalComps/EmptyScreen'
 import { Image } from 'expo-image';
 import { Video } from 'expo-av';
+import ModalScreen from '../../component/GlobalComps/ModalScreen';
+import { Link } from 'expo-router';
 
 export default function NoticeBoard() {
   const authToken = useSelector((state) => state.auth.authToken);
@@ -24,6 +26,10 @@ export default function NoticeBoard() {
   const [date, setDate] = useState('');
   const [page, setPage] = useState(null);
   const videoRef = useRef(null);
+  const [showImage, setShowImage] = useState(false);
+  const [showImagePath, setShowImagePath] = useState('');
+  const screenWidthFull = Dimensions.get('window').width;
+
   const [status, setStatus] = useState({});
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -122,7 +128,7 @@ export default function NoticeBoard() {
             <Text style={[stylesGlobal.title]} className='my-4'>{page.title}</Text>
             <View className='flex flex-row pb-5 border-b border-lightergrey'>
               <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
-              <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
+              <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.created_at).format('DD MMM, YYYY')}</Text>
             </View>
             {page.notice_images && page.notice_videos && (page.notice_images.length > 0 || page.notice_videos.length > 0) &&
               <View className='flex flex-col justify-center items-center mt-5'>
@@ -138,13 +144,13 @@ export default function NoticeBoard() {
                     />
                   ) : null}
                   {page.notice_images && page.notice_images.length > 0 ? (
-                    <View className='w-full'>
+                    <TouchableOpacity className='w-full' onPress={() => { setShowImagePath(page.notice_images[0].media); setShowImage(true) }}>
                       <Image
                         source={{ uri: page.notice_images[0].media }}
                         style={{ width: screenWidth, height: 170, borderRadius: 10 }}
                         contentFit="fill"
                       />
-                    </View>
+                    </TouchableOpacity>
                   ) : null}
                 </ScrollView>
                 {page.notice_videos && page.notice_videos.length > 0 || page.notice_images && page.notice_images.length > 0 ? (
@@ -165,6 +171,13 @@ export default function NoticeBoard() {
           </View>
         </ScrollView>
       }
+      <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
+        <Link href={showImagePath} className='text-lg text-lightgrey font-bold text-center mt-5'>Download <AppIcon type='AntDesign' name='arrowdown' size={20} color='#999999' /></Link>
+        <ImageBackground
+          source={{ uri: showImagePath }}
+          style={{ width: screenWidthFull, flex: 1, borderRadius: 10, justifyContent: 'flex-start', marginTop: 30, marginBottom: 20 }}
+        />
+      </ModalScreen>
     </View >
   );
 }

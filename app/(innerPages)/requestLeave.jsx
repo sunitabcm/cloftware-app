@@ -19,6 +19,7 @@ const RequestLeave = () => {
   const [name, setName] = useState(userCred && Object.keys(userCred).length > 0 ? `${userCred?.first_name} ${userCred?.last_name}` : '');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [reason, setReason] = useState('');
+  const [disabled, setDiabled] = useState(false);
   const params = useLocalSearchParams();
   const [leaveDate, setLeaveDate] = useState(Object.keys(params).length > 0 ? params.date : dayjs(new Date()).format('YYYY-MM-DD'));
 
@@ -36,6 +37,7 @@ const RequestLeave = () => {
   };
 
   const loginPostFunc = async () => {
+    setDiabled(true)
     try {
       const response = await addEditApplyLeave(authToken, userCred?.class_id, userCred?.section_id, userCred?.year_id, reason, dayjs(leaveDate).format('YYYY-MM-DD'), userCred?.student_details?.stu_id);
       if (response) {
@@ -49,12 +51,12 @@ const RequestLeave = () => {
   };
 
   const onSubmit = () => {
-    // Validate input fields and handle submission
     if (name && leaveDate && reason) {
       loginPostFunc()
     } else {
-      Alert.alert('Error', 'Please fill in all fields.');
+      toast.show('Please fill in all fields.', { type: "danger" })
     }
+    setDiabled(true)
   };
 
   return (
@@ -84,7 +86,7 @@ const RequestLeave = () => {
           placeholder="Enter Reason"
           value={reason}
           mainClass={'mt-5'}
-          onChangeText={(text) => setReason(text)}
+          onChangeText={(text) => {setReason(text); setDiabled(false)}}
           blurOnSubmit={false}
         />
 
@@ -93,6 +95,7 @@ const RequestLeave = () => {
           title="Request Leave"
           onPress={onSubmit}
           classNames={'w-full mt-8'}
+          isDisabled={disabled}
         />
       </View>
     </ScrollView>

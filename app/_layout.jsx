@@ -10,7 +10,7 @@ import { setAuthToken } from '../store/slices/authSlice';
 import { NativeWindStyleSheet } from "nativewind";
 import AppIcon from '../component/GlobalComps/AppIcon';
 import { ToastProvider } from 'react-native-toast-notifications';
-import { startNetworkLogging } from 'react-native-network-logger';
+// import { startNetworkLogging } from 'react-native-network-logger';
 import SplashScreen from '../component/GlobalComps/SplashScreen';
 import { updateUser } from '../store/slices/userSlice';
 NativeWindStyleSheet.setOutput({
@@ -19,7 +19,7 @@ NativeWindStyleSheet.setOutput({
 export default function Layout() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  startNetworkLogging();
+  // startNetworkLogging();
   useEffect(() => {
     loadAuthToken().then(authToken => {
       store.dispatch(setAuthToken(authToken));
@@ -41,20 +41,20 @@ export default function Layout() {
         <SplashScreen />
         :
         <View style={{ flex: 1, paddingTop: top, paddingBottom: bottom, fontSize: 14, backgroundColor: '#fff', color: '#37374E', position: 'relative' }}>
-          <Pressable onPress={()=> router.push('/network')}><Text>Open Network</Text></Pressable>
+          {/* <Pressable onPress={() => router.push('/network')}><Text>Open Network</Text></Pressable> */}
           <ToastProvider
             placement="top"
-            duration={5000}
+            duration={1200}
             animationType='slide-in'
             animationDuration={250}
             successColor="#84e38d"
             dangerColor="#ffa8a8"
             warningColor="#ffe791"
             normalColor="#fafafa"
-            //  successIcon={<AppIcon type='AntDesign' name='checkcircle' size={20} color='#242424' />}
-            //  dangerIcon={<AppIcon type='MaterialIcons' name='dangerous' size={20} color='#242424' />}
-            //  warningIcon={<AppIcon type='AntDesign' name='warning' size={20} color='#242424' />}
-            textStyle={{ fontSize: 14, color: '#242424', fontWeight: 700 }}
+            successIcon={<AppIcon type='AntDesign' name='checkcircle' size={20} color='#EEEEEE' />}
+            dangerIcon={<AppIcon type='MaterialIcons' name='dangerous' size={20} color='#EEEEEE' />}
+            warningIcon={<AppIcon type='AntDesign' name='warning' size={20} color='#EEEEEE' />}
+            textStyle={{ fontSize: 14, color: '#EEEEEE', fontWeight: 700 }}
             offset={50}
             offsetTop={30}
             offsetBottom={40}
@@ -67,7 +67,7 @@ export default function Layout() {
               <Stack.Screen name='validateOtp' />
               <Stack.Screen name='login' />
               <Stack.Screen name='forgotPassword' />
-              <Stack.Screen name='network' />
+              {/* <Stack.Screen name='network' /> */}
 
               {/* <Stack.Screen
               name="requestLeave"

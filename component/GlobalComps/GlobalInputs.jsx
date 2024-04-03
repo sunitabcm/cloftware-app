@@ -2,10 +2,18 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, Pressable, TouchableWithoutFeedback } from 'react-native';
 import AppIcon from './AppIcon';
 import { stylesGlobal } from '../../styles/global';
-const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secureTextEntry, value, onChangeText, error, disabled, width = 'w-full', onBlur, keyboardType, blurOnSubmit = false, touched, styleChange, clickable = false, onClick = {} }) => {
+const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secureTextEntry, value, onChangeText, error, disabled, width = 'w-full', onBlur, keyboardType, blurOnSubmit = false, touched, styleChange, clickable = false, onClick = {}, enableButton }) => {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+    const handleInputChange = (text) => {
+        if (onChangeText) {
+            onChangeText(text);
+        }
+        if(enableButton){
+        enableButton();
+        }
+    };
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
@@ -20,7 +28,7 @@ const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secu
             <TouchableWithoutFeedback onPress={clickable === true ? onClick : () => { }}>
                 <View className="relative">
                     <TextInput
-                        className={`${inputStyles} ${styleChange} ${value?.length < 2 ? 'capitalize' : ''}`}
+                        className={`${inputStyles} ${styleChange} ${value?.length < 2 ? '' : ''}`}
                         style={stylesGlobal.primaryInput}
                         placeholder={placeholder}
                         secureTextEntry={secureTextEntry && !isPasswordVisible}
@@ -30,7 +38,7 @@ const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secu
                         name={label ? label : ''}
                         autoCapitalize="none"
                         autoCorrect={false}
-                        onChangeText={onChangeText}
+                        onChangeText={handleInputChange}
                         editable={!disabled}
                         placeholderTextColor="#666"
                         onBlur={blurOnSubmit !== false ? onBlur : undefined}

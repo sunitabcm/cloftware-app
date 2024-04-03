@@ -11,7 +11,7 @@ export default function UpdateProfile() {
   const userCred = useSelector((state) => state.userDetails.user);
   const toast = useToast();
   const [apiData, setApiData] = useState(userCred);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
 const dispatch = useDispatch()
   const updatePro = async (values) => {
@@ -26,9 +26,6 @@ const dispatch = useDispatch()
     } catch (error) {
       // toast.show('Something went wrong', { type: "danger" })
     }
-    setTimeout(() => {
-      setDisabled(false)
-    }, 5000);
   };
 
   const handleProfileUpdate = (values) => {
@@ -39,7 +36,7 @@ const dispatch = useDispatch()
   return (
     <ScrollView className='h-full bg-light p-5'>
       {Object.values(userCred).length > 0 && userCred ?
-        <UserProfileForm apiData={userCred} onSubmit={handleProfileUpdate} disabled={disabled}/>
+        <UserProfileForm apiData={userCred} onSubmit={handleProfileUpdate} disabled={disabled} setDisabled={setDisabled}/>
         :
         <LoadingAnimation />
       }

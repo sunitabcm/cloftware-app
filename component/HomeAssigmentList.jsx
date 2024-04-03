@@ -152,7 +152,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
               <Text style={[stylesGlobal.title]} className='mb-4 capitalize'>{page.subject_name}</Text>
               <View className='flex flex-row pb-5 border-b border-lightergrey'>
                 <AppIcon type='AntDesign' name='calendar' color='#999999' size={20} />
-                <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.date).format('DD MMM, YYYY')}</Text>
+                <Text className='ml-4 text-lightgrey text-sm '>{dayjs(page.created_at).format('DD MMM, YYYY')}</Text>
               </View>
               <View className='flex flex-col justify-center items-center mt-5'>
                 {page.image && page.image !== '' && page.flag !== 0 ? (

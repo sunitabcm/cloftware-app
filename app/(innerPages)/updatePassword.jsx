@@ -19,18 +19,19 @@ export default function UpdatePassword() {
     newPassword: yup
       .string()
       .min(3, 'New Password must be at least 3 characters')
+      .notOneOf([yup.ref('oldPassword')], 'New Password must be different from Old Password')
       .required('New Password is required'),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
       .required('Confirm Password is required'),
   });
-
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const ResetPass = async (oldPass, newPass, confirmPass) => {
     try {
       const response = await changePassword(oldPass, newPass, authToken);
-      if (response.status === 200 || response.status === 201) {
+      if (response) {
         toast.show(response?.message, { type: "success" })
       } else {
         toast.show(response?.message, { type: "danger" })
@@ -38,12 +39,16 @@ export default function UpdatePassword() {
     } catch (error) {
       toast.show('Credentials didnt matched', { type: "danger" })
     }
-    setButtonDisabled(false)
+    setButtonDisabled(true)
   };
   const handlePasswordSubmit = (values) => {
     setButtonDisabled(true)
     ResetPass(values.oldPassword, values.newPassword, values.confirmPassword)
   };
+
+  const enableButton = () => {
+    setButtonDisabled(false);
+};
 
   return (
     <ScrollView className='h-full bg-light p-5'>
@@ -64,7 +69,9 @@ export default function UpdatePassword() {
               secureTextEntry
               error={errors.oldPassword}
               touched={touched}
-              styleChange={'mb-3'}
+              styleChange={'mb-1'}
+              mainClass={'mt-4'}
+              enableButton={enableButton}
             />
 
             <GlobalInputs
@@ -77,7 +84,9 @@ export default function UpdatePassword() {
               secureTextEntry
               error={errors.newPassword}
               touched={touched}
-              styleChange={'mb-3'}
+              styleChange={'mb-1'}
+              mainClass={'mt-4'}
+              enableButton={enableButton}
             />
 
             <GlobalInputs
@@ -90,7 +99,9 @@ export default function UpdatePassword() {
               secureTextEntry
               error={errors.confirmPassword}
               touched={touched}
-              styleChange={'mb-3'}
+              styleChange={'mb-1'}
+              mainClass={'mt-4'}
+              enableButton={enableButton}
             />
 
             <BtnGlobal

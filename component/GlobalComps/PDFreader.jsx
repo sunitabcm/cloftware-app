@@ -13,7 +13,6 @@ const PDFreader = ({path = 'https://clofterbucket.s3.ap-south-1.amazonaws.com/bo
                 source={PdfResource}
                 style={styles.pdf}
                 onLoadComplete={(numberOfPages, filePath) => {
-                    // console.log(`number of pages: ${numberOfPages}`);
                 }}
             />
         </View>

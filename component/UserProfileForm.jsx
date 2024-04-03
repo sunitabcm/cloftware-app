@@ -22,7 +22,7 @@ const validationSchema = yup.object().shape({
     emg_relationship_to_student: yup.string(),
 });
 
-const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
+const UserProfileForm = ({ apiData, onSubmit, disabled, setDisabled }) => {
     const authToken = useSelector((state) => state.auth.authToken);
     const userCred = useSelector((state) => state.userDetails.user);
     const toast = useToast();
@@ -125,6 +125,10 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
         closeModal()
     };
 
+    const enableButton = () => {
+        setDisabled(false);
+    };
+
     return (
         <View className='relative w-full'>
             <View className='flex flex-row justify-between items-center'>
@@ -144,9 +148,6 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                         <Text>Loading</Text>
                     }
                 </View>
-                <Pressable onPress={() => setIsSubmitting((prev) => !prev)} className=''>
-                    <AppIcon type='MaterialCommunityIcons' name='account-edit' size={30} color={'#FF6F1B'} />
-                </Pressable>
             </View>
             <View className='mt-5 pb-10 mb-10'>
                 <Formik
@@ -164,15 +165,6 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                         setFieldValue,
                     }) => (
                         <View>
-                            {/* <GlobalInputs
-                            placeholder={`Year Title`}
-                            name="year_title"
-                            label="Year Title"
-                            value={values.year_title}
-                            mainClass={'mt-5'}
-                            disabled={true}
-                        /> */}
-
                             <GlobalInputs
                                 placeholder={`First Name`}
                                 name="first_name"
@@ -210,7 +202,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                                 error={errors.current_address}
                                 touched={touched}
                                 mainClass={'mt-5'}
-                                disabled={isSubmitting}
+                                enableButton={enableButton}
                             />
 
                             <GlobalInputs
@@ -225,7 +217,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                                 type='number'
                                 keyboardType={'number'}
                                 mainClass={'mt-5'}
-                                disabled={isSubmitting}
+                                enableButton={enableButton}
                             />
 
                             <GlobalInputs
@@ -240,7 +232,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                                 type='number'
                                 keyboardType={'number'}
                                 mainClass={'mt-5'}
-                                disabled={isSubmitting}
+                                enableButton={enableButton}
                             />
 
                             <GlobalInputs
@@ -253,7 +245,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                                 error={errors.emg_contact_name}
                                 touched={touched}
                                 mainClass={'mt-5'}
-                                disabled={isSubmitting}
+                                enableButton={enableButton}
                             />
 
                             <GlobalInputs
@@ -267,7 +259,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                                 keyboardType={'email'}
                                 touched={touched}
                                 mainClass={'mt-5'}
-                                disabled={isSubmitting}
+                                enableButton={enableButton}
                             />
 
                             <GlobalInputs
@@ -280,16 +272,16 @@ const UserProfileForm = ({ apiData, onSubmit, disabled }) => {
                                 error={errors.emg_relationship_to_student}
                                 touched={touched}
                                 mainClass={'mt-5'}
-                                disabled={isSubmitting}
+                                enableButton={enableButton}
                             />
 
-                            {!isSubmitting && <BtnGlobal
+                            <BtnGlobal
                                 styleClassName="button"
                                 title="Update Profile"
                                 onPress={handleSubmit}
                                 classNames={'w-full mt-5'}
                                 isDisabled={disabled}
-                            />}
+                            />
                         </View>
                     )}
                 </Formik>

@@ -11,7 +11,7 @@ export const SmallPopup = ({ isVisible, closeModal, children, customModalClass =
             visible={isVisible}
             onRequestClose={closeModal}
         >
-            <View style={styles.modalContainer}>
+            <View style={styles.modalContainer} className='bg-[#0000005A]'>
                 <View style={[StyleSheet.absoluteFill, styles.blurContainer]} >
                     <View style={styles.modalContent} className={customModalClass}>
                         <View style={{ marginTop: 15 }}>

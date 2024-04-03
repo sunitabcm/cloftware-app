@@ -38,7 +38,7 @@ export default function Fees() {
   return (
     <ScrollView className="h-full bg-light p-5">
       <View className="pb-10">
-      {apiData ? apiData?.body.map((fee, index) => (
+      {apiData && Array.isArray(apiData?.body) && apiData?.body?.length > 0 ? apiData?.body.map((fee, index) => (
           <View className='mb-5'>
             <View key={index} className='p-4 border-lightgrey border rounded-xl'>
               <TouchableOpacity onPress={() => toggleAccordion(index)} className='flex flex-row items-start justify-between'>
@@ -75,7 +75,7 @@ export default function Fees() {
           </View>
         ))
         :
-        <Text className='text-body font-bold text-lg'>No Data Found</Text>
+        <Text className='text-body font-bold text-lg'>No Invoices Found</Text>
       }
       </View>
     </ScrollView>
