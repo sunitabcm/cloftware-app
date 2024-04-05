@@ -171,12 +171,13 @@ export default function NoticeBoard() {
           </View>
         </ScrollView>
       }
-      <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
-        <Link href={showImagePath} className='text-lg text-lightgrey font-bold text-center mt-5'>Download <AppIcon type='AntDesign' name='arrowdown' size={20} color='#999999' /></Link>
-        <ImageBackground
+      <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
+        <Image
           source={{ uri: showImagePath }}
-          style={{ width: screenWidthFull, flex: 1, borderRadius: 10, justifyContent: 'flex-start', marginTop: 30, marginBottom: 20 }}
+          contentFit="contain"
+          style={{ width: screenWidthFull, flex: 1 }}
         />
+        <Link href={showImagePath} className='text-lg text-[#6bac98] font-bold text-center mt-5 mb-10'>Download <AppIcon type='MaterialCommunityIcons' name='tray-arrow-down' size={20} color='#6bac98' /></Link>
       </ModalScreen>
     </View >
   );

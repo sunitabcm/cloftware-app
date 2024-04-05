@@ -56,7 +56,7 @@ const HolidayList = ({ data, fetchData }) => {
         {organizedData[month].map((holiday) => (
           <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center my-3 bg-light p-4 rounded-xl'>
             {holiday.image && holiday.image !== '' &&
-               <TouchableOpacity className='w-full' onPress={() => { setShowImagePath(holiday.image); setShowImage(true) }}>
+              <TouchableOpacity className='w-full' onPress={() => { setShowImagePath(holiday.image); setShowImage(true) }}>
                 <Image
                   source={holiday.image}
                   style={{ width: '100%', height: 190 }}
@@ -92,14 +92,15 @@ const HolidayList = ({ data, fetchData }) => {
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>
       </View>
-      {data.length === 0 && <EmptyScreen/>}
+      {data.length === 0 && <EmptyScreen />}
       {renderHolidays()}
-      <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
-        <Link href={showImagePath} className='text-lg text-lightgrey font-bold text-center mt-5'>Download <AppIcon type='AntDesign' name='arrowdown' size={20} color='#999999' /></Link>
-        <ImageBackground
+      <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
+        <Image
           source={{ uri: showImagePath }}
-          style={{ width: screenWidthFull, flex: 1, borderRadius: 10, justifyContent: 'flex-start', marginTop: 30, marginBottom: 20 }}
+          contentFit="contain"
+          style={{ width: screenWidthFull, flex: 1 }}
         />
+        <Link href={showImagePath} className='text-lg text-[#6bac98] font-bold text-center mt-5 mb-10'>Download <AppIcon type='MaterialCommunityIcons' name='tray-arrow-down' size={20} color='#6bac98' /></Link>
       </ModalScreen>
     </View>
   );

@@ -600,6 +600,20 @@ export async function getFeeList(token) {
     }
 }
 
+export async function getSupport(token) {
+    try {
+        const response = await axios.get(`${baseURL}/question_answer'`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error getting fee list:", error);
+        throw error;
+    }
+}
+
 export async function markNotificationAsRead(token, notificationId) {
     try {
         const response = await axios.post(`${baseURL}/is_read_notification`, {

@@ -17,6 +17,7 @@ import { saveAuthToken } from "../authStorage";
 import { setAuthToken } from "../store/slices/authSlice";
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
 import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
+
 const Otp = () => {
   const router = useRouter();
   const toast = useToast();
@@ -31,6 +32,28 @@ const Otp = () => {
   const [errormsg, seterrormsg] = useState("");
   const [otperrormsg, setotperrormsg] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
+
+  const fetchData = async () => {
+    try {
+      const response = await getStudentProfile(dispatch, response.body)
+      setTimeout(() => {
+        router.replace("/dashboard");
+      }, 1000);
+    } catch (error) {
+    }
+  };
+
+  useEffect(() => {
+    if (authToken && userCred && Object.keys(userCred).length > 0) {
+        router.replace("/dashboard");
+    } else {
+        if (authToken && Object.keys(userCred).length === 0) {
+            fetchData(authToken)
+        }
+    }
+}, [router, authToken, userCred]);
 
   const openModal = () => {
     setModalVisible(true);

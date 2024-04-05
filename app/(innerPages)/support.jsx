@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, TouchableOpacity, Linking, Button, Alert } from 'react-native';
 import AppIcon from '../../component/GlobalComps/AppIcon';
 import { stylesGlobal } from '../../styles/global';
@@ -7,24 +7,11 @@ import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToast } from 'react-native-toast-notifications';
 import { RaiseIssue } from '../../ApiCalls';
-
-const dummyData = [
-  { id: '1', question: 'What is Lorem Ipsum?', answer: 'Lorem ipsum is placeholder text' },
-  { id: '2', question: 'How can I use React Native?', answer: 'To use React Native, you need to' },
-  { id: '3', question: 'What are the key features of React Navigation?', answer: 'React Navigation provides' },
-  { id: '4', question: 'Why use Redux with React?', answer: 'Redux helps manage the state' },
-  { id: '5', question: 'What are React Hooks?', answer: 'React Hooks are functions that' },
-  { id: '6', question: 'How do I style components in React Native?', answer: 'You can style components using' },
-  { id: '7', question: 'What is the purpose of useEffect in React?', answer: 'useEffect is used for side effects in' },
-  { id: '8', question: 'Can I use TypeScript with React Native?', answer: 'Yes, TypeScript is supported in React Native' },
-  { id: '9', question: 'What is the purpose of AsyncStorage?', answer: 'AsyncStorage is used for' },
-  { id: '10', question: 'How to handle navigation in React Native?', answer: 'You can use libraries like React Navigation for' },
-];
-
+import { getSupport } from '../../ApiCalls';
 
 export default function Support() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData, setFilteredData] = useState(dummyData);
+  const [filteredData, setFilteredData] = useState(null);
   const [selectedFAQ, setSelectedFAQ] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [form, openForm] = useState(false);
@@ -39,13 +26,31 @@ export default function Support() {
     setIsButtonDisabled(inputText.trim().length === 0);
   };
 
+  useEffect(() => {
+    if (authToken) {
+      fetchData()
+    }
+  }, [authToken]);
+
+
+  const fetchData = async () => {
+    try {
+      const response = await getSupport(authToken);
+      if (response) {
+        setFilteredData(response)
+      } else {
+      }
+    } catch (error) {
+    }
+  };
+
   const handleSubmit = async () => {
     if (text.trim().length === 0) {
       toast.show('Add issue to proceed', { type: "danger" })
     } else {
       try {
-        const response = await RaiseIssue(authToken, text, userCred?.school_id ,userCred?.phone_number ,userCred?.last_name ,userCred?.first_name ,userCred?.email_id);
-        if(response){
+        const response = await RaiseIssue(authToken, text, userCred?.school_id, userCred?.phone_number, userCred?.last_name, userCred?.first_name, userCred?.email_id);
+        if (response) {
           toast.show(response?.message, { type: "success" })
           setText('')
           openForm(false)
@@ -132,14 +137,15 @@ export default function Support() {
           </View>
         </TouchableOpacity>
         <Text style={stylesGlobal.title} className='my-5'>Frequently asked questions</Text>
-
-        <View className='bg-light rounded-xl'>
-          <FlatList
-            data={filteredData}
-            keyExtractor={(item) => item.id}
-            renderItem={renderFAQItem}
-          />
-        </View>
+        {filteredData &&
+          <View className='bg-light rounded-xl'>
+            <FlatList
+              data={filteredData}
+              keyExtractor={(item) => item.id}
+              renderItem={renderFAQItem}
+            />
+          </View>
+        }
       </ScrollView>
       <ModalScreen isVisible={modalVisible} onClose={closeModal} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
         <View className="w-full h-full px-[20px] bg-light relative mt-16">

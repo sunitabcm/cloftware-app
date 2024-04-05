@@ -3,6 +3,9 @@ import { View, FlatList, Text, Dimensions, StyleSheet, TouchableOpacity, Image, 
 import { useRouter } from "expo-router";
 import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
+import { useSelector, useDispatch } from 'react-redux';
+import { getStudentProfile } from "../ApiCalls";
+
 const SlideShow = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
@@ -11,6 +14,29 @@ const SlideShow = () => {
     { id: 2, image: require("../assets/SlideShow_chat.png"), text: "Direct Teacher Communication", descriptionText: 'Connect directly, ask questions, and collaborate with teachers.' },
     { id: 3, image: require("../assets/SlideShow_tools.png"), text: "Efficient School Management", descriptionText: 'Intuitive and efficient, tailors to manage your role seamlessly' },
   ];
+  const authToken = useSelector((state) => state.auth.authToken)
+  const userCred = useSelector((state) => state.userDetails.user);
+  const dispatch = useDispatch()
+
+  const fetchData = async () => {
+    try {
+      const response = await getStudentProfile(dispatch, response.body)
+      setTimeout(() => {
+        router.replace("/dashboard");
+      }, 1000);
+    } catch (error) {
+    }
+  };
+
+  useEffect(() => {
+    if (authToken && userCred && Object.keys(userCred).length > 0) {
+        router.replace("/dashboard");
+    } else {
+        if (authToken && Object.keys(userCred).length === 0) {
+            fetchData(authToken)
+        }
+    }
+}, [router, authToken, userCred]);
 
   const flatListRef = useRef(null);
 

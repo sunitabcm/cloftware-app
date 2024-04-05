@@ -5,6 +5,7 @@ import { useRouter, Link } from 'expo-router';
 import { getFeeList } from '../../ApiCalls';
 import dayjs from 'dayjs';
 import AppIcon from '../../component/GlobalComps/AppIcon';
+import { Image } from 'expo-image';
 
 export default function Fees() {
   const authToken = useSelector((state) => state.auth.authToken)
@@ -40,20 +41,20 @@ export default function Fees() {
       <View className="pb-10">
       {apiData && Array.isArray(apiData?.body) && apiData?.body?.length > 0 ? apiData?.body.map((fee, index) => (
           <View className='mb-5'>
-            <View key={index} className='p-4 border-lightgrey border rounded-xl'>
+            <View key={index} className={`p-4 border-lightergrey border ${expandedIndex === index ? 'rounded-t-xl' : 'rounded-xl'}`}>
               <TouchableOpacity onPress={() => toggleAccordion(index)} className='flex flex-row items-start justify-between'>
                 <View className='mr-5 flex flex-row items-center'>
                   <AppIcon type='AntDesign' name='checkcircle' size={25} color={'#10B981'} />
                   <Text className='font-bold text-body ml-2 text-base'>{dayjs(fee.start_date).format('MMM, YYYY')}</Text>
                 </View>
-                <View>
+                <View className='flex flex-row items-center'>
                   <Text className='font-bold text-body text-base'>Rs. {fee.amount}</Text>
-                  <Link href={fee.invoice_url} className='text-secondary text-sm'>Download invoice</Link>
+                  <Link href={fee.invoice_url} className='text-secondary text-sm ml-2'><AppIcon type='MaterialCommunityIcons' name='tray-arrow-down' size={20} color='#6bac98' /></Link>
                 </View>
               </TouchableOpacity>
             </View>
             {expandedIndex === index && (
-              <View className='bg-lightergrey rounded-xl mt-4 p-5'>
+              <View className='bg-lightergrey rounded-b-xl p-5'>
                 <View className='flex flex-row items-center justify-between'>
                   <Text className='text-body text-base'>Submission Date: </Text>
                   <Text className='font-bold text-body text-base w-[35%]'>{dayjs(fee.submission_date).format('DD MMM, YYYY')}</Text>
@@ -66,10 +67,10 @@ export default function Fees() {
                   <Text className='text-body text-base'>Fee Category: </Text>
                   <Text className='font-bold text-body text-base w-[35%]'>{fee?.fee_category_name}</Text>
                 </View>
-                <View className='flex flex-row items-center justify-between'>
+                {/* <View className='flex flex-row items-center justify-between'>
                   <Text className='text-body text-base'>Other Category: </Text>
                   <Text className='font-bold text-body text-base w-[35%]'>{fee?.category_name}</Text>
-                </View>
+                </View> */}
               </View>
             )}
           </View>

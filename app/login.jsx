@@ -33,7 +33,27 @@ const Login = () => {
     const [passwderr, setpasswderr] = useState(false);
     const authToken = useSelector((state) => state.auth.authToken)
     const userCred = useSelector((state) => state.userDetails.user);
-    
+
+    const fetchData = async () => {
+        try {
+          const response = await getStudentProfile(dispatch, response.body)
+          setTimeout(() => {
+            router.replace("/dashboard");
+          }, 1000);
+        } catch (error) {
+        }
+      };
+      
+    useEffect(() => {
+        if (authToken && userCred && Object.keys(userCred).length > 0) {
+            router.replace("/dashboard");
+        } else {
+            if (authToken && Object.keys(userCred).length === 0) {
+                fetchData(authToken)
+            }
+        }
+    }, [router, authToken, userCred]);
+
     const handleSubmit = (event) => {
         setbuttondisabled(true)
         event.preventDefault();
@@ -42,12 +62,12 @@ const Login = () => {
             password: password,
         };
         // if (isNaN(formList.email) || formList.email == 0) {
-            const validationErrors = validate(formList);
-            if (Object.keys(validationErrors).length === 0) {
-                loginPostFunc(email);
-            } else {
-                setErrors(validationErrors);
-            }
+        const validationErrors = validate(formList);
+        if (Object.keys(validationErrors).length === 0) {
+            loginPostFunc(email);
+        } else {
+            setErrors(validationErrors);
+        }
         // }
         // else {
         //     const validationErrors = validatenumberfield(formList);
@@ -104,8 +124,8 @@ const Login = () => {
         }
         // setbuttondisabled(false);
     };
-    
-    
+
+
 
     const chnageemail = (e) => {
         setErrors('');
@@ -138,7 +158,7 @@ const Login = () => {
     return (
         <ScrollView className='bg-light h-full'>
             <View>
-                <NonLoggedInBlur hidden={false}/>
+                <NonLoggedInBlur hidden={false} />
                 <View style={styles.formFields} className=' p-5'>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Login to your account</Text>
@@ -186,7 +206,7 @@ const Login = () => {
                     />
                 </View>
             </View>
-            <CloftwareLogo/>
+            <CloftwareLogo />
         </ScrollView>
     );
 };

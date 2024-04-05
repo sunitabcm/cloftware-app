@@ -9,6 +9,7 @@ import { stylesGlobal } from '../styles/global';
 import ModalScreen from './GlobalComps/ModalScreen';
 import PDFreader from './GlobalComps/PDFreader';
 import EmptyScreen from './GlobalComps/EmptyScreen';
+import { Link } from 'expo-router';
 const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
   const startDate = dayjs(selectedDate).startOf('month');
   const endDate = dayjs(selectedDate).endOf('month');
@@ -185,14 +186,16 @@ const HomeAssigmentList = ({ data, fetchData }) => {
             </ScrollView>
           )
       }
-      <ModalScreen isVisible={showPDF} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowPDF(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
+      <ModalScreen isVisible={showPDF} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowPDF(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
         <PDFreader path={showPDFPath} Heading={showPDFName} />
       </ModalScreen>
-      <ModalScreen isVisible={showImage} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
-        <ImageBackground
+      <ModalScreen isVisible={showImage} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
+        <Image
           source={{ uri: showPDFPath }}
-          style={{ width: screenWidthFull, flex: 1, borderRadius: 10, justifyContent: 'flex-start', marginTop: 70, marginBottom: 20 }}
+          contentFit="contain"
+          style={{ width: screenWidthFull, flex: 1 }}
         />
+        <Link href={showPDFPath} className='text-lg text-[#6bac98] font-bold text-center mt-5 mb-10'>Download <AppIcon type='MaterialCommunityIcons' name='tray-arrow-down' size={20} color='#6bac98' /></Link>
       </ModalScreen>
     </>
   );

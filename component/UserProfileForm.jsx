@@ -108,7 +108,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled, setDisabled }) => {
                 const resultImage = await imageUpload(cameraResult.path, `cameraPic${randomNumber}.jpg`, authToken);
 
                 if (resultImage) {
-                    const value = await updateProfile(authToken, resultImage.fileURL, true);
+                    const value = await updateProfile(authToken, resultImage?.body.fileURL, true);
 
                     if (value) {
                         toast.show(resultImage?.message, { type: 'success' });
