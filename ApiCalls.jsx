@@ -3,7 +3,7 @@ import { setAuthToken } from './store/slices/authSlice';
 import { updateUser } from './store/slices/userSlice';
 import { saveAuthUserData } from './authStorage';
 const baseURL = "https://apidev.cloftware.com/api/app";
-const Schoolid = 14
+const Schoolid = 13
 export async function login(email, password) {
     const response = await axios.post(
         `${baseURL}/login`,
