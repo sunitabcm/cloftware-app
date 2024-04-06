@@ -10,7 +10,7 @@ import { setAuthToken } from '../store/slices/authSlice';
 import { NativeWindStyleSheet } from "nativewind";
 import AppIcon from '../component/GlobalComps/AppIcon';
 import { ToastProvider } from 'react-native-toast-notifications';
-import { startNetworkLogging } from 'react-native-network-logger';
+// import { startNetworkLogging } from 'react-native-network-logger';
 import SplashScreen from '../component/GlobalComps/SplashScreen';
 import { updateUser } from '../store/slices/userSlice';
 NativeWindStyleSheet.setOutput({
@@ -19,7 +19,7 @@ NativeWindStyleSheet.setOutput({
 export default function Layout() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  startNetworkLogging();
+  // startNetworkLogging();
   useEffect(() => {
     loadAuthToken().then(authToken => {
       store.dispatch(setAuthToken(authToken));
@@ -41,7 +41,7 @@ export default function Layout() {
         <SplashScreen />
         :
         <View style={{ flex: 1, paddingTop: top, paddingBottom: bottom, fontSize: 14, backgroundColor: '#fff', color: '#37374E', position: 'relative' }}>
-          <Pressable onPress={() => router.push('/network')}><Text>Open Network</Text></Pressable>
+          {/* <Pressable onPress={() => router.push('/network')}><Text>Open Network</Text></Pressable> */}
           <ToastProvider
             placement="top"
             duration={1200}
@@ -67,7 +67,7 @@ export default function Layout() {
               <Stack.Screen name='validateOtp' />
               <Stack.Screen name='login' />
               <Stack.Screen name='forgotPassword' />
-              <Stack.Screen name='network' />
+              {/* <Stack.Screen name='network' /> */}
 
               {/* <Stack.Screen
               name="requestLeave"
