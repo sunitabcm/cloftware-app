@@ -3,14 +3,14 @@ import { setAuthToken } from './store/slices/authSlice';
 import { updateUser } from './store/slices/userSlice';
 import { saveAuthUserData } from './authStorage';
 const baseURL = "https://apidev.cloftware.com/api/app";
-
+const Schoolid = 14
 export async function login(email, password) {
     const response = await axios.post(
         `${baseURL}/login`,
         {
             'emailOrPhoneNumber': email,
             'password': password,
-            'school_id': '13'
+            'school_id': Schoolid
         },
         {
             headers: {
@@ -137,7 +137,7 @@ export async function verifyLoginOtp(number, otp) {
         {
             'emailOrPhoneNumber': number,
             'otp': otp,
-            'school_id': '13'
+            'school_id': Schoolid
         },
         {
             headers: {
@@ -602,7 +602,7 @@ export async function getFeeList(token) {
 
 export async function getSupport(token) {
     try {
-        const response = await axios.get(`${baseURL}/question_answer'`, {
+        const response = await axios.get(`${baseURL}/question_answer`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

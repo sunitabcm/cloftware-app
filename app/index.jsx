@@ -23,7 +23,7 @@ const Index = () => {
       if (authToken && userCred && Object.keys(userCred).length > 0) {
         router.replace("/dashboard");
       } else {
-        if (authToken && Object.keys(userCred).length === 0) {
+        if (authToken &&  userCred && Object.keys(userCred).length === 0) {
           fetchData(authToken)
         } else {
           router.replace("/slideshow");

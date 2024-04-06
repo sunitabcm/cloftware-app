@@ -37,7 +37,7 @@ export default function Support() {
     try {
       const response = await getSupport(authToken);
       if (response) {
-        setFilteredData(response)
+        setFilteredData(response?.body)
       } else {
       }
     } catch (error) {
@@ -147,7 +147,7 @@ export default function Support() {
           </View>
         }
       </ScrollView>
-      <ModalScreen isVisible={modalVisible} onClose={closeModal} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>
+      <ModalScreen isVisible={modalVisible} onClose={closeModal} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
         <View className="w-full h-full px-[20px] bg-light relative mt-16">
           <Text style={styles.modalHeading}>{selectedFAQ?.question}</Text>
           <Text style={styles.modalDescription}>{selectedFAQ?.answer}</Text>
