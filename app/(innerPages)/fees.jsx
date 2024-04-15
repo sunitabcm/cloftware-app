@@ -39,12 +39,16 @@ export default function Fees() {
   return (
     <ScrollView className="h-full bg-light p-5">
       <View className="pb-10">
-      {apiData && Array.isArray(apiData?.body) && apiData?.body?.length > 0 ? apiData?.body.map((fee, index) => (
+        {apiData && Array.isArray(apiData?.body) && apiData?.body?.length > 0 ? apiData?.body.map((fee, index) => (
           <View className='mb-5'>
             <View key={index} className={`p-4 border-lightergrey border ${expandedIndex === index ? 'rounded-t-xl' : 'rounded-xl'}`}>
               <TouchableOpacity onPress={() => toggleAccordion(index)} className='flex flex-row items-start justify-between'>
                 <View className='mr-5 flex flex-row items-center'>
-                  <AppIcon type='AntDesign' name='checkcircle' size={25} color={'#10B981'} />
+                  {fee.isPaid === true ?
+                    <AppIcon type='AntDesign' name='checkcircle' size={25} color={'#10B981'} />
+                    :
+                    <AppIcon type='Entypo' name='circle-with-cross' size={25} color={'#FE0A0A'} />
+                  }
                   <Text className='font-bold text-body ml-2 text-base'>{dayjs(fee.start_date).format('MMM, YYYY')}</Text>
                 </View>
                 <View className='flex flex-row items-center'>
@@ -75,9 +79,9 @@ export default function Fees() {
             )}
           </View>
         ))
-        :
-        <Text className='text-body font-bold text-lg'>No Invoices Found</Text>
-      }
+          :
+          <Text className='text-body font-bold text-lg'>No Invoices Found</Text>
+        }
       </View>
     </ScrollView>
   );

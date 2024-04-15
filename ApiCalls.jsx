@@ -448,14 +448,14 @@ export async function getHomeAssignmentList(accessToken, classId, sectionId, yea
     try {
         const response = await axios.get(`${baseURL}/home_assignment_list`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo2ODV9LCJpYXQiOjE3MTI2ODk5NTN9.eOs_E7l_PNB2RTaEMR_1ddTtmjI1N_BJs4200_htKEM`,
                 'Content-Type': 'application/json',
             },
             params: {
-                class_id: classId,
-                section_id: sectionId,
+                class_id: '1',
+                section_id: '1',
                 // year_id: yearid,
-                year_month: date,
+                date: date,
             },
         });
 

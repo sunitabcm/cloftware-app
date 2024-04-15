@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Pressable, ScrollView, Dimensions, ImageBackground } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Dimensions, ImageBackground, FlatList } from 'react-native';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
 import { Image } from 'expo-image';
@@ -10,14 +10,49 @@ import ModalScreen from './GlobalComps/ModalScreen';
 import PDFreader from './GlobalComps/PDFreader';
 import EmptyScreen from './GlobalComps/EmptyScreen';
 import { Link } from 'expo-router';
+import CalendarStrip from 'react-native-calendar-strip';
+
 const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
+  const startDate = dayjs(selectedDate).startOf('month').format('YYYY-MM-DD');
+  const endDate = dayjs(selectedDate).endOf('month').format('YYYY-MM-DD');
+  
+  const onDateSelected = (date) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    onDateSelect(formattedDate);
+  };
+
+  return (
+    <CalendarStrip
+    selectedDate={selectedDate}
+    onDateSelected={onDateSelected}
+    style={{ height: 50 }}
+    calendarColor={'white'}
+    calendarHeaderStyle={{ color: 'black' }}
+    dateNumberStyle={{ color: 'black' }}
+    dateNameStyle={{ color: 'black' }}
+    highlightDateNumberStyle={{ color: '#ffffff' }}
+    highlightDateNameStyle={{ color: '#ffffff' }}
+    disabledDateNameStyle={{ color: 'grey' }}
+    disabledDateNumberStyle={{ color: 'grey' }}
+    showMonth={false}
+    showYear={false}
+    minDate={startDate}
+    maxDate={endDate}
+    daySelectionAnimation={{ type: 'background', highlightColor: '#2A2D32', duration: 200, borderWidth: 1, borderHighlightColor: '#2A2D32' }}
+    scrollable={true}
+  />
+
+  );
+};
+
+const HorizontalDateScrolll = ({ selectedDate, onDateSelect }) => {
+  const scrollViewRef = useRef(null);
   const startDate = dayjs(selectedDate).startOf('month');
   const endDate = dayjs(selectedDate).endOf('month');
 
   const renderDates = () => {
     const dates = [];
     let currentDate = startDate;
-
     while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, 'day')) {
       dates.push(currentDate);
       currentDate = currentDate.add(1, 'day');
@@ -27,7 +62,6 @@ const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
       <TouchableOpacity
         key={date.format('YYYY-MM-DD')}
         onPress={() => onDateSelect(date.format('YYYY-MM-DD'))}
-        className='text-body font-bold flex justify-center items-center text-2xl rounded-xl'
         style={{
           marginRight: 10,
           paddingVertical: 8,
@@ -43,11 +77,16 @@ const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
   };
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 10 }}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      ref={scrollViewRef}
+    >
       {renderDates()}
     </ScrollView>
   );
 };
+
 const HomeAssigmentList = ({ data, fetchData }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [modalVisible, setModalVisible] = useState(false);
@@ -69,7 +108,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
   };
 
   const onArrowPress = (increment) => {
-    const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM');
+    const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM-DD');
     setSelectedDate(newDate);
     fetchData(newDate);
   };
@@ -86,11 +125,6 @@ const HomeAssigmentList = ({ data, fetchData }) => {
 
       organizedData[month].push(holiday);
     });
-    // if(Object.keys(organizedData).length === 0){
-    //   setShowEmpty(true)
-    // } else {
-    //   setShowEmpty(false)
-    // }
 
     return organizedData;
   };
@@ -122,9 +156,9 @@ const HomeAssigmentList = ({ data, fetchData }) => {
                   <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
                 </TouchableOpacity>
               </View>
-              {/* <HorizontalDateScroll selectedDate={selectedDate} onDateSelect={(date) => setSelectedDate(date)} /> */}
+              <HorizontalDateScroll key={data} selectedDate={selectedDate} onDateSelect={(date) => { setSelectedDate(date); fetchData(date) }} />
               <View className='bg-lightergrey p-5'>
-                {data && Array.isArray(data) && data.length === 0 && <EmptyScreen />}
+                {data && Array.isArray(data) && data.length === 0 && <EmptyScreen height={false} />}
                 {renderHolidays()}
               </View>
             </View>

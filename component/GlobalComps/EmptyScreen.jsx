@@ -3,10 +3,10 @@ import { View, StyleSheet, Text } from "react-native";
 import { Image } from "expo-image";
 //emptyFolder.png
 //pencil.png
-const EmptyScreen = ({ imageType = false }) => {
+const EmptyScreen = ({ imageType = false, height = true }) => {
 
     return (
-        <View className='h-full bg-light w-full flex justify-center items-center py-16 px-5'>
+        <View className={`${height ? 'h-full' : ''}bg-light w-full flex justify-center items-center py-16 px-5`}>
             {imageType === true ?
                 <>
                     <Image

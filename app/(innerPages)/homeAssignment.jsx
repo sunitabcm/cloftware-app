@@ -15,13 +15,28 @@ export default function HomeAssignment() {
   const [currentYear, setCurrentYear] = useState(dayjs().year());
   const toast = useToast();
 
-  const [apiData, setApiData] = useState(null);
+  const [apiData, setApiData] = useState({
+    "success": true,
+    "code": 200,
+    "message": "Data found successfully",
+    "body": [
+        {
+            "assignment_id": 1,
+            "title": "Home work for holi",
+            "description": "Home work for holi",
+            "image": null,
+            "flag": 0,
+            "created_at": "2024-03-20T14:51:32.000Z",
+            "subject_name": "Mathematics"
+        }
+    ]
+});
 
   const router = useRouter();
   useEffect(() => {
     if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)
-      fetchData(dayjs(new Date()).format('YYYY-MM'))
+      fetchData(dayjs(new Date()).format('YYYY-MM-DD'))
     } else {
       setShowCalender(false)
     }
