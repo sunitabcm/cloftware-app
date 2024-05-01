@@ -2,8 +2,8 @@ import axios from 'axios';
 import { setAuthToken } from './store/slices/authSlice';
 import { updateUser } from './store/slices/userSlice';
 import { saveAuthUserData } from './authStorage';
-const baseURL = "https://apidev.cloftware.com/api/app";
-const Schoolid = 13
+const baseURL = "https://api.cloftware.com/api/app";
+const Schoolid = 4
 export async function login(email, password) {
     const response = await axios.post(
         `${baseURL}/login`,

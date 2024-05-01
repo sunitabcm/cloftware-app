@@ -44,11 +44,11 @@ export default function Fees() {
             <View key={index} className={`p-4 border-lightergrey border ${expandedIndex === index ? 'rounded-t-xl' : 'rounded-xl'}`}>
               <TouchableOpacity onPress={() => toggleAccordion(index)} className='flex flex-row items-start justify-between'>
                 <View className='mr-5 flex flex-row items-center'>
-                  {fee.isPaid === true ?
+                  {/* {fee.isPaid === true ? */}
                     <AppIcon type='AntDesign' name='checkcircle' size={25} color={'#10B981'} />
-                    :
+                    {/* :
                     <AppIcon type='Entypo' name='circle-with-cross' size={25} color={'#FE0A0A'} />
-                  }
+                  } */}
                   <Text className='font-bold text-body ml-2 text-base'>{dayjs(fee.start_date).format('MMM, YYYY')}</Text>
                 </View>
                 <View className='flex flex-row items-center'>
