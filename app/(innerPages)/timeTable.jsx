@@ -52,7 +52,7 @@ export default function TimeTable() {
   return (
     <ScrollView className='h-full bg-light p-5'>
     <View>
-      {showCalender && apiData && apiData.code === 200 ? (
+      {showCalender && apiData && apiData.code === 200 && Object.values(apiData.body).length > 0 ? (
         Object.values(apiData.body).length > 0 && apiData.body.map((item) => (
           <View key={item.id} className='w-full flex flex-row items-center justify-between mb-4'>
             <TouchableOpacity className='w-[90%]' onPress={() => { setShowPDFName(item.title); setShowPDFPath(item.file_upload); setShowPDF(true) }} style={{

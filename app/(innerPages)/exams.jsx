@@ -53,7 +53,7 @@ export default function Exams() {
                     <Text style={[stylesGlobal.title, { fontSize: 16 }]} className='mb-2 capitalize'>{item.subject_name}</Text>
                     {item.exam_name &&
                       <Text style={stylesGlobal.innertext} className='mb-2'>
-                        Name: {item.exam_name}
+                        Exam Name: {item.exam_name}
                       </Text>
                     }
                     {item.exam_type &&
