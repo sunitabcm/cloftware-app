@@ -27,7 +27,7 @@
     "name": "DPS Ajmer",
     "slug": "cw",
     "version": "0.0.1",
-    "scheme": "cloftware.dpss13",
+    "scheme": "cloftware.dpss04",
     "orientation": "portrait",
     "icon": "./assets/adaptive_icon.png",
     "userInterfaceStyle": "light",
@@ -49,7 +49,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "cloftware.dpss13",
+      "bundleIdentifier": "cloftware.dpss04",
       "buildNumber": "0.0.1",
       "entitlements": {
         "com.apple.developer.applesignin": ["Default"],
@@ -65,7 +65,7 @@
       }
     },
     "android": {
-      "package": "cloftware.dpss13",
+      "package": "cloftware.dpss04",
       "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive_icon.png",
