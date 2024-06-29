@@ -108,3 +108,64 @@ export const checkAndReinstateAuthUserData = async () => {
 
 // Listen for changes in app state
 AppState.addEventListener('change', checkAndReinstateAuthUserData);
+
+export const saveAuthTeacherData = async (userData) => {
+  try {
+    await AsyncStorage.setItem('authTeacherData', userData);
+    
+  } catch (error) {
+    console.error('Error saving auth UserData:', error);
+  }
+};
+
+export const loadAuthTeacherData = async (deleteUserData = false) => {
+  try {
+    const storedUserDataString = await AsyncStorage.getItem('authTeacherData');
+    
+    if (deleteUserData) {
+      await deleteAuthTeacherData();
+      return null;
+    }
+    
+    const storedUserData = storedUserDataString ? JSON.parse(storedUserDataString) : null;
+
+    return storedUserData;
+  } catch (error) {
+    console.error('Error loading auth UserData:', error);
+    return null;
+  }
+};
+
+export const deleteAuthTeacherData = async () => {
+  try {
+    await AsyncStorage.removeItem('authTeacherData');
+  } catch (error) {
+    console.error('Error deleting auth UserData:', error);
+  }
+};
+
+export const checkAndReinstateAuthTeacherData = async () => {
+  try {
+    const appState = await AppState.currentState;
+
+    if (appState === 'active') {
+      const storedUserData = await loadAuthTeacherData();
+      if (storedUserData) {
+        await saveAuthTeacherData(storedUserData);
+      }
+    }
+  } catch (error) {
+    console.error('Error checking and reinstating auth UserData:', error);
+  }
+};
+
+// Listen for changes in app state
+AppState.addEventListener('change', checkAndReinstateAuthTeacherData);
+
+
+// Android package name -  com.cloftware.erp
+// Web API key - AIzaSyActasyEY75gJMBtqSgORSR4NKIo1X42fY
+// App ID - 1:418175820894:android:e5992086c93aaf959e00cf
+// Sender ID - 418175820894
+// Project Id - cloftware-technology
+// Project name - Cloftware Technology

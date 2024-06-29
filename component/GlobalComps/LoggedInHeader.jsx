@@ -16,13 +16,19 @@ export default function LoggedInHeader() {
                 <IconHeader />
             </View>
             <View className='flex flex-row items-center justify-between mt-10'>
-                <Pressable onPress={()=> router.push('/updateProfile')} className='flex flex-row items-center mt-3'>
+                <Pressable onPress={() => router.push('/updateProfile')} className='flex flex-row items-center mt-3'>
                     <AvatarIcon />
                     {userCred && Object.keys(userCred).length > 0 ?
-                        <View className='flex flex-col items-start ml-4'>
-                            <Text className='font-bold text-light'>{userCred.first_name} {userCred?.last_name}</Text>
-                            <Text className='font-light text-light'>{userCred.class_name} {userCred.section_name}</Text>
-                        </View>
+                        userCred?.role_id === 4 ?
+                            <View className='flex flex-col items-start ml-4'>
+                                <Text className='font-bold text-light'>{userCred.first_name} {userCred?.last_name}</Text>
+                                <Text className='font-light text-light'>{userCred.class_name} {userCred.section_name}</Text>
+                            </View>
+                            :
+                            <View className='flex flex-col items-start ml-4'>
+                                <Text className=' text-light'>Welcome</Text>
+                                <Text className='font-bold text-light'>{userCred.first_name} {userCred?.last_name}</Text>
+                            </View>
                         :
                         <Text></Text>
                     }

@@ -36,6 +36,30 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
     else if (pathname === '/importantDates') {
       setPageName('Important Days')
     }
+    else if (pathname === '/addAssignment') {
+      setPageName('Add assignment')
+    }
+    else if (pathname === '/addSchedule') {
+      setPageName('Add schedule')
+    }
+    else if (pathname === '/attendanceTeacher') {
+      setPageName('Attendance')
+    }
+    else if (pathname === '/classes') {
+      setPageName('My classes')
+    }
+    else if (pathname === '/board') {
+      setPageName('Board')
+    }
+    else if (pathname === '/markAttendance') {
+      setPageName('Mark attendance')
+    }
+    else if (pathname === '/homeAssignmentTeacher') {
+      setPageName('Assignment')
+    }
+    else if (pathname === '/scheduleTeacher') {
+      setPageName('Schedule')
+    }
     else {
       setPageName(pathname)
     }

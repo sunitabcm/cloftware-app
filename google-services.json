@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "418175820894",
+    "project_id": "cloftware-technology",
+    "storage_bucket": "cloftware-technology.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418175820894:android:e5992086c93aaf959e00cf",
+        "android_client_info": {
+          "package_name": "com.cloftware.erp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyActasyEY75gJMBtqSgORSR4NKIo1X42fY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

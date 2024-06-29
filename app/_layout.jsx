@@ -5,7 +5,7 @@ import { store } from '../store';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { Pressable, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar'
-import { loadAuthToken, loadAuthUserData } from '../authStorage';
+import { loadAuthTeacherData, loadAuthToken, loadAuthUserData } from '../authStorage';
 import { setAuthToken } from '../store/slices/authSlice';
 import { NativeWindStyleSheet } from "nativewind";
 import AppIcon from '../component/GlobalComps/AppIcon';
@@ -13,6 +13,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { startNetworkLogging } from 'react-native-network-logger';
 import SplashScreen from '../component/GlobalComps/SplashScreen';
 import { updateUser } from '../store/slices/userSlice';
+import { updateUserTeacher } from '../store/slices/teacherSlice';
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
@@ -26,6 +27,9 @@ export default function Layout() {
     });
     loadAuthUserData().then(authUserData => {
       store.dispatch(updateUser(authUserData));
+    });
+    loadAuthTeacherData().then(authTeacherData => {
+      store.dispatch(updateUserTeacher(authTeacherData));
     });
     setTimeout(() => {
       setIsLoading(false);

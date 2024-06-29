@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Pressable, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import AppIcon from './AppIcon';
-const BtnGlobal = ({ title, styleClassName, onPress, isDisabled = false, classNames, icon, iconName, iconType, iconColor, iconSize }) => {
+const BtnGlobal = ({ title, styleClassName, onPress, isDisabled = false, classNames, icon, iconName, iconType, iconColor, iconSize, bgColor = '#2A2D32' }) => {
     const [isPressed, setIsPressed] = useState(false);
 
     const handlePressIn = () => {
@@ -13,10 +13,14 @@ const BtnGlobal = ({ title, styleClassName, onPress, isDisabled = false, classNa
     const handlePressOut = () => {
         setIsPressed(false);
     };
-
+    const dynamicStyles = {
+        borderColor: bgColor,
+        backgroundColor: bgColor,
+    };
     return (
         <TouchableOpacity
             style={[
+                dynamicStyles,
                 styles[styleClassName],
                 isPressed && styles[`${styleClassName}Hover`],
                 isPressed && styles[`${styleClassName}Active`],
@@ -41,7 +45,7 @@ export default BtnGlobal;
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#2A2D32',
+        // backgroundColor: bgColor,
         borderRadius: 56,
         textAlign: 'center',
         paddingVertical: 15,
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
     updatedbutton: {
         backgroundColor: '#fff',
         borderWidth: 1, // Border width
-        borderColor: '#2A2D32', // Border color
+        // borderColor: bgColor, // Border color
         borderRadius: 56,
         textAlign: 'center',
         paddingVertical: 15,
@@ -81,7 +85,7 @@ const styles = StyleSheet.create({
     updatedbuttonDisabled: {
         backgroundColor: '#ccc',
         borderWidth: 1, // Border width
-        borderColor: '#2A2D32', // Border color
+        // borderColor: bgColor, // Border color
         borderRadius: 56,
         textAlign: 'center',
         paddingVertical: 15,
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E1E1E1',
         fontSize: 28,
         lineHeight: 32,
-        color: '#2A2D32',
+        // color: bgColor,
         padding: 6,
         borderRadius: 35,
         cursor: 'pointer',
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     buttonSmall: {
-        backgroundColor: '#2A2D32',
+        // backgroundColor: bgColor,
         borderRadius: 56,
         textAlign: 'center',
         paddingVertical: 5,
@@ -154,7 +158,7 @@ const styles = StyleSheet.create({
     updatedbuttonSmall: {
         backgroundColor: '#fff',
         borderWidth: 1, // Border width
-        borderColor: '#2A2D32', // Border color
+        // borderColor: bgColor, // Border color
         borderRadius: 56,
         textAlign: 'center',
         paddingVertical: 5,
@@ -168,7 +172,7 @@ const styles = StyleSheet.create({
     updatedbuttonSmallDisabled: {
         backgroundColor: '#ccc',
         borderWidth: 1, // Border width
-        borderColor: '#2A2D32', // Border color
+        // borderColor: bgColor, // Border color
         borderRadius: 56,
         textAlign: 'center',
         paddingVertical: 5,

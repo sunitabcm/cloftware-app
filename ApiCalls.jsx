@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { setAuthToken } from './store/slices/authSlice';
 import { updateUser } from './store/slices/userSlice';
-import { saveAuthUserData } from './authStorage';
-const baseURL = "https://api.cloftware.com/api/app";
-const Schoolid = 4
+import { saveAuthTeacherData, saveAuthUserData } from './authStorage';
+import { updateUserTeacher } from './store/slices/teacherSlice';
+import { setSelectedClass } from './store/slices/classSlice';
+
+const baseURL = "https://apidev.cloftware.com/api/app";
+const Schoolid = 13
+
 export async function login(email, password) {
     const response = await axios.post(
         `${baseURL}/login`,
@@ -654,3 +658,442 @@ export async function RaiseIssue(token, issue, schoolId, phone, lastname, firstN
         return null;
     }
 }
+
+export async function getProfileTeacher(dispatch, accessToken, limit = '5', offset = '0') {
+    try {
+        const response = await axios.post(`${baseURL}/teacher/get_teacher_details`, {
+            offset: offset,
+            limit: limit,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (response.status === 200 || response.status === 201) {
+            const userData = response.data.body;
+            if (response.data.body.teacherSections) {
+                const defaultClass = response.data.body.teacherSections.find((cls) => cls.is_class_teacher === 1);
+                if (defaultClass) {
+                    dispatch(setSelectedClass(defaultClass));
+                }
+            }
+            const userDataString = typeof userData === 'object' ? JSON.stringify(userData) : userData;
+            dispatch(updateUserTeacher(userData));
+            saveAuthTeacherData(JSON.stringify(userData))
+        }
+    } catch (error) {
+        console.error('Error getting student profile:', error);
+        dispatch(updateUserTeacher(null));
+        throw error;
+    }
+}
+
+export async function getTeacherClassSectionList() {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/get_teacher_class_sections_list`,
+            null,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching teacher class and section list:', error);
+        throw error;
+    }
+};
+
+
+export async function ClassViewData(token, classId, sectionId) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/class_view_list`,
+            {
+                section_id: sectionId,
+                class_id: classId,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching attendance student list:', error);
+        throw error;
+    }
+};
+
+
+
+export async function attendanceGetStudentList(token, classId, sectionId, offset = 0, limit = 20) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/get_students_list`,
+            {
+                section_id: sectionId,
+                class_id: classId,
+                offset: offset,
+                limit: limit,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching attendance student list:', error);
+        throw error;
+    }
+};
+
+export async function markAttendance(token, formData) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/add_bulk_attendance`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error marking attendance:', error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+export async function getAssignmentList(token, classid ,sectionid) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/assignment_list`,
+            {
+                offset: "0",
+                limit: "10",
+                section_id: sectionid,
+                class_id: classid,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error getting assignment list:', error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+
+export async function assignmentDetails(assignment_id) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/assignment_details`,
+            {
+                assignment_id: assignment_id,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching assignment details:', error);
+        throw error;
+    }
+};
+
+
+export async function addEditAssignment() {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/add_edit_assignment`,
+            {
+                class_id: '60',
+                section_id: '74',
+                subject_id: '1',
+                due_date: '2024-06-23',
+                title: 'Home work',
+                description: 'Home work',
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error adding or editing assignment:', error);
+        throw error;
+    }
+};
+
+
+export async function deleteAssignment(assignmentId) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/delete_assignment`,
+            {
+                assignment_id: assignmentId
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+
+
+
+export async function getAssignedTeacherSubjectList(classId, sectionId) {
+    try {
+        const response = await axios.post(
+            `${baseURL}/teacher/assigned_subject_list`,
+            {
+                class_id: classId,
+                section_id: sectionId
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+
+
+
+export async function addEditSchedule() {
+    try {
+        const response = await axios.post(`${baseURL}/teacher/add_edit_schedule`, {
+            class_id: '3',
+            section_id: '14',
+            title: 'Teacher class book',
+            book_schedule_id: '22',
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error in Add/Edit Schedule API:', error);
+        throw error;
+    }
+};
+
+
+
+
+export async function getScheduleList(token,classId, sectionId) {
+    try {
+        const response = await axios.post(`${baseURL}/teacher/get_schedule_list`, {
+            class_id: classId,
+                section_id: sectionId,
+            offset: '0',
+            limit: '20',
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error in Get Schedule List API:', error);
+        throw error;
+    }
+};
+
+
+
+
+
+export async function getProfileData(accessToken, classId, sectionId, schoolId, date) {
+    try {
+        const response = await axios.post(`${baseURL}/teacher/calender_student_attendance`, {
+            class_id: classId,
+            section_id: sectionId,
+            school_id: schoolId,
+            date: date
+        }, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 200 || response.status === 201) {
+            return response.data;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching profile data:', error);
+        throw error;
+    }
+};
+
+export async function uploadFileAPI(formData, loginWebToken) {
+    // const formData = new FormData();
+    // formData.append('file', {
+    //     uri: fileUrl,
+    //     type: type,
+    //     name: fileName,
+    //     filename: 'imageFile',
+    // });
+    // formData.append('folder', 'assignment');
+
+    try {
+        const response = await axios.post(`${baseURL}/pdf_and_image_file_upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + loginWebToken,
+            },
+        });
+        const responseData = response.data
+        if (response.status === 200 || response.status === 201) {
+            return responseData;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        return null;
+    }
+}
+
+export const addEditAssignmentAPI = async (assignmentData, accessToken) => {
+  try {
+    const response = await axios.post(`${baseURL}/add_edit_assignment`, assignmentData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getClassListAPI = async (accessToken) => {
+  try {
+    const response = await axios.post(`${baseURL}/get_teacher_class_sections_list`, {}, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getSubjectListAPI = async (classId, sectionId, accessToken) => {
+  try {
+    const response = await axios.post(`${baseURL}/assigned_subject_list`, {
+      class_id: classId,
+      section_id: sectionId,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+

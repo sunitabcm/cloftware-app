@@ -5,31 +5,32 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
 import EventList from '../../component/EventList';
 import { useToast } from 'react-native-toast-notifications';
-import { getHomeAssignmentList } from '../../ApiCalls';
+import { getProfileData } from '../../ApiCalls';
 import LoadingAnimation from '../../component/GlobalComps/loadingAnimation';
-import HomeAssigmentList from '../../component/HomeAssigmentList';
+import TeacherHomeAssignment from '../../component/TeacherHomeAssignment';
+import FixedFooter from '../../component/GlobalComps/FixedFooter';
 export default function HomeAssignment() {
   const authToken = useSelector((state) => state.auth.authToken)
   const userCred = useSelector((state) => state.userDetails.user);
   const [showCalender, setShowCalender] = useState(false);
-  const [currentYear, setCurrentYear] = useState(dayjs().year());
   const toast = useToast();
+  const selectedClass = useSelector((state) => state.class.selectedClass);
 
   const [apiData, setApiData] = useState(null);
   const router = useRouter();
   useEffect(() => {
-    if (userCred && Object.keys(userCred).length > 0) {
+    if (selectedClass && Object.keys(selectedClass).length > 0) {
       setShowCalender(true)
       fetchData(dayjs(new Date()).format('YYYY-MM-DD'))
     } else {
       setShowCalender(false)
     }
-  }, [userCred]);
+  }, [selectedClass]);
 
 
   const fetchData = async (date) => {
     try {
-      const response = await getHomeAssignmentList(authToken, userCred?.class_id, userCred?.section_id, userCred?.year_id, date);
+      const response = await getProfileData(authToken, selectedClass?.class_id, selectedClass?.section_id, selectedClass?.class_details.school_id, date);
       if (response) {
         // toast.show(response?.message, { type: "success" })
         setApiData(response)
@@ -43,14 +44,17 @@ export default function HomeAssignment() {
 
 
   return (
-    <ScrollView className='h-full bg-lightergrey'>
-      <View>
-        {showCalender && apiData && apiData?.code === 200 ?
-          <HomeAssigmentList data={apiData?.body} fetchData={fetchData} />
-          :
-          <LoadingAnimation />
-        }
-      </View>
-    </ScrollView>
+    <>
+      <ScrollView className='h-full bg-lightergrey'>
+        <View>
+          {showCalender && apiData && apiData?.code === 200 ?
+            <TeacherHomeAssignment data={apiData} fetchData={fetchData} />
+            :
+            <LoadingAnimation />
+          }
+        </View>
+      </ScrollView>
+      <FixedFooter />
+    </>
   )
 }

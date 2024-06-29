@@ -52,8 +52,13 @@
       "bundleIdentifier": "cloftware.dpss04",
       "buildNumber": "0.0.1",
       "entitlements": {
-        "com.apple.developer.applesignin": ["Default"],
+        "com.apple.developer.applesignin": [
+          "Default"
+        ],
         "com.apple.developer.networking.wifi-info": true
+      },
+      "infoPlist": {
+        "NSPhotoLibraryAddUsageDescription": "This app needs access to your photo library to save files."
       },
       "permissions": {
         "camera": {
@@ -71,7 +76,11 @@
         "foregroundImage": "./assets/adaptive_icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "minSdkVersion": 26
     },
     "extra": {

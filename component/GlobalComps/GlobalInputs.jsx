@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, Pressable, TouchableWithoutFeedback } from 'react-native';
 import AppIcon from './AppIcon';
 import { stylesGlobal } from '../../styles/global';
-const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secureTextEntry, value, onChangeText, error, disabled, width = 'w-full', onBlur, keyboardType, blurOnSubmit = false, touched, styleChange, clickable = false, onClick = {}, enableButton }) => {
+const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secureTextEntry, value, onChangeText, error, disabled, width = 'w-full', onBlur, keyboardType, blurOnSubmit = false, touched, styleChange, clickable = false, onClick = {}, enableButton, star = false, hidden = false }) => {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -10,8 +10,8 @@ const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secu
         if (onChangeText) {
             onChangeText(text);
         }
-        if(enableButton){
-        enableButton();
+        if (enableButton) {
+            enableButton();
         }
     };
     const togglePasswordVisibility = () => {
@@ -23,36 +23,38 @@ const GlobalInputs = ({ label, name, mainClass, placeholder, type = 'text', secu
     return (
         <View className={`${width} ${mainClass}`}>
             {label && (
-                <Text className='mb-1.5 capitalize text-sm font-bold text-body'>{label}</Text>
+                <Text className='mb-1.5 capitalize text-sm font-bold text-body'>{label}{star === true && <Text className='text-error'>*</Text>}</Text>
             )}
-            <TouchableWithoutFeedback onPress={clickable === true ? onClick : () => { }}>
-                <View className="relative">
-                    <TextInput
-                        className={`${inputStyles} ${styleChange} ${value?.length < 2 ? '' : ''}`}
-                        style={stylesGlobal.primaryInput}
-                        placeholder={placeholder}
-                        secureTextEntry={secureTextEntry && !isPasswordVisible}
-                        keyboardType={type === 'number' ? 'numeric' : (keyboardType || 'default')}
-                        value={value}
-                        type={type}
-                        name={label ? label : ''}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={handleInputChange}
-                        editable={!disabled}
-                        placeholderTextColor="#666"
-                        onBlur={blurOnSubmit !== false ? onBlur : undefined}
-                        blurOnSubmit={blurOnSubmit}
-                    />
-                    {secureTextEntry && (
-                        <View className="absolute top-0 right-0 w-[40px] h-[45px] justify-center flex items-center">
-                            <Pressable onPress={togglePasswordVisibility}>
-                                <AppIcon type={'MaterialCommunityIcons'} name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color='#37374E' />
-                            </Pressable>
-                        </View>
-                    )}
-                </View>
-            </TouchableWithoutFeedback>
+            {hidden === false &&
+                <TouchableWithoutFeedback onPress={clickable === true ? onClick : () => { }}>
+                    <View className="relative">
+                        <TextInput
+                            className={`${inputStyles} ${styleChange} ${value?.length < 2 ? '' : ''}`}
+                            style={stylesGlobal.primaryInput}
+                            placeholder={placeholder}
+                            secureTextEntry={secureTextEntry && !isPasswordVisible}
+                            keyboardType={type === 'number' ? 'numeric' : (keyboardType || 'default')}
+                            value={value}
+                            type={type}
+                            name={label ? label : ''}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            onChangeText={handleInputChange}
+                            editable={!disabled}
+                            placeholderTextColor="#666"
+                            onBlur={blurOnSubmit !== false ? onBlur : undefined}
+                            blurOnSubmit={blurOnSubmit}
+                        />
+                        {secureTextEntry && (
+                            <View className="absolute top-0 right-0 w-[40px] h-[45px] justify-center flex items-center">
+                                <Pressable onPress={togglePasswordVisibility}>
+                                    <AppIcon type={'MaterialCommunityIcons'} name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color='#37374E' />
+                                </Pressable>
+                            </View>
+                        )}
+                    </View>
+                </TouchableWithoutFeedback>
+            }
             {touched && error && <Text className='capitalize text-sm text-error'>{error}</Text>}
         </View>
     );
@@ -74,4 +76,16 @@ onChangeText={setEmail}
 error={error}
 disabled={disabled}
 width='w-full'
-/> */}
+/> 
+<GlobalInputs
+                                placeholder={`Current Address`}
+                                name="current_address"
+                                label="Current Address"
+                                onChangeText={handleChange('current_address')}
+                                onBlur={handleBlur('current_address')}
+                                value={values.current_address}
+                                error={errors.current_address}
+                                touched={touched}
+                                mainClass={'mt-5'}
+                                enableButton={enableButton}
+                            />*/}
