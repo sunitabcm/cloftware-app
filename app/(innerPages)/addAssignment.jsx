@@ -23,28 +23,15 @@ const validationSchema = Yup.object({
 });
 
 const AssignmentForm = () => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [classes, setClasses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const authToken = useSelector((state) => state.auth.authToken);
   const selectedClass = useSelector((state) => state.class.selectedClass);
   const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
-
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const classList = await getClassListAPI(authToken);
-        setClasses(classList.body.data);
-      } catch (error) {
-        console.error('Error fetching classes:', error);
-      }
-    };
-
-    fetchClasses();
-  }, [userTeacherCred.teacherSections]);
-
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [classes, setClasses] = useState(userTeacherCred && userTeacherCred.teacherSections || []);
+  const [subjects, setSubjects] = useState([]);
+console.log(subjects)
   const fetchSubjects = async (classId, sectionId) => {
     try {
       const subjectList = await getSubjectListAPI(classId, sectionId, authToken);
@@ -77,8 +64,9 @@ const AssignmentForm = () => {
       formData.append('folder', 'assignment');
       formData.append('file', {
         uri: res[0].uri,
-        type: res[0].type,
+        type: 'image/*',
         name: res[0].name,
+        filename: 'imageFile',
       });
 
       const uploadResponse = await uploadFileAPI(formData, authToken);
@@ -139,7 +127,7 @@ const AssignmentForm = () => {
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
               <RNPickerSelect
                 onValueChange={(value) => {
-                  handleChange('class')(value);
+                  handleChange('class');
                   fetchSubjects(value, selectedClass?.section_id);
                 }}
                 items={classes.map((cls) => ({
