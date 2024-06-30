@@ -64,7 +64,7 @@ console.log(subjects)
       formData.append('folder', 'assignment');
       formData.append('file', {
         uri: res[0].uri,
-        type: 'image/*',
+        type: res[0].type,
         name: res[0].name,
         filename: 'imageFile',
       });
@@ -150,7 +150,14 @@ console.log(subjects)
               />
               {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Select Due Date<Text className='text-error'>*</Text></Text>
-              <TouchableOpacity style={{ borderColor: errors.dueDate && touched.dueDate ? 'red' : '#ccc', borderWidth: 1, padding: 10, marginTop: 10 }} onPress={showDatePicker}>
+              <TouchableOpacity style={{ borderWidth: 0,
+                  borderRadius: 8,
+                  paddingHorizontal: 14,
+                  paddingVertical: 12,
+                  fontSize: 13,
+                  backgroundColor: "#f4f4f4",
+                  color: "#444",
+                  marginBottom: 20 }} onPress={showDatePicker}>
                 <Text>{dayjs(leaveDate).format('YYYY-MM-DD')}</Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -167,7 +174,7 @@ console.log(subjects)
                 onChangeText={handleChange('description')}
                 onBlur={handleBlur('description')}
                 style={{
-                  borderWidth: 1,
+                  borderWidth: 0,
                   borderRadius: 8,
                   paddingHorizontal: 14,
                   paddingVertical: 12,

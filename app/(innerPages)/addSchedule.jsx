@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import dayjs from 'dayjs';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import DocumentPicker from 'react-native-document-picker';
 import { Image } from 'expo-image';
 import RNPickerSelect from 'react-native-picker-select';
-
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
-import { uploadFileAPI, addEditAssignmentAPI, getClassListAPI, getSubjectListAPI } from '../../ApiCalls';
+import { uploadFileAPI, addEditAssignmentAPI } from '../../ApiCalls';
 
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
@@ -20,50 +17,12 @@ const validationSchema = Yup.object({
 });
 
 const AssignmentForm = () => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [classes, setClasses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const authToken = useSelector((state) => state.auth.authToken);
   const selectedClass = useSelector((state) => state.class.selectedClass);
   const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
+  const [uploadedFileDetails, setUploadedFileDetails] = useState(null);
 
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const classList = await getClassListAPI(authToken);
-        setClasses(classList.body.data);
-      } catch (error) {
-        console.error('Error fetching classes:', error);
-      }
-    };
-
-    fetchClasses();
-  }, [userTeacherCred.teacherSections]);
-
-  const fetchSubjects = async (classId, sectionId) => {
-    try {
-      const subjectList = await getSubjectListAPI(classId, sectionId, authToken);
-      setSubjects(subjectList.body);
-    } catch (error) {
-      console.error('Error fetching subjects:', error);
-    }
-  };
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    hideDatePicker();
-    setLeaveDate(dayjs(date).format('YYYY-MM-DD'));
-  };
-
+  const [classes, setClasses] = useState(userTeacherCred && userTeacherCred.teacherSections || []);
   const handleFilePicker = async (setFieldValue) => {
     try {
       const res = await DocumentPicker.pick({
@@ -76,12 +35,13 @@ const AssignmentForm = () => {
         uri: res[0].uri,
         type: res[0].type,
         name: res[0].name,
+        filename: 'imageFile',
       });
 
       const uploadResponse = await uploadFileAPI(formData, authToken);
 
       if (uploadResponse.success) {
-        setUploadedFiles([...uploadedFiles, uploadResponse.body.fileURL]);
+        setUploadedFileDetails({ uri: uploadResponse.body.fileURL, flag: uploadResponse.body.flag });
         setFieldValue('file', { uri: uploadResponse.body.fileURL, name: res[0].name });
       }
     } catch (err) {
@@ -103,10 +63,12 @@ const AssignmentForm = () => {
         title: values.title,
         description: values.description,
         image: values.file.uri,
+        flag: uploadedFileDetails?.flag, // Include the flag here
       };
 
       await addEditAssignmentAPI(addAssignmentData, authToken);
       resetForm();
+      setUploadedFileDetails(null); // Reset file details after submission
     } catch (error) {
       console.error('Error uploading file or adding assignment:', error);
     }
@@ -136,8 +98,7 @@ const AssignmentForm = () => {
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
               <RNPickerSelect
                 onValueChange={(value) => {
-                  handleChange('class')(value);
-                  fetchSubjects(value, selectedClass?.section_id);
+                  setFieldValue('class', value);
                 }}
                 items={classes.map((cls) => ({
                   label: cls.class_details.class_name,
