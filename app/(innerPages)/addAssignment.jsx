@@ -12,6 +12,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
 import { uploadFileAPI, addEditAssignmentAPI, getClassListAPI, getSubjectListAPI } from '../../ApiCalls';
+import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
@@ -23,21 +24,45 @@ const validationSchema = Yup.object({
 });
 
 const AssignmentForm = () => {
+  const params = useLocalSearchParams();
+  const {
+    assignment_id,
+    class_id,
+    class_name,
+    classwise_subject_id,
+    created_at,
+    description,
+    flag,
+    image,
+    section_id,
+    section_name,
+    status,
+    subject_name,
+    teacher_id,
+    teacher_name,
+    title
+  } = params || {};
   const authToken = useSelector((state) => state.auth.authToken);
   const selectedClass = useSelector((state) => state.class.selectedClass);
   const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploadedFileDetails, setUploadedFileDetails] = useState(null);
   const [leaveDate, setLeaveDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [classes, setClasses] = useState(userTeacherCred && userTeacherCred.teacherSections || []);
+  const [classes, setClasses] = useState(userTeacherCred?.teacherSections || []);
   const [subjects, setSubjects] = useState([]);
-console.log(subjects)
+
   const fetchSubjects = async (classId, sectionId) => {
-    try {
-      const subjectList = await getSubjectListAPI(classId, sectionId, authToken);
-      setSubjects(subjectList.body);
-    } catch (error) {
-      console.error('Error fetching subjects:', error);
+    if (classId && sectionId) {
+      try {
+        const subjectList = await getSubjectListAPI(classId, sectionId, authToken);
+        if (subjectList && subjectList.body) {
+          setSubjects(subjectList.body);
+        } else {
+          console.error('Invalid subject list response:', subjectList);
+        }
+      } catch (error) {
+        console.error('Error fetching subjects:', error);
+      }
     }
   };
 
@@ -51,7 +76,9 @@ console.log(subjects)
 
   const handleConfirm = (date) => {
     hideDatePicker();
-    setLeaveDate(dayjs(date).format('YYYY-MM-DD'));
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    setLeaveDate(formattedDate);
+    setFieldValue('dueDate', formattedDate); // Update dueDate in Formik values
   };
 
   const handleFilePicker = async (setFieldValue) => {
@@ -59,6 +86,11 @@ console.log(subjects)
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
       });
+
+      if (!res) {
+        console.log('No file selected');
+        return;
+      }
 
       const formData = new FormData();
       formData.append('folder', 'assignment');
@@ -72,21 +104,20 @@ console.log(subjects)
       const uploadResponse = await uploadFileAPI(formData, authToken);
 
       if (uploadResponse.success) {
-        setUploadedFiles([...uploadedFiles, uploadResponse.body.fileURL]);
+        setUploadedFileDetails({ uri: uploadResponse.body.fileURL, flag: uploadResponse.body.flag });
         setFieldValue('file', { uri: uploadResponse.body.fileURL, name: res[0].name });
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled the file picker');
       } else {
-        throw err;
+        console.error('Error picking file or uploading:', err);
       }
     }
   };
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const addAssignmentData = {
+      const assignmentData = {
         class_id: values.class,
         section_id: selectedClass?.section_id,
         subject_id: values.subject,
@@ -94,20 +125,37 @@ console.log(subjects)
         title: values.title,
         description: values.description,
         image: values.file.uri,
+        flag: uploadedFileDetails?.flag,
       };
-
-      await addEditAssignmentAPI(addAssignmentData, authToken);
+      if (assignment_id) {
+        assignmentData.assignment_id = assignment_id;
+      }
+      await addEditAssignmentAPI(assignmentData, authToken);
+      setUploadedFileDetails(null);
       resetForm();
     } catch (error) {
       console.error('Error uploading file or adding assignment:', error);
     }
   };
 
+  useEffect(() => {
+    if (class_id && section_id) {
+      fetchSubjects(class_id, section_id)
+    }
+  }, [class_id, section_id]);
+
   return (
     <ScrollView className='h-full bg-light p-5'>
       <View className='mb-20'>
         <Formik
-          initialValues={{ title: '', class: '', subject: '', dueDate: '', description: '', file: null }}
+          initialValues={{
+            title: title || '',
+            class: class_id ? class_id.toString() : '',
+            subject: classwise_subject_id ? classwise_subject_id.toString() : '',
+            dueDate: created_at || dayjs(new Date()).format('YYYY-MM-DD'),
+            description: description || '',
+            file: image ? { uri: image, name: image.split('/').pop() } : null
+          }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -124,11 +172,18 @@ console.log(subjects)
                 mainClass={'mb-5'}
                 star={true}
               />
+
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
               <RNPickerSelect
                 onValueChange={(value) => {
-                  handleChange('class');
-                  fetchSubjects(value, selectedClass?.section_id);
+                  setFieldValue('class', value);
+                  const selectedClass = classes.find(cls => cls.class_details.class_id === value);
+                  const sectionId = selectedClass ? selectedClass.section_id : null;
+                  if (sectionId) {
+                    fetchSubjects(value, sectionId);
+                  } else {
+                    setSubjects([]);
+                  }
                 }}
                 items={classes.map((cls) => ({
                   label: cls.class_details.class_name,
@@ -138,26 +193,33 @@ console.log(subjects)
                 value={values.class}
               />
               {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
-              <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Subject<Text className='text-error'>*</Text></Text>
-              <RNPickerSelect
-                onValueChange={handleChange('subject')}
-                items={subjects.map((subj) => ({
-                  label: subj.subject_name,
-                  value: subj.classwise_id,
-                }))}
-                style={pickerSelectStyles}
-                value={values.subject}
-              />
-              {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
+
+              {subjects && subjects.length > 0 &&
+                <>
+                  <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Subject<Text className='text-error'>*</Text></Text>
+                  <RNPickerSelect
+                    onValueChange={(value) => setFieldValue('subject', value)}
+                    items={subjects.map((subj) => ({
+                      label: subj.subject_name,
+                      value: subj.classwise_id,
+                    }))}
+                    style={pickerSelectStyles}
+                    value={values.subject}
+                  />
+                  {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
+                </>
+              }
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Select Due Date<Text className='text-error'>*</Text></Text>
-              <TouchableOpacity style={{ borderWidth: 0,
-                  borderRadius: 8,
-                  paddingHorizontal: 14,
-                  paddingVertical: 12,
-                  fontSize: 13,
-                  backgroundColor: "#f4f4f4",
-                  color: "#444",
-                  marginBottom: 20 }} onPress={showDatePicker}>
+              <TouchableOpacity style={{
+                borderWidth: 0,
+                borderRadius: 8,
+                paddingHorizontal: 14,
+                paddingVertical: 12,
+                fontSize: 13,
+                backgroundColor: "#f4f4f4",
+                color: "#444",
+                marginBottom: 20
+              }} onPress={showDatePicker}>
                 <Text>{dayjs(leaveDate).format('YYYY-MM-DD')}</Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -204,10 +266,27 @@ console.log(subjects)
                   </View>
                 </TouchableOpacity>
                 {values.file && (
-                  <Image
-                    source={{ uri: values.file.uri }}
-                    style={{ width: 100, height: 100, marginBottom: 10 }}
-                  />
+                  uploadedFileDetails && uploadedFileDetails?.flag === 1 ?
+                    <View className='w-[90%]'
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        // marginBottom: 15,
+                      }}>
+                      <Image
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
+                        style={{ width: 45, height: 60 }}
+                        contentFit="cover"
+                      />
+                      <View className='flex flex-col ml-5'>
+                        <Text className=' text-body text-lg font-bold'>{values.file.name}</Text>
+                      </View>
+                    </View>
+                    :
+                    <Image
+                      source={{ uri: values.file.uri }}
+                      style={{ width: 60, height: 60, marginBottom: 10 }}
+                    />
                 )}
               </View>
               <View className='mt-10'>
@@ -225,6 +304,7 @@ console.log(subjects)
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   errorText: {

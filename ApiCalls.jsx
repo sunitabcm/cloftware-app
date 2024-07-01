@@ -940,14 +940,9 @@ export async function getAssignedTeacherSubjectList(token, classId, sectionId) {
 
 
 
-export async function addEditSchedule(toke, classid, sessionid, title, scheduleid) {
+export async function addEditSchedule(formData, token) {
     try {
-        const response = await axios.post(`${baseURL}/teacher/add_edit_schedule`, {
-            class_id: classid,
-            section_id: sessionid,
-            title: title,
-            book_schedule_id: scheduleid,
-        }, {
+        const response = await axios.post(`${baseURL}/teacher/add_edit_schedule`, formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -1033,7 +1028,7 @@ export async function uploadFileAPI(formData, loginWebToken) {
     // formData.append('folder', 'assignment');
 
     try {
-        const response = await axios.post(`${baseURL}/pdf_and_image_file_upload`, formData, {
+        const response = await axios.post(`${baseURL}/teacher/pdf_and_image_file_upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + loginWebToken,
@@ -1052,7 +1047,7 @@ export async function uploadFileAPI(formData, loginWebToken) {
 
 export const addEditAssignmentAPI = async (assignmentData, accessToken) => {
     try {
-        const response = await axios.post(`${baseURL}/add_edit_assignment`, assignmentData, {
+        const response = await axios.post(`${baseURL}/teacher/add_edit_assignment`, assignmentData, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -1066,7 +1061,7 @@ export const addEditAssignmentAPI = async (assignmentData, accessToken) => {
 
 export const getClassListAPI = async (accessToken) => {
     try {
-        const response = await axios.post(`${baseURL}/get_teacher_class_sections_list`, null, {
+        const response = await axios.post(`${baseURL}/teacher/get_teacher_class_sections_list`, null, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -1080,7 +1075,7 @@ export const getClassListAPI = async (accessToken) => {
 
 export const getSubjectListAPI = async (classId, sectionId, accessToken) => {
     try {
-        const response = await axios.post(`${baseURL}/assigned_subject_list`, {
+        const response = await axios.post(`${baseURL}/teacher/assigned_subject_list`, {
             class_id: classId,
             section_id: sectionId,
         }, {

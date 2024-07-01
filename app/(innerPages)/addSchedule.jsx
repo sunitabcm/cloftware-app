@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import dayjs from 'dayjs';
+import { useSelector, useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import DocumentPicker from 'react-native-document-picker';
 import { Image } from 'expo-image';
 import RNPickerSelect from 'react-native-picker-select';
+
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
-import { uploadFileAPI, addEditAssignmentAPI } from '../../ApiCalls';
+import { uploadFileAPI, addEditAssignmentAPI, getClassListAPI, getSubjectListAPI, addEditSchedule } from '../../ApiCalls';
+import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
@@ -16,18 +20,41 @@ const validationSchema = Yup.object({
   file: Yup.mixed().required('A file is required'),
 });
 
-const AssignmentForm = () => {
-  const authToken = useSelector((state) => state.auth.authToken);
+const AssignmentScheduleForm = () => {
+  const params = useLocalSearchParams();
+  const { 
+    assignment_id,
+    class_id,
+    class_name,
+    classwise_subject_id,
+    created_at,
+    description,
+    flag,
+    image,
+    section_id,
+    section_name,
+    status,
+    subject_name,
+    teacher_id,
+    teacher_name,
+    title
+  } = params || {};
+    const authToken = useSelector((state) => state.auth.authToken);
   const selectedClass = useSelector((state) => state.class.selectedClass);
   const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
   const [uploadedFileDetails, setUploadedFileDetails] = useState(null);
+  const [classes, setClasses] = useState(userTeacherCred?.teacherSections || []);
 
-  const [classes, setClasses] = useState(userTeacherCred && userTeacherCred.teacherSections || []);
   const handleFilePicker = async (setFieldValue) => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        type: [DocumentPicker.types.pdf],
       });
+
+      if (!res) {
+        console.log('No file selected');
+        return;
+      }
 
       const formData = new FormData();
       formData.append('folder', 'assignment');
@@ -46,29 +73,27 @@ const AssignmentForm = () => {
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled the file picker');
       } else {
-        throw err;
+        console.error('Error picking file or uploading:', err);
       }
     }
   };
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const addAssignmentData = {
+      const assignmentData = {
         class_id: values.class,
         section_id: selectedClass?.section_id,
-        subject_id: values.subject,
-        due_date: values.dueDate,
         title: values.title,
-        description: values.description,
-        image: values.file.uri,
-        flag: uploadedFileDetails?.flag, // Include the flag here
+        file_upload: values.file.uri,
+        flag: uploadedFileDetails?.flag,
       };
-
-      await addEditAssignmentAPI(addAssignmentData, authToken);
+      if (assignment_id) {
+        assignmentData.book_schedule_id = assignment_id;
+      }
+      await addEditSchedule(assignmentData, authToken);
+      setUploadedFileDetails(null);
       resetForm();
-      setUploadedFileDetails(null); // Reset file details after submission
     } catch (error) {
       console.error('Error uploading file or adding assignment:', error);
     }
@@ -78,7 +103,11 @@ const AssignmentForm = () => {
     <ScrollView className='h-full bg-light p-5'>
       <View className='mb-20'>
         <Formik
-          initialValues={{ title: '', class: '', subject: '', dueDate: '', description: '', file: null }}
+          initialValues={{
+            title: title || '',
+            class: class_id ? class_id.toString() : '',
+            file: image ? { uri: image, name: image.split('/').pop() } : null
+          }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -95,6 +124,7 @@ const AssignmentForm = () => {
                 mainClass={'mb-5'}
                 star={true}
               />
+
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
               <RNPickerSelect
                 onValueChange={(value) => {
@@ -127,10 +157,21 @@ const AssignmentForm = () => {
                   </View>
                 </TouchableOpacity>
                 {values.file && (
+                  <View className='w-[90%]'
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    // marginBottom: 15,
+                  }}>
                   <Image
-                    source={{ uri: values.file.uri }}
-                    style={{ width: 100, height: 100, marginBottom: 10 }}
+                    source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
+                    style={{ width: 45, height: 60 }}
+                    contentFit="cover"
                   />
+                  <View className='flex flex-col ml-5'>
+                    <Text className=' text-body text-lg font-bold'>{values.file.name}</Text>
+                  </View>
+                </View>
                 )}
               </View>
               <View className='mt-10'>
@@ -148,6 +189,7 @@ const AssignmentForm = () => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   errorText: {
@@ -168,7 +210,7 @@ const pickerSelectStyles = StyleSheet.create({
     color: 'black',
     paddingRight: 30,
     marginTop: 10,
-    marginBottom: 10,
+    paddingBottom: 0,
   },
   inputAndroid: {
     fontSize: 16,
@@ -180,8 +222,8 @@ const pickerSelectStyles = StyleSheet.create({
     color: 'black',
     paddingRight: 30,
     marginTop: 10,
-    marginBottom: 10,
+    paddingBottom: 0,
   },
 });
 
-export default AssignmentForm;
+export default AssignmentScheduleForm;
