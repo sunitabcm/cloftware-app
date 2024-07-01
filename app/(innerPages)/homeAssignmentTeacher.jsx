@@ -110,7 +110,7 @@ const TeacherHomeAssignment = () => {
               <BtnGlobal
                 styleClassName="closeBtn"
                 icon={true}
-                onPress={() => {setData(null); setSelectedId('')}}
+                onPress={() => { setData(null); setSelectedId('') }}
                 classNames={'mr-5 mt-2'}
                 iconName={'arrowleft'}
                 iconType={'AntDesign'}
@@ -227,12 +227,12 @@ const TeacherHomeAssignment = () => {
       <SmallPopup isVisible={modalVisible} closeModal={closeModal} customModalClass={'h-[20%]'}>
         <View className='flex flex-col gap-5 items-start'>
           <Pressable onPress={() => router.push({ pathname: "/addAssignment", params: { assignment_id: data.assignment_id, class_id: data.class_id, class_name: data.class_name, classwise_subject_id: data.classwise_subject_id, created_at: data.created_at, description: data.description, flag: data.flag, image: data.image, section_id: data.section_id, section_name: data.section_name, status: data.status, subject_name: data.subject_name, teacher_id: data.teacher_id, teacher_name: data.teacher_name, title: data.title } })} className='flex flex-row items-center'>
-            <AppIcon type='Entypo' name='camera' size={30} color={'#535353'} />
+            <View className='bg-[#FEC53228] rounded-[40px] h-10 w-10 flex items-center justify-center'><AppIcon type='MaterialIcons' name='edit' size={25} color={'#FEC532'} /></View>
             <Text className='text-body pl-5'>Edit Assignment</Text>
           </Pressable>
-          <Pressable onPress={()=> deleteData(selectedID)} className='flex flex-row items-center'>
-            <AppIcon type='Feather' name='image' size={30} color={'#535353'} />
-            <Text className='text-body pl-5'>Delete Assignment</Text>
+          <Pressable onPress={() => deleteData(selectedID)} className='flex flex-row items-center'>
+            <View className='bg-[#FE0A0A28] rounded-[40px] h-10 w-10 flex items-center justify-center'><AppIcon type='MaterialCommunityIcons' name='delete' size={25} color={'#FE0A0A'} /></View>
+            <Text className='text-error pl-5'>Delete Assignment</Text>
           </Pressable>
         </View>
       </SmallPopup>
