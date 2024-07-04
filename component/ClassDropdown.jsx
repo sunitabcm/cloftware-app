@@ -25,7 +25,7 @@ const ClassDropdown = () => {
   };
 
   return (
-    <View className='border border-lightgrey rounded-xl'>
+    <View className='border border-lightgrey rounded-xl capitalize'>
       <RNPickerSelect
         onValueChange={handleValueChange}
         placeholder={{ label: 'Select Class', value: null }}
