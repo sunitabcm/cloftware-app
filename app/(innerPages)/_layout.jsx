@@ -34,6 +34,7 @@ export default function _layout() {
         <Stack.Screen name='timeTable' />
         <Stack.Screen name='classes' />
         <Stack.Screen name='addAssignment' />
+        <Stack.Screen name='editAssignment' />
         <Stack.Screen name='addSchedule' />
         <Stack.Screen name='attendanceTeacher' />
         <Stack.Screen name='board' />

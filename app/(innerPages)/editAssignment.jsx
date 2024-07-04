@@ -23,7 +23,7 @@ const validationSchema = Yup.object({
   file: Yup.mixed().required('A file is required'),
 });
 
-const AssignmentForm = () => {
+const AssignmentFormEdit = () => {
   const params = useLocalSearchParams();
   const {
     assignment_id,
@@ -136,9 +136,9 @@ const AssignmentForm = () => {
       setUploadedFileDetails(null);
       resetForm();
       toast.show(responseapi?.message, { type: "success" })
-      // setTimeout(() => {
-      //   router.push('/homeAssignmentTeacher')
-      // }, 1000);
+      setTimeout(() => {
+        router.push('/homeAssignmentTeacher')
+      }, 1000);
     } catch (error) {
       console.error('Error uploading file or adding assignment:', error);
     }
@@ -347,4 +347,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default AssignmentForm;
+export default AssignmentFormEdit;

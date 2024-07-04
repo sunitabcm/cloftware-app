@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import DocumentPicker from 'react-native-document-picker';
 import { Image } from 'expo-image';
 import RNPickerSelect from 'react-native-picker-select';
-
+import { useToast } from 'react-native-toast-notifications';
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
 import { uploadFileAPI, addEditAssignmentAPI, getClassListAPI, getSubjectListAPI, addEditSchedule } from '../../ApiCalls';
@@ -44,6 +44,7 @@ const AssignmentScheduleForm = () => {
   const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
   const [uploadedFileDetails, setUploadedFileDetails] = useState(null);
   const [classes, setClasses] = useState(userTeacherCred?.teacherSections || []);
+  const toast = useToast();
 
   const handleFilePicker = async (setFieldValue) => {
     try {
@@ -91,9 +92,10 @@ const AssignmentScheduleForm = () => {
       if (assignment_id) {
         assignmentData.book_schedule_id = assignment_id;
       }
-      await addEditSchedule(assignmentData, authToken);
+      const responseValue = await addEditSchedule(assignmentData, authToken);
       setUploadedFileDetails(null);
       resetForm();
+      toast.show(responseValue?.message, { type: "success" })
     } catch (error) {
       console.error('Error uploading file or adding assignment:', error);
     }
@@ -139,7 +141,7 @@ const AssignmentScheduleForm = () => {
               />
               {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
               <View>
-                <Text className='text-body font-bold'>Select PDF/Image<Text className='text-error'>*</Text></Text>
+                <Text className='text-body font-bold'>Select PDF<Text className='text-error'>*</Text></Text>
                 <TouchableOpacity onPress={() => handleFilePicker(setFieldValue)}>
                   <View
                     className='mt-3 mb-5 flex justify-center items-center flex-col'
@@ -153,7 +155,7 @@ const AssignmentScheduleForm = () => {
                       borderTopColor: 'white',
                     }}
                   >
-                    <Text className='text-body'>Drop your image/pdf here, or <Text className='text-primary'>Browse</Text></Text>
+                    <Text className='text-body'>Drop your pdf here, or <Text className='text-primary'>Browse</Text></Text>
                   </View>
                 </TouchableOpacity>
                 {values.file && (

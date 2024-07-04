@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Pressable, ScrollView, Dimensions, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Dimensions, ImageBackground } from 'react-native';
 import { Calendar, Agenda } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
@@ -18,6 +18,12 @@ const HolidayList = ({ data, fetchData }) => {
   const [showImagePath, setShowImagePath] = useState('');
   const screenWidthFull = Dimensions.get('window').width;
 
+  useEffect(() => {
+    if (fetchData) {
+      fetchData(dayjs(selectedDate).format('YYYY-MM'));
+    }
+  }, [selectedDate]);
+
   const openModal = (holiday) => {
     setSelectedHoliday(holiday);
     setModalVisible(true);
@@ -30,7 +36,6 @@ const HolidayList = ({ data, fetchData }) => {
   const onArrowPress = (increment) => {
     const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM');
     setSelectedDate(newDate);
-    fetchData(newDate);
   };
 
   const organizeDataByMonth = () => {
@@ -54,8 +59,9 @@ const HolidayList = ({ data, fetchData }) => {
 
     return Object.keys(organizedData).map((month) => (
       <View key={month} className=''>
+        <Text className='text-body font-bold text-lg mb-2'>{month}</Text>
         {organizedData[month].map((holiday) => (
-          <View key={holiday.holiday_id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey mb-4'>
+          <View key={holiday.id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey mb-4'>
             {holiday.image && holiday.image.length !== 0 &&
               <TouchableOpacity className='w-full' onPress={() => { setShowImagePath(holiday.image); setShowImage(true) }}>
                 <Image
@@ -94,7 +100,9 @@ const HolidayList = ({ data, fetchData }) => {
         </TouchableOpacity>
       </View> */}
       {data.length === 0 && <EmptyScreen />}
-      {renderHolidays()}
+      <ScrollView>
+        {renderHolidays()}
+      </ScrollView>
       <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
         <Image
           source={{ uri: showImagePath }}

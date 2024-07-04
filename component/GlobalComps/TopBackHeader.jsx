@@ -39,6 +39,9 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
     else if (pathname === '/addAssignment') {
       setPageName('Add assignment')
     }
+    else if (pathname === '/editAssignment') {
+      setPageName('Edit assignment')
+    }
     else if (pathname === '/addSchedule') {
       setPageName('Add schedule')
     }

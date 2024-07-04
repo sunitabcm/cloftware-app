@@ -15,6 +15,7 @@ import ClassDropdown from '../../component/ClassDropdown';
 import AppIcon from '../../component/GlobalComps/AppIcon';
 import { Image } from 'expo-image';
 import FixedFooter from '../../component/GlobalComps/FixedFooter';
+import TeachScheduleUI from '../../component/TeachScheduleUI';
 const ScheduleTeacher = () => {
   const router = useRouter();
   const toast = useToast();
@@ -55,24 +56,7 @@ const ScheduleTeacher = () => {
           {dataView && dataView.length > 0 ? (
             <View >
               {dataView.map((schedule, index) => (
-                <View key={index} className='w-full flex flex-row items-center justify-between mb-4'>
-                  <View className='w-[90%]'
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      // marginBottom: 15,
-                    }}>
-                    <Image
-                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
-                      style={{ width: 45, height: 60 }}
-                      contentFit="cover"
-                    />
-                    <View key={index} className='flex flex-col ml-5'>
-                      <Text className=' text-body text-lg font-bold'>{schedule.title}</Text>
-                      <Text className=' text-body'>Uploaded on {new Date(schedule.created_at).toLocaleDateString()}</Text>
-                    </View>
-                  </View>
-                </View>
+                <TeachScheduleUI schedule={schedule} index={index}/>
               ))}
             </View>
           ) : (

@@ -14,6 +14,8 @@ import AttendanceBox from '../../component/AttendanceBar';
 import ClassDropdown from '../../component/ClassDropdown';
 import AppIcon from '../../component/GlobalComps/AppIcon';
 import { Image } from 'expo-image';
+import TeachAssignmentUI from '../../component/TeachAssignmentUI';
+import TeachScheduleUI from '../../component/TeachScheduleUI';
 const Board = () => {
   const router = useRouter();
   const toast = useToast();
@@ -77,50 +79,29 @@ const Board = () => {
             </View>
           </View>
         }
-        {dataView && dataView.schedule_list.length > 0 ? (
-          <View className='bg-light rounded-xl'>
-            <View className='flex flex-row items-center justify-between border-b border-b-lightergrey mb-5 p-5'>
-              <View className='flex flex-row items-center'>
-                <Image
-                  source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/schedules_svg.svg' }}
-                  style={{ width: 50, height: 50 }}
-                  contentFit="cover"
-                />
-                <Text style={styles.sectionTitle} className='ml-5'>Schedules</Text>
-              </View>
-              <Link href={'/addSchedule'} className='text-body font-bold text-xl'><AppIcon type='AntDesign' name='plus' size={25} color='#2A2D32' /></Link>
+        <View className='bg-light rounded-xl'>
+          <View className='flex flex-row items-center justify-between border-b border-b-lightergrey mb-5 p-5'>
+            <View className='flex flex-row items-center'>
+              <Image
+                source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/schedules_svg.svg' }}
+                style={{ width: 50, height: 50 }}
+                contentFit="cover"
+              />
+              <Text style={styles.sectionTitle} className='ml-5'>Schedules</Text>
             </View>
+            <Link href={'/addSchedule'} className='text-body font-bold text-xl'><AppIcon type='AntDesign' name='plus' size={25} color='#2A2D32' /></Link>
+          </View>
+          {dataView && dataView.schedule_list.length > 0 && (
             <View className='p-5 pt-0'>
               {dataView.schedule_list.slice(0, 3).map((schedule, index) => (
-                <View key={index} className='w-full flex flex-row items-center justify-between mb-4'>
-                  <View className='w-[90%]'
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      // marginBottom: 15,
-                    }}>
-                    <Image
-                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
-                      style={{ width: 45, height: 60 }}
-                      contentFit="cover"
-                    />
-                    <View key={index} className='flex flex-col ml-5'>
-                      <Text className=' text-body text-lg font-bold'>{schedule.title}</Text>
-                      <Text className=' text-body'>Uploaded on {new Date(schedule.created_at).toLocaleDateString()}</Text>
-                    </View>
-                  </View>
-                </View>
+                <TeachScheduleUI schedule={schedule} index={index}/>
               ))}
               <Link href={'/scheduleTeacher'} className='text-body font-bold text-xl'>{`See All Scheduled books`} <AppIcon type='AntDesign' name='right' size={18} color='#2A2D32' /></Link>
             </View>
-          </View>
-        ) : (
-          <Text style={styles.noDataText}>No Schedules Available</Text>
-        )}
+          )}
+        </View>
       </View>
-
       <View style={styles.section}>
-        {dataView && dataView.assignment_list.length > 0 ? (
           <View className='bg-light rounded-xl'>
             <View className='flex flex-row items-center justify-between border-b border-b-lightergrey mb-5 p-5'>
               <View className='flex flex-row items-center'>
@@ -133,42 +114,16 @@ const Board = () => {
               </View>
               <Link href={'/addAssignment'} className='text-body font-bold text-xl'><AppIcon type='AntDesign' name='plus' size={25} color='#2A2D32' /></Link>
             </View>
-            <View className='p-5 pt-0'>
-              {dataView.assignment_list.slice(0, 3).map((assignment, index) => (
-                <View key={index} className='border border-lightergrey p-4 rounded-xl mb-4'>
-                  <Text style={{ backgroundColor: assignment.status === 'Active' ? '#10B981' : '#FE0A0A' }} className='text-light p-2 font-bold mb-2 rounded-lg w-[80px] text-center'>{assignment.status}</Text>
-                  <Text style={stylesGlobal.title}>{assignment.title}</Text>
-                  <Text className='text-lightgrey font-bold w-[90%] mt-2'>{assignment.description}</Text>
-                  <View className='flex flex-row items-center justify-between mt-2'>
-                    <View>
-                      <Text className='text-body'>Created at</Text>
-                      <View className='flex flex-row items-center'>
-                        <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                        <Text className='text-lightgrey ml-2'>{new Date(assignment.created_at).toLocaleDateString()}</Text>
-                      </View>
-                    </View>
-                    <View>
-                      <Text className='text-body'>Due date</Text>
-                      <View className='flex flex-row items-center'>
-                        <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                        <Text className='text-lightgrey ml-2'>{assignment.due_date ? new Date(assignment.due_date).toLocaleDateString() : 'N/A'}</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View className='flex flex-col my-2'>
-                    <Text className='text-body'>Assigned by</Text>
-                    <Text className='text-body'>{assignment.teacher_name}</Text>
-                  </View>
-                </View>
-              ))}
-              <Link href={'/homeAssignmentTeacher'} className='text-body font-bold text-xl'>{`See All Assignments`} <AppIcon type='AntDesign' name='right' size={18} color='#2A2D32' /></Link>
+            {dataView && dataView.assignment_list.length > 0 && (
+              <View className='p-5 pt-0'>
+                {dataView.assignment_list.slice(0, 3).map((assignment, index) => (
+                  <TeachAssignmentUI assignment={assignment} index={index} pressFunction={()=> router.push({ pathname: "/homeAssignmentTeacher", params: { assignment_id: assignment.assignment_id } })}/>
+                ))}
+                <Link href={'/homeAssignmentTeacher'} className='text-body font-bold text-xl'>{`See All Assignments`} <AppIcon type='AntDesign' name='right' size={18} color='#2A2D32' /></Link>
 
-            </View>
+              </View>
+            )}
           </View>
-        ) : (
-          <Text style={styles.noDataText}>No Assignments Available</Text>
-        )}
-
       </View>
     </ScrollView>
   );

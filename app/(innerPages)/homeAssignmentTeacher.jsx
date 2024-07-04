@@ -18,6 +18,7 @@ import FixedFooter from '../../component/GlobalComps/FixedFooter';
 import ModalScreen from '../../component/GlobalComps/ModalScreen';
 import PDFreader from '../../component/GlobalComps/PDFreader'
 import { SmallPopup } from '../../component/GlobalComps/SmallPopup';
+import TeachAssignmentUI from '../../component/TeachAssignmentUI';
 
 const TeacherHomeAssignment = () => {
   const router = useRouter();
@@ -43,6 +44,11 @@ const TeacherHomeAssignment = () => {
     setModalVisible(true);
   };
 
+  const clearParams = () => {
+    router.push('/homeAssignmentTeacher');
+    loginPostFunc()
+  };
+
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -59,6 +65,13 @@ const TeacherHomeAssignment = () => {
       setDataView(null)
     }
     setLoading(false)
+    setData(null)
+    setSelectedId('')
+    setShowPDF(false)
+    setShowImage(false)
+    setShowPDFPath('')
+    setShowPDFName('')
+    setModalVisible(false)
   };
 
   useEffect(() => {
@@ -66,6 +79,12 @@ const TeacherHomeAssignment = () => {
       loginPostFunc()
     }
   }, [authToken, selectedClass]);
+
+  useEffect(() => {
+    if(Object.keys(params).length > 0 && params.assignment_id){
+      getData(params.assignment_id)
+    }
+  }, [params]);
 
   const getData = async (id) => {
     setSelectedId(id)
@@ -87,15 +106,22 @@ const TeacherHomeAssignment = () => {
     try {
       const response = await deleteAssignment(authToken, id);
       if (response) {
-        setData(response.body)
+        setData(null)
+        toast.show(response?.message, { type: "success" })
       } else {
+        toast.show(response?.message, { type: "danger" })
 
       }
     } catch (error) {
-
     }
     setData(null)
     setSelectedId('')
+    setShowPDF(false)
+    setShowImage(false)
+    setShowPDFPath('')
+    setShowPDFName('')
+    setModalVisible(false)
+    loginPostFunc()
   };
 
   return (
@@ -110,7 +136,7 @@ const TeacherHomeAssignment = () => {
               <BtnGlobal
                 styleClassName="closeBtn"
                 icon={true}
-                onPress={() => { setData(null); setSelectedId('') }}
+                onPress={() => { setData(null); setSelectedId(''); clearParams() }}
                 classNames={'mr-5 mt-2'}
                 iconName={'arrowleft'}
                 iconType={'AntDesign'}
@@ -179,32 +205,8 @@ const TeacherHomeAssignment = () => {
           <View className='p-5'>
             {dataView && dataView.length > 0 ? (
               <View >
-                {dataView.map((assignment, index) => (
-                  <Pressable onPress={() => getData(assignment.assignment_id)} key={index} className='border border-lightergrey p-4 rounded-xl mb-4 bg-light'>
-                    <Text style={{ backgroundColor: assignment.status === 'Active' ? '#10B981' : '#FE0A0A' }} className='text-light p-2 font-bold mb-2 rounded-lg w-[80px] text-center'>{assignment.status}</Text>
-                    <Text style={stylesGlobal.title}>{assignment.title}</Text>
-                    <Text className='text-lightgrey font-bold w-[90%] mt-2'>{assignment.description}</Text>
-                    <View className='flex flex-row items-center justify-between mt-2'>
-                      <View>
-                        <Text className='text-body'>Created at</Text>
-                        <View className='flex flex-row items-center'>
-                          <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                          <Text className='text-lightgrey ml-2'>{new Date(assignment.created_at).toLocaleDateString()}</Text>
-                        </View>
-                      </View>
-                      <View>
-                        <Text className='text-body'>Due date</Text>
-                        <View className='flex flex-row items-center'>
-                          <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                          <Text className='text-lightgrey ml-2'>{assignment.due_date ? new Date(assignment.due_date).toLocaleDateString() : 'N/A'}</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <View className='flex flex-col my-2'>
-                      <Text className='text-body'>Assigned by</Text>
-                      <Text className='text-body'>{assignment.teacher_name}</Text>
-                    </View>
-                  </Pressable>
+                {dataView.filter(assignment => assignment.status === 'Active').map((assignment, index) => (
+                  <TeachAssignmentUI assignment={assignment} index={index} pressFunction={()=> router.push({ pathname: "/homeAssignmentTeacher", params: { assignment_id: assignment.assignment_id } })}/>
                 ))}
               </View>
             ) : (
@@ -226,7 +228,7 @@ const TeacherHomeAssignment = () => {
       </ModalScreen>
       <SmallPopup isVisible={modalVisible} closeModal={closeModal} customModalClass={'h-[20%]'}>
         <View className='flex flex-col gap-5 items-start'>
-          <Pressable onPress={() => router.push({ pathname: "/addAssignment", params: { assignment_id: data.assignment_id, class_id: data.class_id, class_name: data.class_name, classwise_subject_id: data.classwise_subject_id, created_at: data.created_at, description: data.description, flag: data.flag, image: data.image, section_id: data.section_id, section_name: data.section_name, status: data.status, subject_name: data.subject_name, teacher_id: data.teacher_id, teacher_name: data.teacher_name, title: data.title } })} className='flex flex-row items-center'>
+          <Pressable onPress={() => {router.push({ pathname: "/editAssignment", params: { assignment_id: data.assignment_id, class_id: data.class_id, class_name: data.class_name, classwise_subject_id: data.classwise_subject_id, created_at: data.created_at, description: data.description, flag: data.flag, image: data.image, section_id: data.section_id, section_name: data.section_name, status: data.status, subject_name: data.subject_name, teacher_id: data.teacher_id, teacher_name: data.teacher_name, title: data.title } }); setModalVisible(false);}} className='flex flex-row items-center'>
             <View className='bg-[#FEC53228] rounded-[40px] h-10 w-10 flex items-center justify-center'><AppIcon type='MaterialIcons' name='edit' size={25} color={'#FEC532'} /></View>
             <Text className='text-body pl-5'>Edit Assignment</Text>
           </Pressable>

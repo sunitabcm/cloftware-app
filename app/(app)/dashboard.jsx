@@ -69,7 +69,7 @@ export default function dashboard() {
             userCred?.role_id === 3 ?
               <View style={stylesGlobal.flexCenter} className=''>
                 <View className='w-full' style={[{ display: 'flex', flexDirection: 'row', marginTop: 20, flexWrap: 'wrap', gap: 10, justifyContent: 'start', }]}>
-                <Pressable style={[stylesGlobal.flexCenter, { width: '47%', padding: 0, marginBottom: 24 }]} onPress={() => router.push('/classes')}>
+                  <Pressable style={[stylesGlobal.flexCenter, { width: '47%', padding: 0, marginBottom: 24 }]} onPress={() => router.push('/classes')}>
                     <Image
                       source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/events_svg.svg' }}
                       style={{ width: 50, height: 50 }}
@@ -102,14 +102,6 @@ export default function dashboard() {
                     />
                     <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Schedules</Text>
                   </Pressable>
-                  <Pressable style={[stylesGlobal.flexCenter, { width: '47%', padding: 0, marginBottom: 24 }]} onPress={() => router.push('/timeTable')}>
-                    <Image
-                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/timeTable_svg.svg' }}
-                      style={{ width: 50, height: 50 }}
-                      contentFit="cover"
-                    />
-                    <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Time Table</Text>
-                  </Pressable>
                   <Pressable style={[stylesGlobal.flexCenter, { width: '47%', padding: 0, marginBottom: 24 }]} onPress={() => router.push('/homeAssignmentTeacher')}>
                     <Image
                       source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/assignment_svg.svg' }}
@@ -134,14 +126,8 @@ export default function dashboard() {
                     />
                     <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Important Days</Text>
                   </Pressable>
-                  <Pressable style={[stylesGlobal.flexCenter, { width: '47%', padding: 0, marginBottom: 24 }]} onPress={() => router.push('/exams')}>
-                    <Image
-                      source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/exam_svg.svg' }}
-                      style={{ width: 50, height: 50 }}
-                      contentFit="cover"
-                    />
-                    <Text style={[stylesGlobal.innertext, { marginTop: 5 }]} className='text-center'>Exams</Text>
-                  </Pressable>
+                  <View style={[stylesGlobal.flexCenter, { width: '47%', padding: 0, marginBottom: 24 }]}></View>
+                  <View style={[stylesGlobal.flexCenter, { width: '100%', padding: 0, marginBottom: 70 }]}></View>
                 </View>
               </View>
               :
