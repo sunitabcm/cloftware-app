@@ -56,6 +56,12 @@ const HolidayList = ({ data, fetchData }) => {
 
   const renderHolidays = () => {
     const organizedData = organizeDataByMonth();
+    // Sort holidays within each month by date in ascending order
+    Object.keys(organizedData).forEach((month) => {
+      organizedData[month].sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
+    });
 
     return Object.keys(organizedData).map((month) => (
       <View key={month} className=''>
@@ -100,7 +106,7 @@ const HolidayList = ({ data, fetchData }) => {
         </TouchableOpacity>
       </View> */}
       {data.length === 0 && <EmptyScreen />}
-      <ScrollView>
+      <ScrollView className='pb-10'>
         {renderHolidays()}
       </ScrollView>
       <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
