@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const RoleSelection = ({ setRoleid, roleid }) => {
+const RoleSelection = ({ setRoleid, roleid, setbuttondisabled }) => {
 
     const handleRoleChange = (role) => {
         setRoleid(role);
+        setbuttondisabled(false)
     };
 
     return (

@@ -27,8 +27,7 @@ export async function login(email, password, roleId) {
     if (response.status === 200 || response.status === 201) {
         return response.data;
     } else {
-        console.error('Error logging in:', response.message);
-        throw new Error(response.message);
+        return response.data;
     }
 }
 
@@ -52,8 +51,20 @@ export async function forgotPassword(value) {
             return response.data;
         }
     } catch (error) {
-        console.error('Error in forgot password:', error);
-        throw error;
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.error('Error response data:', error.response.data);
+            return error.response.data;
+        } else if (error.request) {
+            // The request was made but no response was received
+            console.error('Error request data:', error.request);
+            throw new Error('No response received from the server.');
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error message:', error.message);
+            throw new Error('Error in setting up the request.');
+        }
     }
 }
 

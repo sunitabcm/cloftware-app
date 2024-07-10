@@ -110,14 +110,14 @@ const Login = () => {
     const loginPostFunc = async (valuee) => {
         try {
             const response = await login(valuee, password, roleid);
-            if (response) {
+            if (response.success === true) {
                 dispatch(setAuthToken(response.body));
                 saveAuthToken(response.body);
                 await getStudentProfile(dispatch, response.body);
                 toast.show(response.message, { type: "success" });
                 router.replace('/dashboard');
             } else {
-                throw new Error('An error occurred. Please try again.');
+                toast.show(response.message, { type: "danger" });
             }
         } catch (error) {
             const errorMessage = error.response ? error.response.data.message : error.message;
@@ -163,7 +163,7 @@ const Login = () => {
                 <View style={styles.formFields} className='p-5'>
                     <View>
                         <Text style={styles.title}>Please select if you are a teacher or student</Text>
-                        <RoleSelection setRoleid={setRoleid} roleid={roleid}/>
+                        <RoleSelection setRoleid={setRoleid} roleid={roleid} setbuttondisabled={setbuttondisabled}/>
                     </View>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Login to your account</Text>

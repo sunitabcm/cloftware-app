@@ -88,18 +88,32 @@ const ForgotPassword = () => {
         // Add your validation logic for confirm password here
         return value === password;
     };
-    const forgotPass = async (valuee) => {
 
+    const forgotPass = async (valuee) => {
         try {
             const response = await forgotPassword(valuee);
-            if (response) {
-                toast.show(response?.message, { type: "success" })
+            if (response.success === true) {
+                toast.show(response?.message, { type: "success" });
+                setShowEmailButton(false);
+                setShowOtpButton(true);
+                setEmailValid(true);
             } else {
+                toast.show(response?.message, { type: "danger" });
+                setEmailValid(false);
+                seterr(true);
             }
         } catch (error) {
-            // toast.show('An error occured, Please try again', { type: "danger" })
+            if (error.response && error.response.data) {
+                // Display the error message from the response
+                toast.show(error.response.data.message, { type: "danger" });
+            } else {
+                // Display a generic error message
+                toast.show('An error occurred, Please try again', { type: "danger" });
+            }
         }
+        setbuttondisabled(true);
     };
+    
 
     const verifyForgotPassOtp = async (email, otp) => {
 
@@ -111,7 +125,6 @@ const ForgotPassword = () => {
                 setShowOtpButton(false);
                 setButtondisabledOtp(true);
                 setShowPasswordFields(true);
-                setbuttondisabled(true);
             } else {
                 toast.show(response?.message, { type: "danger" })
             }
@@ -139,17 +152,7 @@ const ForgotPassword = () => {
     };
 
     const handleEmailSubmit = () => {
-        if (validateEmail(email)) {
-            // Call forgot password API
-            forgotPass(email);
-            setShowEmailButton(false);
-            setShowOtpButton(true);
-            setbuttondisabled(true);
-            setEmailValid(true);
-        } else {
-            setEmailValid(false);
-            seterr(true);
-        }
+        forgotPass(email);
     };
 
     const handleOtpSubmit = () => {
@@ -222,13 +225,13 @@ const ForgotPassword = () => {
                     </View>
                     <View style={styles.inputFields}>
                         <InputeFields
-                            label={"Email"}
-                            placeholder={"Enter Email"}
+                            label={"Username"}
+                            placeholder={"Enter Username"}
                             value={email}
                             disabled={!showEmailButton}
                             onChangeText={(e) => chnageemail(e)}
                         />
-                        {err && <Messages title="Invalid Email" />}
+                        {err && <Messages title="Invalid Username" />}
                     </View>
                     {showEmailButton && (
                         <BtnGlobal
