@@ -24,6 +24,9 @@ export default function TopBackHeader({ TitleName = '/Page' }) {
     else if (pathname === '/updateProfile') {
       setPageName('Update Profile')
     }
+    else if (pathname === '/updateProfileTeach') {
+      setPageName('Update Profile')
+    }
     else if (pathname === '/updatePassword') {
       setPageName('Update Password')
     }

@@ -26,6 +26,7 @@ const Board = () => {
   const [data, setData] = useState(null);
   const params = useLocalSearchParams();
   const selectedClass = useSelector((state) => state.class.selectedClass);
+  const pathname = usePathname();
 
   const loginPostFunc = async () => {
     try {
@@ -47,12 +48,12 @@ const Board = () => {
 
     }
   };
-
+console.log(pathname)
   useEffect(() => {
     if (authToken && selectedClass && Object.keys(selectedClass).length > 0) {
       loginPostFunc()
     }
-  }, [authToken, selectedClass]);
+  }, [authToken, selectedClass, router, pathname]);
 
   return (
     <ScrollView className='h-full bg-lightergrey'>

@@ -26,6 +26,7 @@ export default function _layout() {
         <Stack.Screen name='noticeBoard' />
         <Stack.Screen name='performance' />
         <Stack.Screen name='updateProfile' />
+        <Stack.Screen name='updateProfileTeach' />
         <Stack.Screen name='reports' />
         <Stack.Screen name='schedule' />
         <Stack.Screen name='studentStats' />

@@ -52,6 +52,7 @@ const AssignmentFormEdit = () => {
   const [subjects, setSubjects] = useState([]);
   const toast = useToast();
   const router = useRouter();
+  const [fileError, setFileError] = useState(false);
 
   const fetchSubjects = async (classId, sectionId) => {
     if (classId && sectionId) {
@@ -90,10 +91,10 @@ const AssignmentFormEdit = () => {
       });
 
       if (!res) {
-        console.log('No file selected');
+        setFileError(true)
         return;
       }
-
+      setFileError(false)
       const formData = new FormData();
       formData.append('folder', 'assignment');
       formData.append('file', {
@@ -111,7 +112,9 @@ const AssignmentFormEdit = () => {
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
+        setFileError(true)
       } else {
+        setFileError(true)
         console.error('Error picking file or uploading:', err);
       }
     }
@@ -180,38 +183,42 @@ const AssignmentFormEdit = () => {
               />
 
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
-              <RNPickerSelect
-                onValueChange={(value) => {
-                  setFieldValue('class', value);
-                  const selectedClass = classes.find(cls => cls.class_details.class_id === value);
-                  const sectionId = selectedClass ? selectedClass.section_id : null;
-                  if (sectionId) {
-                    fetchSubjects(value, sectionId);
-                  } else {
-                    setSubjects([]);
-                  }
-                }}
-                items={classes.map((cls) => ({
-                  label: cls.class_details.class_name,
-                  value: cls.class_details.class_id,
-                }))}
-                style={pickerSelectStyles}
-                value={values.class}
-              />
+              <View className='rounded-md capitalize bg-[#f4f4f4]'>
+                <RNPickerSelect
+                  onValueChange={(value) => {
+                    setFieldValue('class', value);
+                    const selectedClass = classes.find(cls => cls.class_details.class_id === value);
+                    const sectionId = selectedClass ? selectedClass.section_id : null;
+                    if (sectionId) {
+                      fetchSubjects(value, sectionId);
+                    } else {
+                      setSubjects([]);
+                    }
+                  }}
+                  items={classes.map((cls) => ({
+                    label: cls.class_details.class_name,
+                    value: cls.class_details.class_id,
+                  }))}
+                  style={pickerSelectStyles}
+                  value={values.class}
+                />
+              </View>
               {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
 
               {subjects && subjects.length > 0 &&
                 <>
-                  <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Subject<Text className='text-error'>*</Text></Text>
-                  <RNPickerSelect
-                    onValueChange={(value) => setFieldValue('subject', value)}
-                    items={subjects.map((subj) => ({
-                      label: subj.subject_name,
-                      value: subj.classwise_id,
-                    }))}
-                    style={pickerSelectStyles}
-                    value={values.subject}
-                  />
+                  <Text className='mb-1.5 capitalize text-sm font-bold text-body mt-5'>Subject<Text className='text-error'>*</Text></Text>
+                  <View className='rounded-md capitalize bg-[#f4f4f4]'>
+                    <RNPickerSelect
+                      onValueChange={(value) => setFieldValue('subject', value)}
+                      items={subjects.map((subj) => ({
+                        label: subj.subject_name,
+                        value: subj.classwise_id,
+                      }))}
+                      // style={pickerSelectStyles}
+                      value={values.subject}
+                    />
+                  </View>
                   {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
                 </>
               }
@@ -268,9 +275,11 @@ const AssignmentFormEdit = () => {
                       borderTopColor: 'white',
                     }}
                   >
-                    <Text className='text-body'>Drop your image/pdf here, or <Text className='text-primary'>Browse</Text></Text>
+                    <Text className='text-body'>Drop your PDF/Image here, or <Text className='text-primary'>Browse</Text></Text>
                   </View>
                 </TouchableOpacity>
+                {fileError === true && <Text style={styles.errorText}>Please Upload a file to continue</Text>}
+
                 {values.file && (
                   uploadedFileDetails && uploadedFileDetails?.flag === 1 ?
                     <View className='w-[90%]'

@@ -45,7 +45,7 @@ const AssignmentScheduleForm = () => {
   const [uploadedFileDetails, setUploadedFileDetails] = useState(null);
   const [classes, setClasses] = useState(userTeacherCred?.teacherSections || []);
   const toast = useToast();
-
+  const [fileError, setFileError] = useState(false);
   const handleFilePicker = async (setFieldValue) => {
     try {
       const res = await DocumentPicker.pick({
@@ -53,10 +53,10 @@ const AssignmentScheduleForm = () => {
       });
 
       if (!res) {
-        console.log('No file selected');
+        setFileError(true)
         return;
       }
-
+      setFileError(false)
       const formData = new FormData();
       formData.append('folder', 'assignment');
       formData.append('file', {
@@ -74,7 +74,9 @@ const AssignmentScheduleForm = () => {
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
+        setFileError(true)
       } else {
+        setFileError(true)
         console.error('Error picking file or uploading:', err);
       }
     }
@@ -128,6 +130,7 @@ const AssignmentScheduleForm = () => {
               />
 
               <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
+              <View className='rounded-md capitalize bg-[#f4f4f4]'>
               <RNPickerSelect
                 onValueChange={(value) => {
                   setFieldValue('class', value);
@@ -136,11 +139,12 @@ const AssignmentScheduleForm = () => {
                   label: cls.class_details.class_name,
                   value: cls.class_details.class_id,
                 }))}
-                style={pickerSelectStyles}
+                // style={pickerSelectStyles}
                 value={values.class}
               />
+              </View>
               {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
-              <View>
+              <View className='mt-5'>
                 <Text className='text-body font-bold'>Select PDF<Text className='text-error'>*</Text></Text>
                 <TouchableOpacity onPress={() => handleFilePicker(setFieldValue)}>
                   <View
@@ -158,6 +162,7 @@ const AssignmentScheduleForm = () => {
                     <Text className='text-body'>Drop your pdf here, or <Text className='text-primary'>Browse</Text></Text>
                   </View>
                 </TouchableOpacity>
+                {fileError === true && <Text style={styles.errorText}>Please Upload a file to continue</Text>}
                 {values.file && (
                   <View className='w-[90%]'
                   style={{

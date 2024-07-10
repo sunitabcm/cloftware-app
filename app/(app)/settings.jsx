@@ -40,8 +40,13 @@ export default function Settings() {
         <View className='rounded-t-[24px] p-5 bg-light w-full h-full min-h-[600px]'>
           <View className='h-full flex flex-col items-start gap-y-5 mb-auto'>
             {userCred && Object.keys(userCred).length > 0 &&
-              userCred?.role_id === 4 &&
+              userCred?.role_id === 4 ?
               <Pressable onPress={() => router.push('/updateProfile')} className='flex flex-row items-center'>
+                <View className='w-[40px] flex items-center'><AppIcon type='EvilIcons' name='pencil' size={40} color={'#535353'} /></View>
+                <Text className='font-bold text-body ml-5 mt-2 text-base'>Update Profile</Text>
+              </Pressable>
+              :
+              <Pressable onPress={() => router.push('/updateProfileTeach')} className='flex flex-row items-center'>
                 <View className='w-[40px] flex items-center'><AppIcon type='EvilIcons' name='pencil' size={40} color={'#535353'} /></View>
                 <Text className='font-bold text-body ml-5 mt-2 text-base'>Update Profile</Text>
               </Pressable>
