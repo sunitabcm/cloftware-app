@@ -25,9 +25,9 @@ export default function TeachAssignmentUI({ assignment, index, pressFunction }) 
                     </View>
                 </View>
             </View>
-            <View className='flex flex-col my-2'>
-                <Text className='text-body'>Assigned by</Text>
-                <Text className='text-body'>{assignment.teacher_name}</Text>
+            <View className='flex flex-row my-2'>
+                <Text className='text-body font-bold mr-1'>Subject:</Text>
+                <Text className='text-body font-bold'>{assignment.subject_name}</Text>
             </View>
         </Pressable>
     )

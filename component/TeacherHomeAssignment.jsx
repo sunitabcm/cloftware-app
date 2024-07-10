@@ -100,7 +100,7 @@ const TeacherHomeAssignment = ({ data, fetchData }) => {
               />
             </View>
           ) : (
-            <EmptyScreen height={false} />
+            <EmptyScreen height={false} url={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/emptyFolder.png'} text1='Looks like there is nothing yet!' text2='Hold back teacher will upload this soon'/>
           )}
         </View>
       </View>

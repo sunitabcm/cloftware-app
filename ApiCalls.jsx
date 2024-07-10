@@ -7,14 +7,15 @@ import { setSelectedClass } from './store/slices/classSlice';
 
 const baseURL = "https://apidev.cloftware.com/api/app";
 const Schoolid = 13
-
-export async function login(email, password) {
+// const roleId = 4;
+export async function login(email, password, roleId) {
     const response = await axios.post(
         `${baseURL}/login`,
         {
             'emailOrPhoneNumber': email,
             'password': password,
-            'school_id': Schoolid
+            'school_id': Schoolid,
+            'role_id': roleId
         },
         {
             headers: {
@@ -420,7 +421,7 @@ export async function updateProfile(accessToken, values, image) {
     }
 }
 
-export async function imageUpload(fileUrl, fileName, loginWebToken) {
+export async function imageUpload(fileUrl, fileName, loginWebToken, folder) {
     const formData = new FormData();
     formData.append('file', {
         uri: fileUrl,
@@ -428,7 +429,7 @@ export async function imageUpload(fileUrl, fileName, loginWebToken) {
         name: fileName,
         filename: 'imageFile',
     });
-    formData.append('folder', 'profile_images/student');
+    formData.append('folder', folder ? folder : 'profile_images/student');
 
     try {
         const response = await axios.post(`${baseURL}/file_upload`, formData, {
@@ -969,7 +970,7 @@ export async function getScheduleList(token, classId, sectionId) {
             class_id: classId,
             section_id: sectionId,
             offset: '0',
-            limit: '20',
+            limit: '50',
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -1093,15 +1094,15 @@ export const getSubjectListAPI = async (classId, sectionId, accessToken) => {
 
 export const updateTeacher = async (accessToken, values, image) => {
     const formData = new FormData();
-        formData.append('email', values.email);
-        formData.append('password', values.password);
+        // formData.append('email', values.email);
+        // formData.append('password', values.password);
         formData.append('school_id', values.scl_id);
         formData.append('title', values.title);
-        formData.append('first_name', values.first_name);
-        formData.append('last_name', values.last_name);
-        formData.append('dob', values.dob);
-        formData.append('gender', values.gender);
-        formData.append('nationality', values.nationality);
+        // formData.append('first_name', values.first_name);
+        // formData.append('last_name', values.last_name);
+        // formData.append('dob', values.dob);
+        // formData.append('gender', values.gender);
+        // formData.append('nationality', values.nationality);
         formData.append('phone_number', values.phone_number);
         formData.append('marital_status', values.marital_status);
         formData.append('languages_spoken', values.languages_spoken);
@@ -1111,46 +1112,46 @@ export const updateTeacher = async (accessToken, values, image) => {
         formData.append('pin_code', values.pin_code);
         formData.append('country', values.country);
         formData.append('job_title', values.job_title);
-        formData.append('date_hiring', values.date_hiring);
-        formData.append('employment_status', values.employment_status);
-        formData.append('social_security_number', values.social_security_number);
-        formData.append('emergency_contact_name', values.emergency_contact_name);
-        formData.append('emergency_contact_relationship', values.emergency_contact_relationship);
-        formData.append('emergency_phone_number', values.emergency_phone_number);
-        formData.append('spouse_name', values.spouse_name);
-        formData.append('dependents', values.dependents);
-        formData.append('educational_qualifications', values.educational_qualifications);
-        formData.append('teaching_certifications', values.teaching_certifications);
-        formData.append('previous_teaching_experience', values.previous_teaching_experience);
-        formData.append('address_line2', values.address_line2);
-        formData.append('primary_teaching_location', values.primary_teaching_location);
-        formData.append('secondary_teaching_location', values.secondary_teaching_location);
-        formData.append('professional_development_courses', values.professional_development_courses);
-        formData.append('professional_development_certificates', values.professional_development_certificates);
-        formData.append('professional_development_goals', values.professional_development_goals);
-        formData.append('skills', values.skills);
-        formData.append('interests', values.interests);
-        formData.append('hobbies', values.hobbies);
-        formData.append('emp_id', values.emp_id);
-        formData.append('work_schedule', values.work_schedule);
-        formData.append('job_description', values.job_description);
-        formData.append('performance_evaluations', values.performance_evaluations);
-        formData.append('disciplinary_actions', values.disciplinary_actions);
-        formData.append('reason_for_termination', values.reason_for_termination);
-        formData.append('salary_amount', values.salary_amount);
-        formData.append('pay_frequency', values.pay_frequency);
-        formData.append('bank_name', values.bank_name);
-        formData.append('account_number', values.account_number);
-        formData.append('ifcs_code', values.ifcs_code);
-        formData.append('routing_number', values.routing_number);
-        formData.append('tax_information', values.tax_information);
-        formData.append('retirement_plan_information', values.retirement_plan_information);
-        formData.append('insurance_information', values.insurance_information);
-        formData.append('background_check_results', values.background_check_results);
-        formData.append('drug_test_results', values.drug_test_results);
-        formData.append('driving_record', values.driving_record);
+        // formData.append('date_hiring', values.date_hiring);
+        // formData.append('employment_status', values.employment_status);
+        // formData.append('social_security_number', values.social_security_number);
+        // formData.append('emergency_contact_name', values.emergency_contact_name);
+        // formData.append('emergency_contact_relationship', values.emergency_contact_relationship);
+        // formData.append('emergency_phone_number', values.emergency_phone_number);
+        // formData.append('spouse_name', values.spouse_name);
+        // formData.append('dependents', values.dependents);
+        // formData.append('educational_qualifications', values.educational_qualifications);
+        // formData.append('teaching_certifications', values.teaching_certifications);
+        // formData.append('previous_teaching_experience', values.previous_teaching_experience);
+        // formData.append('address_line2', values.address_line2);
+        // formData.append('primary_teaching_location', values.primary_teaching_location);
+        // formData.append('secondary_teaching_location', values.secondary_teaching_location);
+        // formData.append('professional_development_courses', values.professional_development_courses);
+        // formData.append('professional_development_certificates', values.professional_development_certificates);
+        // formData.append('professional_development_goals', values.professional_development_goals);
+        // formData.append('skills', values.skills);
+        // formData.append('interests', values.interests);
+        // formData.append('hobbies', values.hobbies);
+        // formData.append('emp_id', values.emp_id);
+        // formData.append('work_schedule', values.work_schedule);
+        // formData.append('job_description', values.job_description);
+        // formData.append('performance_evaluations', values.performance_evaluations);
+        // formData.append('disciplinary_actions', values.disciplinary_actions);
+        // formData.append('reason_for_termination', values.reason_for_termination);
+        // formData.append('salary_amount', values.salary_amount);
+        // formData.append('pay_frequency', values.pay_frequency);
+        // formData.append('bank_name', values.bank_name);
+        // formData.append('account_number', values.account_number);
+        // formData.append('ifcs_code', values.ifcs_code);
+        // formData.append('routing_number', values.routing_number);
+        // formData.append('tax_information', values.tax_information);
+        // formData.append('retirement_plan_information', values.retirement_plan_information);
+        // formData.append('insurance_information', values.insurance_information);
+        // formData.append('background_check_results', values.background_check_results);
+        // formData.append('drug_test_results', values.drug_test_results);
+        // formData.append('driving_record', values.driving_record);
         formData.append('teacher_id', values.teacher_id);
-        formData.append('middle_name', values.middle_name);
+        // formData.append('middle_name', values.middle_name);
         formData.append('profile_image', image ? image : values.profile_image);
 
     const config = {

@@ -67,7 +67,7 @@ export default function BookSchedule() {
             </View>
           ))
         ) : (
-          <EmptyScreen imageType={true} />
+          <EmptyScreen url={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/emptyFolder.png'} text1='Looks like there is nothing yet!' text2='Hold back teacher will upload this soon'/>
         )}
       </View>
       <ModalScreen isVisible={showPDF} onClose={() => { setShowPDFName(''); setShowPDFPath(''); setShowPDF(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-full rounded-none p-0`}>

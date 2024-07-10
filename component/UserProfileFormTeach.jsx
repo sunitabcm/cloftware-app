@@ -16,7 +16,7 @@ import { SmallPopup } from './GlobalComps/SmallPopup';
 const validationSchema = yup.object().shape({
     // email: yup.string().email('Invalid email format').required('Email is required'),
     // password: yup.string().required('Password is required'),
-    // school_id: yup.string().required('School ID is required'),
+    // scl_id: yup.string().required('School ID is required'),
     // title: yup.string().required('Title is required'),
     // first_name: yup.string().required('First name is required'),
     // last_name: yup.string().required('Last name is required'),
@@ -31,7 +31,7 @@ const validationSchema = yup.object().shape({
     // city: yup.string().required('City is required'),
     pin_code: yup.string().matches(/^[0-9]+$/, 'Pin code must be digits'),
     // country: yup.string(),
-    job_title: yup.string().required('Job title is required'),
+    // job_title: yup.string().required('Job title is required'),
     // employment_status: yup.string().required('Employment status is required'),
     // social_security_number: yup.string().required('Social security number is required'),
     // emergency_contact_name: yup.string().required('Emergency contact name is required'),
@@ -103,13 +103,14 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
 
     const initialValues = {
         first_name: apiData?.first_name || '',
+        middle_name: apiData?.middle_name || '',
         last_name: apiData?.last_name || '',
         phone_number: apiData?.phone_number || '',
         emergency_phone_number: apiData?.emergency_phone_number || '',
         emergency_contact_name: apiData?.emergency_contact_name || '',
-        email: apiData?.email || '',
-        password: apiData?.password || '',
-        school_id: apiData?.scl_id || '',
+        email: apiData?.email_id || '',
+        password: '',  // Assuming password is not part of apiData
+        scl_id: apiData?.scl_id || '',
         title: apiData?.title || '',
         dob: apiData?.dob || '',
         gender: apiData?.gender || '',
@@ -121,9 +122,9 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
         city: apiData?.city || '',
         pin_code: apiData?.pin_code || '',
         country: apiData?.country || '',
-        job_title: apiData?.job_title || '',
-        date_hiring: apiData?.date_hiring || '',
-        employment_status: apiData?.employment_status || '',
+        job_title: apiData?.teacher_other_details.job_title || '',
+        date_hiring: apiData?.teacher_other_details.date_hiring || '',
+        employment_status: apiData?.teacher_other_details.employment_status || '',
         social_security_number: apiData?.social_security_number || '',
         spouse_name: apiData?.spouse_name || '',
         dependents: apiData?.dependents || '',
@@ -139,29 +140,29 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
         skills: apiData?.skills || '',
         interests: apiData?.interests || '',
         hobbies: apiData?.hobbies || '',
-        emp_id: apiData?.teacher_other_details?.emp_id || 0,
-        work_schedule: apiData?.work_schedule || '',
-        job_description: apiData?.job_description || '',
-        performance_evaluations: apiData?.performance_evaluations || '',
-        disciplinary_actions: apiData?.disciplinary_actions || '',
-        reason_for_termination: apiData?.reason_for_termination || '',
-        salary_amount: apiData?.salary_amount || '',
-        pay_frequency: apiData?.pay_frequency || '',
-        bank_name: apiData?.bank_name || '',
-        account_number: apiData?.account_number || '',
-        ifcs_code: apiData?.ifcs_code || '',
-        routing_number: apiData?.routing_number || '',
-        tax_information: apiData?.tax_information || '',
-        retirement_plan_information: apiData?.retirement_plan_information || '',
-        insurance_information: apiData?.insurance_information || '',
-        background_check_results: apiData?.background_check_results || '',
-        drug_test_results: apiData?.drug_test_results || '',
-        driving_record: apiData?.driving_record || '',
+        emp_id: apiData?.teacher_other_details.emp_id || 0,
+        work_schedule: apiData?.teacher_other_details.work_schedule || '',
+        job_description: apiData?.teacher_other_details.job_description || '',
+        performance_evaluations: apiData?.teacher_other_details.performance_evaluations || '',
+        disciplinary_actions: apiData?.teacher_other_details.disciplinary_actions || '',
+        reason_for_termination: apiData?.teacher_other_details.reason_for_termination || '',
+        salary_amount: apiData?.teacher_other_details.salary_amount || '',
+        pay_frequency: apiData?.teacher_other_details.pay_frequency || '',
+        bank_name: apiData?.teacher_other_details.bank_name || '',
+        account_number: apiData?.teacher_other_details.account_number || '',
+        ifcs_code: apiData?.teacher_other_details.ifcs_code || '',
+        routing_number: apiData?.teacher_other_details.routing_number || '',
+        tax_information: apiData?.teacher_other_details.tax_information || '',
+        retirement_plan_information: apiData?.teacher_other_details.retirement_plan_information || '',
+        insurance_information: apiData?.teacher_other_details.insurance_information || '',
+        background_check_results: apiData?.teacher_other_details.background_check_results || '',
+        drug_test_results: apiData?.teacher_other_details.drug_test_results || '',
+        driving_record: apiData?.teacher_other_details.driving_record || '',
         teacher_id: apiData?.teacher_id || '',
-        middle_name: apiData?.middle_name || '',
-        profile_image: apiData?.profile_image
+        profile_image: apiData?.profile_image || ''
     };
-
+    
+console.log(apiData?.teacher_other_details)
     const handleFilePicker = async () => {
         try {
             const result = await ImagePicker.openPicker({
@@ -214,7 +215,7 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
                 cropperToolbarColor: '#3498db',
             });
             if (cameraResult) {
-                const resultImage = await imageUpload(cameraResult.path, `cameraPic${randomNumber}.jpg`, authToken);
+                const resultImage = await imageUpload(cameraResult.path, `cameraPic${randomNumber}.jpg`, authToken, 'profile_images/teacher');
 
                 if (resultImage) {
                     const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL);
@@ -339,6 +340,47 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
                                 mainClass="mt-5"
                                 disabled={true}
                             />
+                            <GlobalInputs
+                                placeholder="Job Title"
+                                name="job_title"
+                                label="Job Title"
+                                onChangeText={handleChange('job_title')}
+                                onBlur={handleBlur('job_title')}
+                                value={values.job_title}
+                                error={errors.job_title}
+                                touched={touched.job_title}
+                                mainClass="mt-5"
+                                enableButton={enableButton}
+                                disabled={true}
+                            />
+
+                            <GlobalInputs
+                                placeholder="Date of Hiring"
+                                name="date_hiring"
+                                label="Date of Hiring"
+                                onChangeText={handleChange('date_hiring')}
+                                onBlur={handleBlur('date_hiring')}
+                                value={values.date_hiring}
+                                error={errors.date_hiring}
+                                touched={touched.date_hiring}
+                                mainClass="mt-5"
+                                enableButton={enableButton}
+                                disabled={true}
+                            />
+
+                            <GlobalInputs
+                                placeholder="Employment Status"
+                                name="employment_status"
+                                label="Employment Status"
+                                onChangeText={handleChange('employment_status')}
+                                onBlur={handleBlur('employment_status')}
+                                value={values.employment_status}
+                                error={errors.employment_status}
+                                touched={touched.employment_status}
+                                mainClass="mt-5"
+                                enableButton={enableButton}
+                                disabled={true}
+                            />
 
                             <GlobalInputs
                                 placeholder="Phone Number"
@@ -446,48 +488,6 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
                                 touched={touched.country}
                                 mainClass="mt-5"
                                 enableButton={enableButton}
-                            />
-
-                            <GlobalInputs
-                                placeholder="Job Title"
-                                name="job_title"
-                                label="Job Title"
-                                onChangeText={handleChange('job_title')}
-                                onBlur={handleBlur('job_title')}
-                                value={values.job_title}
-                                error={errors.job_title}
-                                touched={touched.job_title}
-                                mainClass="mt-5"
-                                enableButton={enableButton}
-                                // disabled={true}
-                            />
-
-                            <GlobalInputs
-                                placeholder="Date of Hiring"
-                                name="date_hiring"
-                                label="Date of Hiring"
-                                onChangeText={handleChange('date_hiring')}
-                                onBlur={handleBlur('date_hiring')}
-                                value={values.date_hiring}
-                                error={errors.date_hiring}
-                                touched={touched.date_hiring}
-                                mainClass="mt-5"
-                                enableButton={enableButton}
-                                disabled={true}
-                            />
-
-                            <GlobalInputs
-                                placeholder="Employment Status"
-                                name="employment_status"
-                                label="Employment Status"
-                                onChangeText={handleChange('employment_status')}
-                                onBlur={handleBlur('employment_status')}
-                                value={values.employment_status}
-                                error={errors.employment_status}
-                                touched={touched.employment_status}
-                                mainClass="mt-5"
-                                enableButton={enableButton}
-                                disabled={true}
                             />
 
                             {/* <GlobalInputs

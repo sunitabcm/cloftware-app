@@ -48,7 +48,7 @@ const Board = () => {
 
     }
   };
-console.log(pathname)
+
   useEffect(() => {
     if (authToken && selectedClass && Object.keys(selectedClass).length > 0) {
       loginPostFunc()

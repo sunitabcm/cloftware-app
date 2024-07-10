@@ -11,7 +11,7 @@ export default function LoggedInHeader() {
     const userCred = useSelector((state) => state.userDetails.user);
     const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
     const selectedClass = useSelector((state) => state.class.selectedClass);
-console.log(selectedClass)
+
     const router = useRouter()
     return (
         <View className='bg-body p-5'>
@@ -29,15 +29,21 @@ console.log(selectedClass)
                             </View>
                             :
                             userTeacherCred && Object.keys(userTeacherCred).length > 0 ?
-                            <View className='flex flex-col items-start ml-4'>
-                                <Text className=' text-light'>Welcome</Text>
-                                <Text className='font-bold text-light'>{userTeacherCred.first_name} {userTeacherCred?.last_name}</Text>
-                                {selectedClass && Object.keys(selectedClass).length > 0 && <Text className='font-normal text-light capitalize'>{selectedClass?.class_details.class_name} - {selectedClass.section_name}</Text>}
-                            </View>
-                            :
-                            <View className='flex flex-col items-start ml-4'>
-                                <Text className=' text-light'>Welcome</Text>
-                            </View>
+                                <View className='flex flex-col items-start ml-4'>
+                                    <Text className=' text-light'>Welcome</Text>
+                                    <Text className='font-bold text-light'>{userTeacherCred.first_name} {userTeacherCred?.last_name}</Text>
+                                    <Text className='font-normal text-light capitalize'>
+                                        {
+                                            userTeacherCred.teacherSections.find(section => section.is_class_teacher) ?
+                                                `${userTeacherCred.teacherSections.find(section => section.is_class_teacher).class_details.class_name} - ${userTeacherCred.teacherSections.find(section => section.is_class_teacher).section_name}` :
+                                                ''
+                                        }
+                                    </Text>
+                                </View>
+                                :
+                                <View className='flex flex-col items-start ml-4'>
+                                    <Text className=' text-light'>Welcome</Text>
+                                </View>
                         :
                         <Text></Text>
                     }

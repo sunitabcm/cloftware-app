@@ -76,7 +76,7 @@ export default function Exams() {
                 ))}
               </View>
             ) : (
-              <EmptyScreen />
+              <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today'/>
             )}
           </ScrollView>
         </>

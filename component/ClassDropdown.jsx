@@ -30,7 +30,7 @@ const ClassDropdown = () => {
         onValueChange={handleValueChange}
         placeholder={{ label: 'Select Class', value: null }}
         items={classes.map((cls) => ({
-          label: cls.class_details.class_name,
+          label: `${cls.class_details.class_name} - ${cls.section_name}`,
           value: cls.class_id,
         }))}
         value={selectedClass ? selectedClass.class_id : defaultValue}

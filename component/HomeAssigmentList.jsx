@@ -158,7 +158,7 @@ const HomeAssigmentList = ({ data, fetchData }) => {
               </View>
               <HorizontalDateScroll key={data} selectedDate={selectedDate} onDateSelect={(date) => { setSelectedDate(date); fetchData(date) }} />
               <View className='bg-lightergrey p-5'>
-                {data && Array.isArray(data) && data.length === 0 && <EmptyScreen height={false} />}
+                {data && Array.isArray(data) && data.length === 0 && <EmptyScreen height={false} url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today'/>}
                 {renderHolidays()}
               </View>
             </View>

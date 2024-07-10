@@ -19,6 +19,7 @@ import { setAuthToken } from "../store/slices/authSlice";
 import { saveAuthToken } from "../authStorage";
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
 import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
+import RoleSelection from "../component/RoleSelection";
 const Login = () => {
     const router = useRouter();
     const toast = useToast();
@@ -27,7 +28,7 @@ const Login = () => {
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
     const [buttondisabled, setbuttondisabled] = useState(true);
-    const [emailNum, setEmailNum] = useState("");
+    const [roleid, setRoleid] = useState(4);
     const [errormsg, seterrormsg] = useState("");
     const [err, seterr] = useState(false);
     const [passwderr, setpasswderr] = useState(false);
@@ -108,7 +109,7 @@ const Login = () => {
     };
     const loginPostFunc = async (valuee) => {
         try {
-            const response = await login(valuee, password);
+            const response = await login(valuee, password, roleid);
             if (response) {
                 dispatch(setAuthToken(response.body));
                 saveAuthToken(response.body);
@@ -157,9 +158,13 @@ const Login = () => {
 
     return (
         <ScrollView className='bg-light h-full'>
-            <View>
+            <View className='pb-10'>
                 <NonLoggedInBlur hidden={false} />
-                <View style={styles.formFields} className=' p-5'>
+                <View style={styles.formFields} className='p-5'>
+                    <View>
+                        <Text style={styles.title}>Please select if you are a teacher or student</Text>
+                        <RoleSelection setRoleid={setRoleid} roleid={roleid}/>
+                    </View>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Login to your account</Text>
                         <Text style={styles.innertext}>Welcome back please enter your details</Text>
@@ -205,8 +210,8 @@ const Login = () => {
                         isDisabled={buttondisabled}
                     />
                 </View>
+                <CloftwareLogo />
             </View>
-            <CloftwareLogo />
         </ScrollView>
     );
 };

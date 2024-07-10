@@ -59,10 +59,10 @@ const Classes = () => {
               {userTeacherCred.teacherSections.filter(section => !section.is_class_teacher).length > 0 && (
                 <>
                   {userTeacherCred.teacherSections.filter(section => !section.is_class_teacher).map((section, index) => (
-                    <View key={index} className={`bg-[#F5F5F7] ${section.class_id === selectedClass.class_id ? 'border-2 border-orange' : ''} rounded-xl p-4 w-full my-2.5 mb-5 flex flex-row items-center justify-between`}>
+                    <View key={index} className={`bg-[#F5F5F7] ${section.section_id === selectedClass.section_id ? 'border-2 border-orange' : ''} rounded-xl p-4 w-full my-2.5 mb-5 flex flex-row items-center justify-between`}>
                       {section.section_name && (
                         <Text style={{ color: '#535353' }} className="mb-2 text-base capitalize text-light">
-                          {section.class_details.class_name}-{section.section_name}
+                          {section.class_details.class_name} - {section.section_name}
                         </Text>
                       )}
                       <View className="flex flex-row items-center">
@@ -81,14 +81,14 @@ const Classes = () => {
             </>
           ) : (
             <View>
-              <EmptyScreen imageType={true} />
+              <EmptyScreen url={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/emptyFolder.png'} text1='Looks like there is nothing yet!' text2='Hold back teacher will upload this soon'/>
             </View>
           )}
 
         </View>
         :
         <View>
-          <EmptyScreen imageType={true} />
+          <EmptyScreen url={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/emptyFolder.png'} text1='Looks like there is nothing yet!' text2='Hold back teacher will upload this soon'/>
         </View>
       }
     </ScrollView>

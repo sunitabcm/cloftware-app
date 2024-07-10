@@ -92,7 +92,7 @@ const HolidayList = ({ data, fetchData }) => {
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>
       </View>
-      {data.length === 0 && <EmptyScreen />}
+      {data.length === 0 && <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today'/>}
       {renderHolidays()}
       <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
         <Image
