@@ -161,13 +161,13 @@ const Login = () => {
             <View className='pb-10'>
                 <NonLoggedInBlur hidden={false} />
                 <View style={styles.formFields} className='p-5 pt-0'>
-                    <View>
-                        {/* <Text style={styles.title}>Please select if you are a teacher or student</Text> */}
-                        <RoleSelection setRoleid={setRoleid} roleid={roleid} setbuttondisabled={setbuttondisabled}/>
-                    </View>
                     <View style={styles.textcontainer}>
                         <Text style={styles.title}>Login to your account</Text>
-                        <Text style={styles.innertext}>Welcome back please enter your details</Text>
+                        {/* <Text style={styles.innertext}>Welcome back please enter your details</Text> */}
+                    </View>
+                    <View className='mb-4'>
+                    <Text style={styles.mobile}>Select your role</Text>
+                    <RoleSelection setRoleid={setRoleid} roleid={roleid} setbuttondisabled={setbuttondisabled}/>
                     </View>
                     <View style={styles.inputFields}>
                         <InputeFields
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     textcontainer: {
-        paddingTop: 30,
-        paddingBottom: 30
+        // paddingTop: 30,
+        paddingBottom: 8
     },
     title: {
         fontSize: 24,
@@ -274,7 +274,12 @@ const styles = StyleSheet.create({
     btnLink: {
         //fontWeight: 500,
     },
-
+    mobile: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 8,
+        color: '#2A2D32'
+      },
 });
 
 export default Login;

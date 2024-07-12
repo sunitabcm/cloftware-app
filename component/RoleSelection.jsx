@@ -10,7 +10,7 @@ const RoleSelection = ({ setRoleid, roleid, setbuttondisabled }) => {
 
     return (
         <View style={styles.container}>
-          <Text style={styles.label}>Select Role</Text>
+          {/* <Text style={styles.label}>Select Role</Text> */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[
