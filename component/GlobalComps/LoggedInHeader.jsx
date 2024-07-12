@@ -19,7 +19,7 @@ export default function LoggedInHeader() {
                 <IconHeader />
             </View>
             <View className='flex flex-row items-center justify-between mt-10'>
-                <Pressable onPress={() => router.push('/updateProfile')} className='flex flex-row items-center mt-3'>
+                <Pressable onPress={() => {userCred && Object.keys(userCred).length > 0 && userCred?.role_id === 3 ? router.push('/updateProfileTeach') : router.push('/updateProfile')}} className='flex flex-row items-center mt-3'>
                     <AvatarIcon />
                     {userCred && Object.keys(userCred).length > 0 ?
                         userCred?.role_id === 4 ?

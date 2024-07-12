@@ -115,7 +115,7 @@ const AssignmentScheduleForm = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
+          {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched, isSubmitting }) => (
             <View>
               <GlobalInputs
                 label="Title"
@@ -136,7 +136,7 @@ const AssignmentScheduleForm = () => {
                   setFieldValue('class', value);
                 }}
                 items={classes.map((cls) => ({
-                  label: cls.class_details.class_name,
+                  label: `${cls.class_details.class_name} - ${cls.section_name}`,
                   value: cls.class_details.class_id,
                 }))}
                 // style={pickerSelectStyles}
@@ -162,7 +162,7 @@ const AssignmentScheduleForm = () => {
                     <Text className='text-body'>Drop your pdf here, or <Text className='text-primary'>Browse</Text></Text>
                   </View>
                 </TouchableOpacity>
-                {fileError === true && <Text style={styles.errorText}>Please Upload a file to continue</Text>}
+                {!values.file && touched.file && errors.file && <Text style={styles.errorText}>A file is required</Text>}
                 {values.file && (
                   <View className='w-[90%]'
                   style={{

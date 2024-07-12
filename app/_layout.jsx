@@ -48,7 +48,7 @@ export default function Layout() {
           <Pressable onPress={() => router.push('/network')}><Text>Open Network</Text></Pressable>
           <ToastProvider
             placement="top"
-            duration={1200}
+            duration={1400}
             animationType='slide-in'
             animationDuration={250}
             successColor="#84e38d"

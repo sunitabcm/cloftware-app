@@ -192,7 +192,7 @@ console.log(apiData?.teacher_other_details)
                     const data = await getProfileTeacher(dispatch, authToken);
                 }
             } else {
-                toast.show('Something went wrong ', { type: 'success' });
+                toast.show('Something went wrong ', { type: 'danger' });
             }
         } catch (err) {
             if (err.code !== 'E_PICKER_CANCELLED') {
@@ -225,7 +225,7 @@ console.log(apiData?.teacher_other_details)
                         const data = await getProfileTeacher(dispatch, authToken);
                     }
                 } else {
-                    toast.show('Something went wrong ', { type: 'success' });
+                    toast.show('Something went wrong ', { type: 'danger' });
                 }
             }
         } catch (err) {

@@ -160,9 +160,9 @@ const Login = () => {
         <ScrollView className='bg-light h-full'>
             <View className='pb-10'>
                 <NonLoggedInBlur hidden={false} />
-                <View style={styles.formFields} className='p-5'>
+                <View style={styles.formFields} className='p-5 pt-0'>
                     <View>
-                        <Text style={styles.title}>Please select if you are a teacher or student</Text>
+                        {/* <Text style={styles.title}>Please select if you are a teacher or student</Text> */}
                         <RoleSelection setRoleid={setRoleid} roleid={roleid} setbuttondisabled={setbuttondisabled}/>
                     </View>
                     <View style={styles.textcontainer}>

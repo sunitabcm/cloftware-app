@@ -9,55 +9,73 @@ const RoleSelection = ({ setRoleid, roleid, setbuttondisabled }) => {
     };
 
     return (
-        <View className='mt-4'>
-
+        <View style={styles.container}>
+          <Text style={styles.label}>Select Role</Text>
+          <View style={styles.buttonContainer}>
             <TouchableOpacity
-                style={styles.checkboxContainer}
-                onPress={() => handleRoleChange(4)}
+              style={[
+                styles.button,
+                roleid === 3 ? styles.selectedButton : styles.unselectedButton,
+                { borderTopLeftRadius: 25, borderBottomLeftRadius: 25 },
+              ]}
+              onPress={() => handleRoleChange(3)}
             >
-                <View style={[styles.checkbox, roleid === 4 && styles.checkedCheckbox]} />
-                <Text className='text-body text-sm'>Student</Text>
+              <Text style={roleid === 3 ? styles.selectedText : styles.unselectedText}>Teacher</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
-                style={styles.checkboxContainer}
-                onPress={() => handleRoleChange(3)}
+              style={[
+                styles.button,
+                roleid === 4 ? styles.selectedButton : styles.unselectedButton,
+                { borderTopRightRadius: 25, borderBottomRightRadius: 25 },
+              ]}
+              onPress={() => handleRoleChange(4)}
             >
-                <View style={[styles.checkbox, roleid === 3 && styles.checkedCheckbox]} />
-                <Text className='text-body text-sm'>Teacher</Text>
+              <Text style={roleid === 4 ? styles.selectedText : styles.unselectedText}>Student</Text>
             </TouchableOpacity>
+          </View>
         </View>
-    );
-};
-
-const styles = StyleSheet.create({
-    container: {
+      );
+    };
+    
+    const styles = StyleSheet.create({
+      container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    label: {
-        fontSize: 20,
-        marginBottom: 20,
-    },
-    checkboxContainer: {
+      },
+      label: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+        marginBottom: 15
+      },
+      buttonContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    checkbox: {
-        width: 20,
-        height: 20,
+        borderRadius: 25,
         borderWidth: 1,
-        borderColor: '#000',
-        marginRight: 10,
-    },
-    checkedCheckbox: {
-        backgroundColor: '#000',
-    },
-    checkboxLabel: {
-        fontSize: 18,
-    },
-});
-
-export default RoleSelection;
+        borderColor: '#10B981',
+        overflow: 'hidden',
+      },
+      button: {
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        flex: 1,
+        alignItems: 'center',
+      },
+      selectedButton: {
+        backgroundColor: '#10B981',
+      },
+      unselectedButton: {
+        backgroundColor: '#E0E0E0',
+      },
+      selectedText: {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+      },
+      unselectedText: {
+        color: '#000',
+        fontWeight: 'bold',
+      },
+    });
+    
+    export default RoleSelection;

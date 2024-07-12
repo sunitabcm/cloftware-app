@@ -25,7 +25,7 @@ export default function TeachScheduleUI({ schedule, index }) {
                         contentFit="cover"
                     />
                     <View key={index} className='flex flex-col ml-5'>
-                        <Text className=' text-body text-lg font-bold'>{schedule.title}</Text>
+                        <Text className=' text-body text-lg font-bold w-[80%]'>{schedule.title}</Text>
                         <Text className=' text-body'>Uploaded on {new Date(schedule.created_at).toLocaleDateString()}</Text>
                     </View>
                 </TouchableOpacity>

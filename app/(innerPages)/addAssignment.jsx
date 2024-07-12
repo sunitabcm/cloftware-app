@@ -196,7 +196,7 @@ const AssignmentForm = () => {
                   }
                 }}
                 items={classes.map((cls) => ({
-                  label: cls.class_details.class_name,
+                  label: `${cls.class_details.class_name} - ${cls.section_name}`,
                   value: cls.class_details.class_id,
                 }))}
                 // style={pickerSelectStyles}
@@ -279,7 +279,7 @@ const AssignmentForm = () => {
                     <Text className='text-body'>Drop your PDF/Image here, or <Text className='text-primary'>Browse</Text></Text>
                   </View>
                 </TouchableOpacity>
-                {fileError === true && <Text style={styles.errorText}>Please Upload a file to continue</Text>}
+                {!values.file && touched.file && errors.file && <Text style={styles.errorText}>A file is required</Text>}
                 {values.file && (
                   uploadedFileDetails && uploadedFileDetails?.flag === 1 ?
                     <View className='w-[90%]'
