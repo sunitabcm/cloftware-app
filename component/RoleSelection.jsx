@@ -5,7 +5,7 @@ const RoleSelection = ({ setRoleid, roleid, setbuttondisabled }) => {
 
     const handleRoleChange = (role) => {
         setRoleid(role);
-        setbuttondisabled(false)
+        // setbuttondisabled(false)
     };
 
     return (
@@ -30,7 +30,7 @@ const RoleSelection = ({ setRoleid, roleid, setbuttondisabled }) => {
               ]}
               onPress={() => handleRoleChange(4)}
             >
-              <Text style={roleid === 4 ? styles.selectedText : styles.unselectedText}>Student</Text>
+              <Text style={roleid === 4 ? styles.selectedText : styles.unselectedText}>Parent</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -57,7 +57,7 @@ const RoleSelection = ({ setRoleid, roleid, setbuttondisabled }) => {
         overflow: 'hidden',
       },
       button: {
-        paddingVertical: 15,
+        paddingVertical: 10,
         paddingHorizontal: 20,
         flex: 1,
         alignItems: 'center',

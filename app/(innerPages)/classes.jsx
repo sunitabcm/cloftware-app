@@ -19,7 +19,7 @@ const Classes = () => {
   const selectedClass = useSelector((state) => state.class.selectedClass);
   const redirect = async (section) => {
     await dispatch(setSelectedClass(section)); // Wait for dispatch to complete
-    router.push('/board');
+    router.push('/classroom');
   }
 
   return (
@@ -35,7 +35,7 @@ const Classes = () => {
                     <View key={index} className="bg-secondary rounded-xl p-6 w-full my-5">
                       {section.section_name && (
                         <Text style={[stylesGlobal.title, { color: '#ffffff' }]} className="mb-5 capitalize text-light">
-                          Classroom {section.class_details.class_name}-{section.section_name}
+                          {section.class_details.class_name}-{section.section_name}
                         </Text>
                       )}
                       <View className="flex flex-row items-center justify-between w-full">

@@ -51,10 +51,10 @@ export default function Layout() {
             duration={1400}
             animationType='slide-in'
             animationDuration={250}
-            successColor="#84e38d"
-            dangerColor="#ffa8a8"
-            warningColor="#ffe791"
-            normalColor="#fafafa"
+            successColor="#10B981"
+            dangerColor="#FE0A0A"
+            warningColor="#FEC532"
+            normalColor="#9747FF"
             successIcon={<AppIcon type='AntDesign' name='checkcircle' size={20} color='#EEEEEE' />}
             dangerIcon={<AppIcon type='MaterialIcons' name='dangerous' size={20} color='#EEEEEE' />}
             warningIcon={<AppIcon type='AntDesign' name='warning' size={20} color='#EEEEEE' />}

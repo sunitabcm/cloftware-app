@@ -225,13 +225,13 @@ const ForgotPassword = () => {
                     </View>
                     <View style={styles.inputFields}>
                         <InputeFields
-                            label={"Username"}
-                            placeholder={"Enter Username"}
+                            label={"Email/Username"}
+                            placeholder={"Enter Email/Username"}
                             value={email}
                             disabled={!showEmailButton}
                             onChangeText={(e) => chnageemail(e)}
                         />
-                        {err && <Messages title="Invalid Username" />}
+                        {err && <Messages title="Invalid Email/Username" />}
                     </View>
                     {showEmailButton && (
                         <BtnGlobal

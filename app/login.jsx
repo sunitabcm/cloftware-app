@@ -12,7 +12,7 @@ import BtnGlobal from "../component/GlobalComps/BtnGlobal";
 import Messages from "../component/Messages";
 import { thirdColorBlack, fiveColorBlack } from "../component/stylesheet";
 import { useToast } from 'react-native-toast-notifications';
-import { getStudentProfile, login, verifyLoginOtp } from "../ApiCalls";
+import { getStudentProfile, login } from "../ApiCalls";
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { setAuthToken } from "../store/slices/authSlice";
@@ -20,6 +20,7 @@ import { saveAuthToken } from "../authStorage";
 import CloftwareLogo from "../component/GlobalComps/CloftwareLogo";
 import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
 import RoleSelection from "../component/RoleSelection";
+import LoadingAnimation from "../component/GlobalComps/loadingAnimation";
 const Login = () => {
     const router = useRouter();
     const toast = useToast();
@@ -28,9 +29,10 @@ const Login = () => {
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
     const [buttondisabled, setbuttondisabled] = useState(true);
-    const [roleid, setRoleid] = useState(4);
+    const [roleid, setRoleid] = useState(3);
     const [errormsg, seterrormsg] = useState("");
     const [err, seterr] = useState(false);
+    const [loader, setLoader] = useState(false);
     const [passwderr, setpasswderr] = useState(false);
     const authToken = useSelector((state) => state.auth.authToken)
     const userCred = useSelector((state) => state.userDetails.user);
@@ -54,6 +56,14 @@ const Login = () => {
             }
         }
     }, [router, authToken, userCred]);
+
+    useEffect(() => {
+        if(password.length !== 0 && email.length !== 0){
+            setbuttondisabled(false)
+        } else {
+            setbuttondisabled(true)
+        }
+    }, [buttondisabled, password, email, roleid]);
 
     const handleSubmit = (event) => {
         setbuttondisabled(true)
@@ -94,11 +104,8 @@ const Login = () => {
     // };
     const validate = (values) => {
         const errors = {};
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
         if (!values.email) {
-            errors.email = "Email is required!";
-        } else if (!regex.test(values.email)) {
-            errors.email = "This is not a valid email format!";
+            errors.email = "Email/Username is required!";
         }
         if (!values.password) {
             errors.password = "Password is required";
@@ -108,6 +115,7 @@ const Login = () => {
         return errors;
     };
     const loginPostFunc = async (valuee) => {
+        setLoader(true)
         try {
             const response = await login(valuee, password, roleid);
             if (response.success === true) {
@@ -116,6 +124,7 @@ const Login = () => {
                 await getStudentProfile(dispatch, response.body);
                 toast.show(response.message, { type: "success" });
                 router.replace('/dashboard');
+                setLoader(false)
             } else {
                 toast.show(response.message, { type: "danger" });
             }
@@ -124,6 +133,7 @@ const Login = () => {
             toast.show(errorMessage, { type: "danger" });
         }
         // setbuttondisabled(false);
+        setLoader(false)
     };
 
 
@@ -158,6 +168,9 @@ const Login = () => {
 
     return (
         <ScrollView className='bg-light h-full'>
+            {loader ?
+ <LoadingAnimation />
+            :
             <View className='pb-10'>
                 <NonLoggedInBlur hidden={false} />
                 <View style={styles.formFields} className='p-5 pt-0'>
@@ -171,12 +184,12 @@ const Login = () => {
                     </View>
                     <View style={styles.inputFields}>
                         <InputeFields
-                            label={"Email"}
-                            placeholder={"Enter Email"}
+                            label={"Email/Username"}
+                            placeholder={"Enter Email/Username"}
                             value={email}
                             onChangeText={(e) => chnageemail(e)}
                         />
-                        {err && <Messages title="Email is Required" />}
+                        {err && <Messages title="Email/Username is Required" />}
                         {errors.email && !err && <Messages title={errors.email} />}
                     </View>
 
@@ -212,6 +225,7 @@ const Login = () => {
                 </View>
                 <CloftwareLogo />
             </View>
+}
         </ScrollView>
     );
 };

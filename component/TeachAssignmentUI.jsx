@@ -2,7 +2,7 @@ import { View, Text, Pressable } from 'react-native'
 import React from 'react'
 import { stylesGlobal } from '../styles/global'
 import AppIcon from './GlobalComps/AppIcon'
-
+import dayjs from 'dayjs'
 export default function TeachAssignmentUI({ assignment, index, pressFunction }) {
     return (
         <Pressable onPress={() => pressFunction()} key={index} className='border border-lightergrey p-4 rounded-xl mb-4 bg-light'>
@@ -14,14 +14,14 @@ export default function TeachAssignmentUI({ assignment, index, pressFunction }) 
                     <Text className='text-body'>Created at</Text>
                     <View className='flex flex-row items-center'>
                         <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                        <Text className='text-lightgrey ml-2'>{new Date(assignment.created_at).toLocaleDateString()}</Text>
+                        <Text className='text-lightgrey ml-2'>{dayjs(assignment.created_at).format('DD-MMM-YYYY')}</Text>
                     </View>
                 </View>
                 <View>
                     <Text className='text-body'>Due date</Text>
                     <View className='flex flex-row items-center'>
                         <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                        <Text className='text-lightgrey ml-2'>{assignment.due_date ? new Date(assignment.due_date).toLocaleDateString() : 'N/A'}</Text>
+                        <Text className='text-lightgrey ml-2'>{assignment.due_date ? dayjs(assignment.due_date).format('DD-MMM-YYYY') : 'N/A'}</Text>
                     </View>
                 </View>
             </View>

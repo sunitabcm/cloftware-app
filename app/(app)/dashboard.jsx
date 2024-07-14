@@ -1,7 +1,7 @@
-import { View, Text, Pressable, ScrollView } from 'react-native'
+import { View, Text, Pressable, ScrollView, BackHandler, Alert } from 'react-native';
 import React, { useEffect } from 'react'
 import { stylesGlobal } from '../../styles/global';
-import { useRouter } from "expo-router";
+import { useRouter, usePathname } from "expo-router";
 import { Image } from 'expo-image';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteAuthTeacherData, deleteAuthToken, deleteAuthUserData } from '../../authStorage';
@@ -14,6 +14,8 @@ import { updateUserTeacher } from '../../store/slices/teacherSlice';
 import { setSelectedClass } from '../../store/slices/classSlice';
 export default function dashboard() {
   const router = useRouter();
+  const pathname = usePathname();
+
   const authToken = useSelector((state) => state.auth.authToken)
   const userCred = useSelector((state) => state.userDetails.user);
   const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
@@ -45,21 +47,38 @@ export default function dashboard() {
     }
   };
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (authToken && userCred && Object.keys(userCred).length > 0 && userCred?.role_id === 3) {
-        if (userTeacherCred && Object.keys(userTeacherCred).length > 0) {
-          const defaultClass = userTeacherCred.teacherSections.find((cls) => cls.is_class_teacher === 1);
-          if (defaultClass) {
-            dispatch(setSelectedClass(defaultClass));
+    if (pathname === '/dashboard') {
+      const timer = setTimeout(() => {
+        if (authToken && userCred && Object.keys(userCred).length > 0 && userCred?.role_id === 3) {
+          if (userTeacherCred && Object.keys(userTeacherCred).length > 0) {
+            const defaultClass = userTeacherCred.teacherSections.find((cls) => cls.is_class_teacher === 1);
+            if (defaultClass) {
+              dispatch(setSelectedClass(defaultClass));
+            }
+          } else {
+            fetchData2(authToken);
           }
-        } else {
-          fetchData2(authToken)
         }
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [authToken, userCred]);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
 
+    const backAction = () => {
+      Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    return () => backHandler.remove();
+  }, [authToken, userCred, pathname]);
   return (
     <>
       <LoggedInHeader />

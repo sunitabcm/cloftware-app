@@ -11,14 +11,14 @@ import RNPickerSelect from 'react-native-picker-select';
 import { useToast } from 'react-native-toast-notifications';
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
-import { uploadFileAPI, addEditAssignmentAPI, getClassListAPI, getSubjectListAPI } from '../../ApiCalls';
+import { uploadFileAPI, addEditAssignmentAPI, getSubjectListAPI } from '../../ApiCalls';
 import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   class: Yup.string().required('Class is required'),
   subject: Yup.string().required('Subject is required'),
-  dueDate: Yup.date().required('Due date is required'),
+  dueDate: Yup.date().required('Due date is required').min(dayjs().startOf('day').toDate(), 'Due date cannot be in the past'),
   description: Yup.string().required('Description is required'),
   file: Yup.mixed().required('A file is required'),
 });
@@ -195,6 +195,7 @@ const AssignmentFormEdit = () => {
                       setSubjects([]);
                     }
                   }}
+                  placeholder={{ label: 'Select Class', value: null }}
                   items={classes.map((cls) => ({
                     label: `${cls.class_details.class_name} - ${cls.section_name}`,
                     value: cls.class_details.class_id,
@@ -211,6 +212,7 @@ const AssignmentFormEdit = () => {
                   <View className='rounded-md capitalize bg-[#f4f4f4]'>
                     <RNPickerSelect
                       onValueChange={(value) => setFieldValue('subject', value)}
+                      placeholder={{ label: 'Select Subject', value: null }}
                       items={subjects.map((subj) => ({
                         label: subj.subject_name,
                         value: subj.classwise_id,
@@ -233,7 +235,7 @@ const AssignmentFormEdit = () => {
                 color: "#444",
                 marginBottom: 20
               }} onPress={showDatePicker}>
-                <Text>{dayjs(leaveDate).format('YYYY-MM-DD')}</Text>
+                <Text>{dayjs(leaveDate).format('DD-MMM-YYYY')}</Text>
               </TouchableOpacity>
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}

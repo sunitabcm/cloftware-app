@@ -112,7 +112,8 @@ const FixedFooter = () => {
 					{userCred && Object.keys(userCred).length > 0 &&
 						userCred?.role_id === 3 ?
 						<View className='flex flex-col justify-center items-center mb-40'>
-							<Pressable onPress={() => { selectedClass && selectedClass.is_class_teacher === 0 ? toast.show('Only Class teacher can mark Attendance', {type: "danger"}) : router.push('/markAttendance'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
+							{selectedClass && selectedClass.is_class_teacher === 1 && 
+							<Pressable onPress={() => {router.push('/markAttendance'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 								<Image
 									source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/attendance_svg.svg' }}
 									style={{ width: 25, height: 25 }}
@@ -120,6 +121,7 @@ const FixedFooter = () => {
 								/>
 								<Text>Mark Attendance</Text>
 							</Pressable>
+}
 							<Pressable onPress={() => { router.push('/addAssignment'); handleClose() }} className='py-4 bg-light w-[250px] pl-5 flex flex-row items-center gap-x-3 rounded-full border mb-5 border-lightgrey'>
 								<Image
 									source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/assignment_svg.svg' }}

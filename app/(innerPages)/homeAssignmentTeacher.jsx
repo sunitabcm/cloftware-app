@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet, ScrollView, Dimensions, Pressable } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import dayjs from 'dayjs';
 import { stylesGlobal } from "../../styles/global";
 import { useToast } from 'react-native-toast-notifications';
-import { ClassViewData, addEditApplyLeave, assignmentDetails, deleteAssignment, getAssignmentList, getProfileData } from "../../ApiCalls";
-import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
+import { assignmentDetails, deleteAssignment, getAssignmentList } from "../../ApiCalls";
+import { Link, useLocalSearchParams, useRouter, usePathname } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
-import GlobalDatePicker from '../../component/GlobalComps/GlobalDatePicker';
-import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
-import AttendanceBox from '../../component/AttendanceBar';
 import ClassDropdown from '../../component/ClassDropdown';
 import AppIcon from '../../component/GlobalComps/AppIcon';
 import { Image } from 'expo-image';
@@ -19,11 +14,13 @@ import ModalScreen from '../../component/GlobalComps/ModalScreen';
 import PDFreader from '../../component/GlobalComps/PDFreader'
 import { SmallPopup } from '../../component/GlobalComps/SmallPopup';
 import TeachAssignmentUI from '../../component/TeachAssignmentUI';
-
+import EmptyScreen from '../../component/GlobalComps/EmptyScreen';
+import dayjs from 'dayjs';
 const TeacherHomeAssignment = () => {
   const router = useRouter();
   const toast = useToast();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const pathname = usePathname();
   const authToken = useSelector((state) => state.auth.authToken)
   const userCred = useSelector((state) => state.userDetails.user);
   const [dataView, setDataView] = useState(null);
@@ -57,6 +54,7 @@ const TeacherHomeAssignment = () => {
     try {
       const response = await getAssignmentList(authToken, selectedClass?.class_id, selectedClass?.section_id);
       if (response) {
+        console.log(response)
         setDataView(response.body)
       } else {
         setDataView(null)
@@ -78,7 +76,7 @@ const TeacherHomeAssignment = () => {
     if (authToken && selectedClass && Object.keys(selectedClass).length > 0) {
       loginPostFunc()
     }
-  }, [authToken, selectedClass]);
+  }, [authToken, selectedClass, pathname]);
 
   useEffect(() => {
     if(Object.keys(params).length > 0 && params.assignment_id){
@@ -154,14 +152,14 @@ const TeacherHomeAssignment = () => {
                 <Text className='text-body'>Created at</Text>
                 <View className='flex flex-row items-center'>
                   <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                  <Text className='text-lightgrey ml-2'>{new Date(data.created_at).toLocaleDateString()}</Text>
+                  <Text className='text-lightgrey ml-2'>{dayjs(data.created_at).format('DD-MMM-YYYY')}</Text>
                 </View>
               </View>
               <View>
                 <Text className='text-body'>Due date</Text>
                 <View className='flex flex-row items-center'>
                   <AppIcon type='AntDesign' name='calendar' size={25} color='#999999' />
-                  <Text className='text-lightgrey ml-2'>{data.due_date ? new Date(data.due_date).toLocaleDateString() : 'N/A'}</Text>
+                  <Text className='text-lightgrey ml-2'>{data.due_date ? dayjs(data.due_date).format('DD-MMM-YYYY') : 'N/A'}</Text>
                 </View>
               </View>
             </View>
@@ -203,14 +201,14 @@ const TeacherHomeAssignment = () => {
           </View>
           :
           <View className='p-5'>
-            {dataView && dataView.length > 0 ? (
+            {dataView && dataView.length > 0 && dataView.filter(assignment => assignment.status === 'Active').length > 0 ? (
               <View >
                 {dataView.filter(assignment => assignment.status === 'Active').map((assignment, index) => (
                   <TeachAssignmentUI assignment={assignment} index={index} pressFunction={()=> router.push({ pathname: "/homeAssignmentTeacher", params: { assignment_id: assignment.assignment_id } })}/>
                 ))}
               </View>
             ) : (
-              <Text style={styles.noDataText}>No Assignments Available</Text>
+              <EmptyScreen url={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/emptyFolder.png'} text1='Looks like there is no Active Assignment' text2='Hold back teacher will upload this soon'/>
             )}
           </View>
         }

@@ -4,7 +4,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
 import { stylesGlobal } from "../../styles/global";
 import { useToast } from 'react-native-toast-notifications';
-import { ClassViewData, addEditApplyLeave, getAssignmentList, getProfileData, getScheduleList } from "../../ApiCalls";
+import { getScheduleList } from "../../ApiCalls";
 import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
 import GlobalDatePicker from '../../component/GlobalComps/GlobalDatePicker';

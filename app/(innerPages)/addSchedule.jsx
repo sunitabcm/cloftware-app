@@ -11,7 +11,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { useToast } from 'react-native-toast-notifications';
 import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
 import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
-import { uploadFileAPI, addEditAssignmentAPI, getClassListAPI, getSubjectListAPI, addEditSchedule } from '../../ApiCalls';
+import { uploadFileAPI, addEditSchedule } from '../../ApiCalls';
 import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 
 const validationSchema = Yup.object({
@@ -49,7 +49,7 @@ const AssignmentScheduleForm = () => {
   const handleFilePicker = async (setFieldValue) => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
+        type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
       });
 
       if (!res) {
@@ -135,6 +135,7 @@ const AssignmentScheduleForm = () => {
                 onValueChange={(value) => {
                   setFieldValue('class', value);
                 }}
+                placeholder={{ label: 'Select Class', value: null }}
                 items={classes.map((cls) => ({
                   label: `${cls.class_details.class_name} - ${cls.section_name}`,
                   value: cls.class_details.class_id,
@@ -145,7 +146,7 @@ const AssignmentScheduleForm = () => {
               </View>
               {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
               <View className='mt-5'>
-                <Text className='text-body font-bold'>Select PDF<Text className='text-error'>*</Text></Text>
+                <Text className='text-body font-bold'>Select PDF/Image<Text className='text-error'>*</Text></Text>
                 <TouchableOpacity onPress={() => handleFilePicker(setFieldValue)}>
                   <View
                     className='mt-3 mb-5 flex justify-center items-center flex-col'
@@ -159,7 +160,7 @@ const AssignmentScheduleForm = () => {
                       borderTopColor: 'white',
                     }}
                   >
-                    <Text className='text-body'>Drop your pdf here, or <Text className='text-primary'>Browse</Text></Text>
+                    <Text className='text-body'>Drop your PDF/Image here, or <Text className='text-primary'>Browse</Text></Text>
                   </View>
                 </TouchableOpacity>
                 {!values.file && touched.file && errors.file && <Text style={styles.errorText}>A file is required</Text>}

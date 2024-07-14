@@ -73,7 +73,7 @@ const RequestLeave = () => {
         />
         <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Select Leave Date</Text>
         <TouchableOpacity style={stylesGlobal.primaryInput} className='' onPress={showDatePicker}>
-          <Text className='text-body'>{dayjs(leaveDate).format('YYYY-MM-DD')}</Text>
+          <Text className='text-body'>{dayjs(leaveDate).format('DD-MMM-YYYY')}</Text>
         </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isDatePickerVisible}

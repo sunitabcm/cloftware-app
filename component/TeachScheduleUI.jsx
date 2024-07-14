@@ -5,7 +5,7 @@ import AppIcon from './GlobalComps/AppIcon'
 import { Link } from 'expo-router'
 import PDFreader from './GlobalComps/PDFreader'
 import ModalScreen from './GlobalComps/ModalScreen'
-
+import dayjs from 'dayjs'
 export default function TeachScheduleUI({ schedule, index }) {
     const [showPDF, setShowPDF] = useState(false);
     const [showPDFPath, setShowPDFPath] = useState('');
@@ -26,7 +26,7 @@ export default function TeachScheduleUI({ schedule, index }) {
                     />
                     <View key={index} className='flex flex-col ml-5'>
                         <Text className=' text-body text-lg font-bold w-[80%]'>{schedule.title}</Text>
-                        <Text className=' text-body'>Uploaded on {new Date(schedule.created_at).toLocaleDateString()}</Text>
+                        <Text className=' text-body'>Uploaded on {dayjs(schedule.created_at).format('DD-MMM-YYYY')}</Text>
                     </View>
                 </TouchableOpacity>
                 <Link href={schedule.file_upload}><View className='w-[35px] h-[35px] rounded-full bg-[#10B98129] flex justify-center items-center'><AppIcon type='Feather' name='download-outline' size={18} color={'#10B981'} /></View></Link>
