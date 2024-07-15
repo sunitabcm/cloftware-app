@@ -21,7 +21,6 @@ module.exports = {
 			'success': '#10B981',
 			'magenta': '#9747FF',
 			'disabled': '#CCCCCC',
-			'orange':'#FF6F1B',
 			'leave':'#5F6369'
 		}
 	},

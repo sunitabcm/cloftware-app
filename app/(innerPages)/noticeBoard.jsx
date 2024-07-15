@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useToast } from 'react-native-toast-notifications';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { getNoticeBoardList } from '../../ApiCalls';
 import { stylesGlobal } from '../../styles/global';
 import AppIcon from '../../component/GlobalComps/AppIcon';
@@ -13,7 +12,18 @@ import EmptyScreen from '../../component/GlobalComps/EmptyScreen'
 import { Image } from 'expo-image';
 import { Video } from 'expo-av';
 import ModalScreen from '../../component/GlobalComps/ModalScreen';
-import { Link } from 'expo-router';
+import RNPickerSelect from 'react-native-picker-select';
+
+const months = [
+  { label: 'January', value: '01' }, { label: 'February', value: '02' },
+  { label: 'March', value: '03' }, { label: 'April', value: '04' },
+  { label: 'May', value: '05' }, { label: 'June', value: '06' },
+  { label: 'July', value: '07' }, { label: 'August', value: '08' },
+  { label: 'September', value: '09' }, { label: 'October', value: '10' },
+  { label: 'November', value: '11' }, { label: 'December', value: '12' }
+];
+
+const years = Array.from(new Array(30), (val, index) => ({ label: (2024 - index).toString(), value: (2024 - index).toString() }));
 
 export default function NoticeBoard() {
   const authToken = useSelector((state) => state.auth.authToken);
@@ -22,29 +32,14 @@ export default function NoticeBoard() {
   const toast = useToast();
   const [apiData, setApiData] = useState(null);
   const [apiDataFilters, setApiDataFilters] = useState(null);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [date, setDate] = useState('');
   const [page, setPage] = useState(null);
   const videoRef = useRef(null);
   const [showImage, setShowImage] = useState(false);
   const [showImagePath, setShowImagePath] = useState('');
   const screenWidthFull = Dimensions.get('window').width;
-
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
   const [status, setStatus] = useState({});
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (selectedDate) => {
-    hideDatePicker();
-    const formattedDate = dayjs(selectedDate).format('MMM, YYYY');
-    setDate(dayjs(selectedDate).format('YYYY-MM-DD'));
-    filterData(formattedDate);
-  };
 
   useEffect(() => {
     if (userCred && Object.keys(userCred).length > 0) {
@@ -56,39 +51,88 @@ export default function NoticeBoard() {
     try {
       const response = await getNoticeBoardList(userCred?.school_id, authToken);
       if (response) {
-        // toast.show(response?.message, { type: 'success' });
         setApiData(response?.body);
         setApiDataFilters(response?.body)
-      } else {
-        // toast.show('An error occurred, Please try again', { type: 'danger' });
       }
     } catch (error) {
-      // toast.show('An error occurred, Please try again', { type: 'danger' });
+      // Handle error
     }
   };
 
-  const filterData = (selectedDate) => {
-    // Filter the existing data based on the selected date
-    const filteredData = apiData.filter((item) => dayjs(item.created_at).format('MMM, YYYY') === selectedDate);
+  const filterData = () => {
+    let filteredData = apiData;
+    if (selectedMonth) {
+      filteredData = filteredData.filter((item) => dayjs(item.created_at).format('MM') === selectedMonth);
+    }
+    if (selectedYear) {
+      filteredData = filteredData.filter((item) => dayjs(item.created_at).format('YYYY') === selectedYear);
+    }
     setApiDataFilters(filteredData);
   };
 
+  useEffect(() => {
+    filterData();
+  }, [selectedMonth, selectedYear]);
+
   return (
-    <View className='h-full bg-light'>
+    <View className='h-full bg-light w-full'>
       {!page ?
         <>
-          <View className='flex flex-row justify-between items-center p-4'>
-            <Text>Filter by</Text>
+          <View className='flex flex-row justify-between items-center p-4 w-full'>
+            <Text className='text-body font-bold text-base'>Filter by</Text>
             <View className='flex flex-row justify-between items-center'>
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-              />
-              <TouchableOpacity className='py-0.5 px-8 border border-lightgrey rounded-full' onPress={showDatePicker}>
-                <Text className='text-body'>{date !== '' ? dayjs(date).format('MMM, YYYY') : `Month, Year`}</Text>
-              </TouchableOpacity>
+              <View className='rounded-[40px] capitalize bg-[#f4f4f4] w-[150px] h-[30px] mr-2'>
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedMonth(value)}
+                  items={months}
+                  value={selectedMonth}
+                  placeholder={{ label: "Month", value: null }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      color: '#000',
+                      paddingRight: 30,
+                      marginTop: -13
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      borderWidth: 0.5,
+                      borderColor: '#ccc',
+                      color: '#000',
+                      paddingRight: 30,
+                      marginTop: -13
+                    },
+                  }}
+                />
+              </View>
+              <View className='rounded-[40px] capitalize bg-[#f4f4f4] w-[120px] h-[30px]'>
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedYear(value)}
+                  items={years}
+                  value={selectedYear}
+                  placeholder={{ label: "Year", value: null }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      color: '#000',
+                      paddingRight: 30,
+                      marginTop: -13
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      borderWidth: 0.5,
+                      borderColor: '#ccc',
+                      color: '#000',
+                      paddingRight: 30,
+                      marginTop: -13
+                    },
+                  }}
+                />
+              </View>
             </View>
           </View>
           <ScrollView className="p-5 bg-lightergrey">
@@ -100,7 +144,7 @@ export default function NoticeBoard() {
                   ))}
                 </View>
               ) : (
-                <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today'/>
+                <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today' />
               )}
             </View>
           </ScrollView>
@@ -119,11 +163,6 @@ export default function NoticeBoard() {
                 iconSize={22}
                 iconColor={'#2A2D32'}
               />
-              {/* <Image
-              source={'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/speaker.svg}
-              style={[{ width: 50, height: 50 }]}
-              contentFit="cover"
-            /> */}
             </View>
             <Text style={[stylesGlobal.title]} className='my-4'>{page.title}</Text>
             <View className='flex flex-row pb-5 border-b border-lightergrey'>
@@ -153,32 +192,22 @@ export default function NoticeBoard() {
                     </TouchableOpacity>
                   ) : null}
                 </ScrollView>
-                {page.notice_videos && page.notice_videos.length > 0 || page.notice_images && page.notice_images.length > 0 ? (
-                  <ScrollView horizontal style={{ marginTop: 10 }}>
-                    {page.notice_videos && page.notice_videos.length > 0 && (
-                      <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
-                    )}
-                    {page.notice_images && page.notice_images.length > 0 && (
-                      <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#2A2D32', marginHorizontal: 5 }} />
-                    )}
-                  </ScrollView>
-                ) : null}
               </View>
             }
-            <Text className='mt-4 text-lightgrey text-sm'>
-              {page.description}
-            </Text>
+            <View className='w-full my-5'>
+              <Text className='text-lightgrey text-sm'>{page.description}</Text>
+            </View>
           </View>
         </ScrollView>
       }
-      <ModalScreen isVisible={showImage} onClose={() => { setShowImagePath(''); setShowImage(false) }} outsideClick={false} modalWidth={'w-full'} otherClasses={` h-screen rounded-none p-0`}>
-        <Image
-          source={{ uri: showImagePath }}
-          contentFit="contain"
-          style={{ width: screenWidthFull, flex: 1 }}
-        />
-        <Link href={showImagePath} className='text-lg text-[#6bac98] font-bold text-center mt-5 mb-10'>Download <AppIcon type='MaterialCommunityIcons' name='tray-arrow-down' size={20} color='#6bac98' /></Link>
-      </ModalScreen>
-    </View >
+      {showImage ? <ModalScreen show={showImage} closeModal={() => setShowImage(false)}>
+        <View className='flex flex-col w-full h-full justify-center items-center'>
+          <ImageBackground source={{ uri: showImagePath }} style={{ width: screenWidthFull, height: 550, borderRadius: 15 }} resizeMode='contain' />
+          <Pressable className='absolute top-0 right-0 z-50' onPress={() => setShowImage(false)}>
+            <AppIcon type='AntDesign' name='closecircle' color='#FFF' size={30} />
+          </Pressable>
+        </View>
+      </ModalScreen> : null}
+    </View>
   );
 }

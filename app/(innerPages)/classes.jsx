@@ -59,7 +59,7 @@ const Classes = () => {
               {userTeacherCred.teacherSections.filter(section => !section.is_class_teacher).length > 0 && (
                 <>
                   {userTeacherCred.teacherSections.filter(section => !section.is_class_teacher).map((section, index) => (
-                    <View key={index} className={`bg-[#F5F5F7] ${section.section_id === selectedClass.section_id ? 'border-2 border-orange' : ''} rounded-xl p-4 w-full my-2.5 mb-5 flex flex-row items-center justify-between`}>
+                    <View key={index} className={`bg-[#F5F5F7] ${section.section_id === selectedClass.section_id ? 'border-2 border-secondary' : ''} rounded-xl p-4 w-full my-2.5 mb-5 flex flex-row items-center justify-between`}>
                       {section.section_name && (
                         <Text style={{ color: '#535353' }} className="mb-2 text-base capitalize text-light">
                           {section.class_details.class_name} - {section.section_name}

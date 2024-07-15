@@ -83,7 +83,7 @@ export default function Support() {
   const renderFAQItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleItemPress(item)} className='flex justify-between flex-row items-center max-w-[95%] border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
       <Text className='max-w-[85%]' style={styles.question}>{item.question}</Text>
-      <AppIcon type='AntDesign' name='right' size={20} color={'#535353'} />
+      <AppIcon type='AntDesign' name='rightcircle' size={30} color={'#FF6F1B'} />
     </TouchableOpacity>
   );
 
@@ -109,32 +109,25 @@ export default function Support() {
             onChangeText={handleSearch}
           />
           <View className='absolute right-4 top-2.5'>
-            <AppIcon type='AntDesign' name='search1' size={28} color={'#535353'} />
+            <AppIcon type='AntDesign' name='search1' size={28} color={'#9747FF'} />
           </View>
         </View>
       </View>
       <ScrollView className='bg-lighergrey p-5 mb-10'>
         <Text className='mb-5' style={stylesGlobal.title}>Need help check these options</Text>
-        <TouchableOpacity onPress={openWhatsAppChat} className='flex justify-start flex-row items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
-          <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='FontAwesome' name='whatsapp' size={25} color={'#fff'} /></View>
-          <View className='flex flex-col'>
-            <Text className='' style={styles.question}>Chat with Us</Text>
-            {/* <Text className='' style={styles.answer}>Get in a call with us</Text> */}
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => Linking.openURL('tel:+918287140514')} className='flex justify-start flex-row items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
-          <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='Ionicons' name='call' size={25} color={'#fff'} /></View>
-          <View className='flex flex-col'>
-            <Text className='' style={styles.question}>Call Us</Text>
-            {/* <Text className='' style={styles.answer}>Get in a call with us</Text> */}
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => OpenModalEmail()} className='flex justify-start flex-row mt-5 items-center w-full border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
-          <View className='bg-[#000] rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='FontAwesome' name='wpforms' size={25} color={'#fff'} /></View>
-          <View className='flex flex-col'>
-            <Text className='' style={styles.question}>Raise a ticket</Text>
-            {/* <Text className='' style={styles.answer}>Ask us anything</Text> */}
-          </View>
+        <View className='flex flex-row w-full items-center justify-between'>
+          <TouchableOpacity onPress={openWhatsAppChat} className='flex justify-start flex-col items-center border-b w-[48%] border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+            <View className='bg-magenta rounded-full h-[44px] w-[44px] flex items-center justify-center'><AppIcon type='FontAwesome' name='whatsapp' size={25} color={'#fff'} /></View>
+            <Text className='pt-2' style={styles.question}>Chat</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Linking.openURL('tel:+918287140514')} className='flex justify-start flex-col items-center border-b w-[48%] border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+            <View className='bg-magenta rounded-full h-[44px] w-[44px] flex items-center justify-center'><AppIcon type='Ionicons' name='call' size={25} color={'#fff'} /></View>
+            <Text className='pt-2' style={styles.question}>Call Us</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={() => OpenModalEmail()} className='flex justify-center flex-row mt-5 items-center border-b border-b-lightergrey bg-light p-5 rounded-xl m-0' style={styles.faqItem}>
+          <View className='bg-magenta rounded-full h-[44px] w-[44px] flex items-center justify-center mr-5'><AppIcon type='FontAwesome' name='wpforms' size={25} color={'#fff'} /></View>
+          <Text className='' style={styles.question}>Raise Request</Text>
         </TouchableOpacity>
         <Text style={stylesGlobal.title} className='my-5'>Frequently asked questions</Text>
         {filteredData &&
@@ -176,6 +169,7 @@ export default function Support() {
               fontSize: 13,
               backgroundColor: "#f4f4f4",
               color: "#444",
+              textAlignVertical: 'top',
             }}
           />
           <BtnGlobal

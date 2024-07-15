@@ -10,7 +10,7 @@ import ClassDropdown from './ClassDropdown';
 
 const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
   const startDate = dayjs(selectedDate).startOf('month').format('YYYY-MM-DD');
-  const endDate = dayjs(selectedDate).endOf('month').format('YYYY-MM-DD');
+  const endDate = dayjs().format('YYYY-MM-DD');
 
   const onDateSelected = (date) => {
     const formattedDate = dayjs(date).format('YYYY-MM-DD');
@@ -37,7 +37,6 @@ const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
       daySelectionAnimation={{ type: 'background', highlightColor: '#2A2D32', duration: 200, borderWidth: 1, borderHighlightColor: '#2A2D32' }}
       scrollable={true}
     />
-
   );
 };
 

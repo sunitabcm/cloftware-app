@@ -258,6 +258,7 @@ const AssignmentFormEdit = () => {
                   fontSize: 13,
                   backgroundColor: "#f4f4f4",
                   color: "#444",
+                  textAlignVertical: 'top', 
                 }}
                 className='mb-5'
               />

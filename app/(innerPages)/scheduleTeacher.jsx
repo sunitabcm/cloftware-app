@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import dayjs from 'dayjs';
-import { stylesGlobal } from "../../styles/global";
 import { useToast } from 'react-native-toast-notifications';
 import { getScheduleList } from "../../ApiCalls";
 import { Link, usePathname, useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
-import GlobalDatePicker from '../../component/GlobalComps/GlobalDatePicker';
-import GlobalInputs from '../../component/GlobalComps/GlobalInputs';
-import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
-import AttendanceBox from '../../component/AttendanceBar';
 import ClassDropdown from '../../component/ClassDropdown';
-import AppIcon from '../../component/GlobalComps/AppIcon';
-import { Image } from 'expo-image';
 import FixedFooter from '../../component/GlobalComps/FixedFooter';
 import TeachScheduleUI from '../../component/TeachScheduleUI';
 const ScheduleTeacher = () => {
@@ -60,7 +51,7 @@ const ScheduleTeacher = () => {
               ))}
             </View>
           ) : (
-            <Text style={styles.noDataText}>No Schedule Available</Text>
+            <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today'/>
           )}
         </View>
       </ScrollView>

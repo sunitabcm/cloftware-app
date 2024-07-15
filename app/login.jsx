@@ -39,14 +39,14 @@ const Login = () => {
 
     const fetchData = async () => {
         try {
-          const response = await getStudentProfile(dispatch, response.body)
-          setTimeout(() => {
-            router.replace("/dashboard");
-          }, 1000);
+            const response = await getStudentProfile(dispatch, response.body)
+            setTimeout(() => {
+                router.replace("/dashboard");
+            }, 1000);
         } catch (error) {
         }
-      };
-      
+    };
+
     useEffect(() => {
         if (authToken && userCred && Object.keys(userCred).length > 0) {
             router.replace("/dashboard");
@@ -58,7 +58,7 @@ const Login = () => {
     }, [router, authToken, userCred]);
 
     useEffect(() => {
-        if(password.length !== 0 && email.length !== 0){
+        if (password.length !== 0 && email.length !== 0) {
             setbuttondisabled(false)
         } else {
             setbuttondisabled(true)
@@ -169,63 +169,63 @@ const Login = () => {
     return (
         <ScrollView className='bg-light h-full'>
             {loader ?
- <LoadingAnimation />
-            :
-            <View className='pb-10'>
-                <NonLoggedInBlur hidden={false} />
-                <View style={styles.formFields} className='p-5 pt-0'>
-                    <View style={styles.textcontainer}>
-                        <Text style={styles.title}>Login to your account</Text>
-                        {/* <Text style={styles.innertext}>Welcome back please enter your details</Text> */}
-                    </View>
-                    <View className='mb-4'>
-                    <Text style={styles.mobile}>Select your role</Text>
-                    <RoleSelection setRoleid={setRoleid} roleid={roleid} setbuttondisabled={setbuttondisabled}/>
-                    </View>
-                    <View style={styles.inputFields}>
-                        <InputeFields
-                            label={"Email/Username"}
-                            placeholder={"Enter Email/Username"}
-                            value={email}
-                            onChangeText={(e) => chnageemail(e)}
-                        />
-                        {err && <Messages title="Email/Username is Required" />}
-                        {errors.email && !err && <Messages title={errors.email} />}
-                    </View>
-
-                    <View style={styles.inputFields}>
-                        <InputeFields
-                            label={"Password"}
-                            placeholder={"Enter Password"}
-                            value={password}
-                            secureTextEntry
-                            onChangeText={(e) => changepasswd(e)}
-                            ifEye
-                        />
-                        {errormsg && (
-                            <Messages title={errormsg} />
-                        )}
-                        {passwderr && <Messages title="Password is Required" />}
-                        {errors.password && (password.length == 0) && <Messages title={errors.password} />}
-                        <View style={styles.inputFieldsLinks}>
-                            <Links
-                                title={"Don’t remember your password?"}
-                                onPress={() => router.push("/forgotPassword")}
-                                style={styles.btnLink}
-                            />
+                <LoadingAnimation />
+                :
+                <View className='pb-10'>
+                    <NonLoggedInBlur hidden={false} />
+                    <View style={styles.formFields} className='p-5 pt-0'>
+                        <View style={styles.textcontainer}>
+                            <Text style={styles.title}>Login to your account</Text>
+                            {/* <Text style={styles.innertext}>Welcome back please enter your details</Text> */}
                         </View>
+                        <View className='mb-4'>
+                            <Text style={styles.mobile}>Select your role</Text>
+                            <RoleSelection setRoleid={setRoleid} roleid={roleid} setbuttondisabled={setbuttondisabled} />
+                        </View>
+                        <View style={styles.inputFields}>
+                            <InputeFields
+                                label={"Email/Username"}
+                                placeholder={"Enter Email/Username"}
+                                value={email}
+                                onChangeText={(e) => chnageemail(e)}
+                            />
+                            {err && <Messages title="Email/Username is Required" />}
+                            {errors.email && !err && <Messages title={errors.email} />}
+                        </View>
+
+                        <View style={styles.inputFields}>
+                            <InputeFields
+                                label={"Password"}
+                                placeholder={"Enter Password"}
+                                value={password}
+                                secureTextEntry
+                                onChangeText={(e) => changepasswd(e)}
+                                ifEye
+                            />
+                            {errormsg && (
+                                <Messages title={errormsg} />
+                            )}
+                            {passwderr && <Messages title="Password is Required" />}
+                            {errors.password && (password.length == 0) && <Messages title={errors.password} />}
+                            <View style={styles.inputFieldsLinks}>
+                                <Links
+                                    title={"Don’t remember your password?"}
+                                    onPress={() => router.push("/forgotPassword")}
+                                    style={styles.btnLink}
+                                />
+                            </View>
+                        </View>
+                        <BtnGlobal
+                            styleClassName="button"
+                            title="Login to account"
+                            onPress={handleSubmit}
+                            classNames={'w-full'}
+                            isDisabled={buttondisabled}
+                        />
                     </View>
-                    <BtnGlobal
-                        styleClassName="button"
-                        title="Login to account"
-                        onPress={handleSubmit}
-                        classNames={'w-full'}
-                        isDisabled={buttondisabled}
-                    />
+                    <CloftwareLogo />
                 </View>
-                <CloftwareLogo />
-            </View>
-}
+            }
         </ScrollView>
     );
 };
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 8,
         color: '#2A2D32'
-      },
+    },
 });
 
 export default Login;
