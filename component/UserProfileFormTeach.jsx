@@ -162,7 +162,6 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
         profile_image: apiData?.profile_image || ''
     };
     
-console.log(apiData?.teacher_other_details)
     const handleFilePicker = async () => {
         try {
             const result = await ImagePicker.openPicker({

@@ -54,7 +54,6 @@ const TeacherHomeAssignment = () => {
     try {
       const response = await getAssignmentList(authToken, selectedClass?.class_id, selectedClass?.section_id);
       if (response) {
-        console.log(response)
         setDataView(response.body)
       } else {
         setDataView(null)

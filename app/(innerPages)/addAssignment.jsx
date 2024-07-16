@@ -161,81 +161,112 @@ const AssignmentForm = () => {
 
   return (
     <ScrollView className='h-full bg-light p-5'>
-      <View className='mb-20'>
-        {loader ?
-          <LoadingAnimation />
-          :
-          <Formik
-            initialValues={{
-              title: title || '',
-              class: class_id ? class_id.toString() : '',
-              subject: classwise_subject_id ? classwise_subject_id.toString() : '',
-              dueDate: created_at || dayjs(new Date()).format('YYYY-MM-DD'),
-              description: description || '',
-              file: image ? { uri: image, name: image.split('/').pop() } : null
-            }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
-              <View>
-                <GlobalInputs
-                  label="Title"
-                  placeholder="Enter title"
-                  value={values.title}
-                  onChangeText={handleChange('title')}
-                  onBlur={handleBlur('title')}
-                  error={errors.title}
-                  touched={touched.title}
-                  mainClass={'mb-5'}
-                  star={true}
+      <View className='mb-20 relative'>
+        {loader &&
+          <View className='absolute z-[10] top-0 bottom-0 left-0 right-0 flex justify-center items-center h-screen w-full'>
+            <LoadingAnimation />
+          </View>
+        }
+        <Formik
+          initialValues={{
+            title: title || '',
+            class: class_id ? class_id.toString() : '',
+            subject: classwise_subject_id ? classwise_subject_id.toString() : '',
+            dueDate: created_at || dayjs(new Date()).format('YYYY-MM-DD'),
+            description: description || '',
+            file: image ? { uri: image, name: image.split('/').pop() } : null
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
+            <View>
+              <GlobalInputs
+                label="Title"
+                placeholder="Enter title"
+                value={values.title}
+                onChangeText={handleChange('title')}
+                onBlur={handleBlur('title')}
+                error={errors.title}
+                touched={touched.title}
+                mainClass={'mb-5'}
+                star={true}
+              />
+
+              <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
+              <View className='rounded-md capitalize bg-[#f4f4f4]'>
+                <RNPickerSelect
+                  onValueChange={(value) => {
+                    setFieldValue('class', value);
+                    const selectedClass = classes.find(cls => cls.class_details.class_id === value);
+                    const sectionId = selectedClass ? selectedClass.section_id : null;
+                    if (sectionId) {
+                      fetchSubjects(value, sectionId);
+                    } else {
+                      setSubjects([]);
+                    }
+                  }}
+                  placeholder={{ label: 'Select Class', value: null }}
+                  items={classes.map((cls) => ({
+                    label: `${cls.class_details.class_name} - ${cls.section_name}`,
+                    value: cls.class_details.class_id,
+                  }))}
+                  // style={pickerSelectStyles}
+                  value={values.class}
                 />
+              </View>
+              {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
 
-                <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Class<Text className='text-error'>*</Text></Text>
-                <View className='rounded-md capitalize bg-[#f4f4f4]'>
-                  <RNPickerSelect
-                    onValueChange={(value) => {
-                      setFieldValue('class', value);
-                      const selectedClass = classes.find(cls => cls.class_details.class_id === value);
-                      const sectionId = selectedClass ? selectedClass.section_id : null;
-                      if (sectionId) {
-                        fetchSubjects(value, sectionId);
-                      } else {
-                        setSubjects([]);
-                      }
-                    }}
-                    placeholder={{ label: 'Select Class', value: null }}
-                    items={classes.map((cls) => ({
-                      label: `${cls.class_details.class_name} - ${cls.section_name}`,
-                      value: cls.class_details.class_id,
-                    }))}
-                    // style={pickerSelectStyles}
-                    value={values.class}
-                  />
-                </View>
-                {errors.class && touched.class && <Text style={styles.errorText}>{errors.class}</Text>}
+              {subjects && subjects.length > 0 &&
+                <>
+                  <Text className='mb-1.5 capitalize text-sm font-bold text-body mt-5'>Subject<Text className='text-error'>*</Text></Text>
+                  <View className='rounded-md capitalize bg-[#f4f4f4]'>
 
-                {subjects && subjects.length > 0 &&
-                  <>
-                    <Text className='mb-1.5 capitalize text-sm font-bold text-body mt-5'>Subject<Text className='text-error'>*</Text></Text>
-                    <View className='rounded-md capitalize bg-[#f4f4f4]'>
-
-                      <RNPickerSelect
-                        onValueChange={(value) => setFieldValue('subject', value)}
-                        placeholder={{ label: 'Select Subject', value: null }}
-                        items={subjects.map((subj) => ({
-                          label: subj.subject_name,
-                          value: subj.classwise_id,
-                        }))}
-                        // style={pickerSelectStyles}
-                        value={values.subject}
-                      />
-                    </View>
-                    {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
-                  </>
-                }
-                <Text className='mb-1.5 capitalize text-sm font-bold text-body mt-5'>Select Due Date<Text className='text-error'>*</Text></Text>
-                <TouchableOpacity style={{
+                    <RNPickerSelect
+                      onValueChange={(value) => setFieldValue('subject', value)}
+                      placeholder={{ label: 'Select Subject', value: null }}
+                      items={subjects.map((subj) => ({
+                        label: subj.subject_name,
+                        value: subj.classwise_id,
+                      }))}
+                      // style={pickerSelectStyles}
+                      value={values.subject}
+                    />
+                  </View>
+                  {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
+                </>
+              }
+              <Text className='mb-1.5 capitalize text-sm font-bold text-body mt-5'>Select Due Date<Text className='text-error'>*</Text></Text>
+              <TouchableOpacity style={{
+                borderWidth: 0,
+                borderRadius: 8,
+                paddingHorizontal: 14,
+                paddingVertical: 12,
+                fontSize: 13,
+                backgroundColor: "#f4f4f4",
+                color: "#444",
+                // marginBottom: 20
+              }} onPress={showDatePicker}>
+                <Text>{dayjs(dueDate).format('DD-MMM-YYYY')}</Text>
+              </TouchableOpacity>
+              {errors.dueDate && touched.dueDate && <Text style={styles.errorText}>{errors.dueDate}</Text>}
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={(date) => {
+                  handleConfirm(date);
+                  setFieldValue('dueDate', dayjs(date).format('YYYY-MM-DD'));
+                }}
+                onCancel={hideDatePicker}
+              />
+              <Text className='mb-1.5 capitalize text-sm font-bold text-body mt-3'>Description<Text className='text-error'>*</Text></Text>
+              <TextInput
+                multiline
+                numberOfLines={4}
+                value={values.description}
+                onChangeText={handleChange('description')}
+                onBlur={handleBlur('description')}
+                style={{
                   borderWidth: 0,
                   borderRadius: 8,
                   paddingHorizontal: 14,
@@ -243,95 +274,65 @@ const AssignmentForm = () => {
                   fontSize: 13,
                   backgroundColor: "#f4f4f4",
                   color: "#444",
-                  marginBottom: 20
-                }} onPress={showDatePicker}>
-                  <Text>{dayjs(dueDate).format('DD-MMM-YYYY')}</Text>
+                  textAlignVertical: 'top',
+                }}
+                className='mb-5'
+              />
+              {errors.description && touched.description && <Text style={styles.errorText}>{errors.description}</Text>}
+              <View>
+                <Text className='text-body font-bold'>Select PDF/Image<Text className='text-error'>*</Text></Text>
+                <TouchableOpacity onPress={() => handleFilePicker(setFieldValue)}>
+                  <View
+                    className='mt-3 mb-5 flex justify-center items-center flex-col'
+                    style={{
+                      paddingLeft: 10,
+                      height: 200,
+                      marginBottom: 10,
+                      borderWidth: 3,
+                      borderStyle: 'dashed',
+                      borderColor: '#999999',
+                      borderTopColor: 'white',
+                    }}
+                  >
+                    <Text className='text-body'>Drop your PDF/Image here, or <Text className='text-primary'>Browse</Text></Text>
+                  </View>
                 </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  onConfirm={(date) => {
-                    handleConfirm(date);
-                    setFieldValue('dueDate', dayjs(date).format('YYYY-MM-DD'));
-                  }}
-                  onCancel={hideDatePicker}
-                />
-                {errors.dueDate && touched.dueDate && <Text style={styles.errorText}>{errors.dueDate}</Text>}
-                <Text className='mb-1.5 capitalize text-sm font-bold text-body'>Description<Text className='text-error'>*</Text></Text>
-                <TextInput
-                  multiline
-                  numberOfLines={4}
-                  value={values.description}
-                  onChangeText={handleChange('description')}
-                  onBlur={handleBlur('description')}
-                  style={{
-                    borderWidth: 0,
-                    borderRadius: 8,
-                    paddingHorizontal: 14,
-                    paddingVertical: 12,
-                    fontSize: 13,
-                    backgroundColor: "#f4f4f4",
-                    color: "#444",
-                    textAlignVertical: 'top',
-                  }}
-                  className='mb-5'
-                />
-                {errors.description && touched.description && <Text style={styles.errorText}>{errors.description}</Text>}
-                <View>
-                  <Text className='text-body font-bold'>Select PDF/Image<Text className='text-error'>*</Text></Text>
-                  <TouchableOpacity onPress={() => handleFilePicker(setFieldValue)}>
-                    <View
-                      className='mt-3 mb-5 flex justify-center items-center flex-col'
+                {!values.file && touched.file && errors.file && <Text style={styles.errorText}>{errors.file}</Text>}
+                {values.file && (
+                  uploadedFileDetails && uploadedFileDetails?.flag === 1 ?
+                    <View className='w-[90%]'
                       style={{
-                        paddingLeft: 10,
-                        height: 200,
-                        marginBottom: 10,
-                        borderWidth: 3,
-                        borderStyle: 'dashed',
-                        borderColor: '#999999',
-                        borderTopColor: 'white',
-                      }}
-                    >
-                      <Text className='text-body'>Drop your PDF/Image here, or <Text className='text-primary'>Browse</Text></Text>
-                    </View>
-                  </TouchableOpacity>
-                  {!values.file && touched.file && errors.file && <Text style={styles.errorText}>{errors.file}</Text>}
-                  {values.file && (
-                    uploadedFileDetails && uploadedFileDetails?.flag === 1 ?
-                      <View className='w-[90%]'
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          // marginBottom: 15,
-                        }}>
-                        <Image
-                          source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
-                          style={{ width: 45, height: 60 }}
-                          contentFit="cover"
-                        />
-                        <View className='flex flex-col ml-5'>
-                          <Text className=' text-body text-lg font-bold'>{values.file.name}</Text>
-                        </View>
-                      </View>
-                      :
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        // marginBottom: 15,
+                      }}>
                       <Image
-                        source={{ uri: values.file.uri }}
-                        style={{ width: 60, height: 60, marginBottom: 10 }}
+                        source={{ uri: 'https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pdfImage.svg' }}
+                        style={{ width: 45, height: 60 }}
+                        contentFit="cover"
                       />
-                  )}
-                </View>
-                <View className='mt-10'>
-                  <BtnGlobal
-                    styleClassName="button"
-                    title="Save"
-                    onPress={handleSubmit}
-                    classNames={'w-full'}
-                  />
-                </View>
+                      <View className='flex flex-col ml-5'>
+                        <Text className=' text-body text-lg font-bold'>{values.file.name}</Text>
+                      </View>
+                    </View>
+                    :
+                    <Image
+                      source={{ uri: values.file.uri }}
+                      style={{ width: 60, height: 60, marginBottom: 10 }}
+                    />
+                )}
               </View>
-            )}
-          </Formik>
-        }
+              <View className='mt-10'>
+                <BtnGlobal
+                  styleClassName="button"
+                  title="Save"
+                  onPress={handleSubmit}
+                  classNames={'w-full'}
+                />
+              </View>
+            </View>
+          )}
+        </Formik>
       </View>
     </ScrollView>
   );

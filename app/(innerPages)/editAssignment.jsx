@@ -162,10 +162,12 @@ const AssignmentFormEdit = () => {
 
   return (
     <ScrollView className='h-full bg-light p-5'>
-      <View className='mb-20'>
-        {loader ?
+      <View className='mb-20 relative'>
+        {loader &&
+        <View className='absolute z-[10] top-0 bottom-0 left-0 right-0 flex justify-center items-center h-screen w-full'>
           <LoadingAnimation />
-          :
+          </View>
+        }
           <Formik
             initialValues={{
               title: title || '',
@@ -333,7 +335,6 @@ const AssignmentFormEdit = () => {
               </View>
             )}
           </Formik>
-        }
       </View>
     </ScrollView>
   );
