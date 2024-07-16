@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ClassDropdown from '../../component/ClassDropdown';
 import FixedFooter from '../../component/GlobalComps/FixedFooter';
 import TeachScheduleUI from '../../component/TeachScheduleUI';
+import EmptyScreen from '../../component/GlobalComps/EmptyScreen'
 const ScheduleTeacher = () => {
   const router = useRouter();
   const toast = useToast();

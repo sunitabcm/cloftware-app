@@ -44,9 +44,9 @@ const HolidayList = ({ data, fetchData }) => {
 
   const renderHolidays = () => {
     const filteredData = filterDataByMonth();
-    { console.log(filteredData) }
-
-    return filteredData && filteredData.length > 0 ? filteredData.map((holiday) => (
+    const sortedData = filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+  
+    return sortedData && sortedData.length > 0 ? sortedData.map((holiday) => (
       <View key={holiday.id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey mb-4'>
         {holiday.image && holiday.image.length !== 0 &&
           <TouchableOpacity className='w-full' onPress={() => { setShowImagePath(holiday.image); setShowImage(true) }}>
@@ -73,6 +73,7 @@ const HolidayList = ({ data, fetchData }) => {
       :
       <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today' />
   };
+    
 
   return (
     <View style={{ flex: 1 }}>
