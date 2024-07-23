@@ -210,7 +210,7 @@ const Login = () => {
                             <View style={styles.inputFieldsLinks}>
                                 <Links
                                     title={"Don’t remember your password?"}
-                                    onPress={() => router.push("/forgotPassword")}
+                                    onPress={() => router.push({ pathname: "/forgotPassword", params: { roleid: roleid } })}
                                     style={styles.btnLink}
                                 />
                             </View>

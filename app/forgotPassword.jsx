@@ -23,7 +23,10 @@ import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import GlobalInputs from "../component/GlobalComps/GlobalInputs";
+import { useLocalSearchParams, useRouter } from 'expo-router';
+
 const ForgotPassword = () => {
+    const params = useLocalSearchParams();
     const passwordValidationSchema = yup.object().shape({
         Password: yup
             .string()
@@ -65,6 +68,11 @@ const ForgotPassword = () => {
     const [ID, setID] = useState("");
     const [err, seterr] = useState(false);
     const [passwderr, setpasswderr] = useState(false);
+
+    useEffect(() => {
+        console.log(params)
+      }, [params]);
+
     const enableButton = () => {
         setButtonDisabled(false);
     };

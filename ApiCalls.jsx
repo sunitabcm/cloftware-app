@@ -32,12 +32,13 @@ export async function login(email, password, roleId) {
 }
 
 // Function for Forgot Password
-export async function forgotPassword(value) {
+export async function forgotPassword(value, roleId) {
     try {
         const response = await axios.post(
             `${baseURL}/forgotpassword`,
             {
                 'emailOrPhoneNumber': value,
+                'role_id': roleId
             },
             {
                 headers: {
