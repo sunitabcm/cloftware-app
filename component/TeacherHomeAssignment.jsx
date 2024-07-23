@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Dimensions, ImageBackground, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Dimensions, ImageBackground, FlatList, Alert } from 'react-native';
 import dayjs from 'dayjs';
 import AppIcon from './GlobalComps/AppIcon';
 import { stylesGlobal } from '../styles/global';
@@ -40,7 +40,7 @@ const HorizontalDateScroll = ({ selectedDate, onDateSelect }) => {
   );
 };
 
-const StudentListItem = ({ student, stat }) => {
+const StudentListItem = ({ student, stat, reason }) => {
   const statusColor = {
     'Present': '#10B981',
     'Absent': '#FE0A0A',
@@ -53,14 +53,21 @@ const StudentListItem = ({ student, stat }) => {
     'Leave': 'L'
   };
 
+  const handleStatusPress = () => {
+    if (stat === 'Leave') {
+      Alert.alert('Leave Reason', reason, [{ text: 'Close', onPress: () => console.log('Alert closed') }]);
+    }
+  };
+
+
   return (
     <View className='border border-[#DFDFDF] flex flex-row justify-between mb-5 items-center rounded-lg p-4'>
       <View className='flex flex-row gap-x-3'>
         <Text className='text-body font-bold capitalize'>{student.stu_first_name} {student.stu_last_name}</Text>
       </View>
-      <View style={{ backgroundColor: statusColor[stat] }} className={`rounded-[20px] p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center`}>
+      <TouchableOpacity onPress={handleStatusPress} style={{ backgroundColor: statusColor[stat] }} className={`rounded-[20px] p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center`}>
         <Text className={` text-light font-bold capitalize`}>{statusLabel[stat]}</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -94,7 +101,7 @@ const TeacherHomeAssignment = ({ data, fetchData }) => {
               <AttendanceBox present={data.body.present} absent={data.body.absent} leave={data.body.leave} />
               <FlatList
                 data={data.body.studentlist}
-                renderItem={({ item }) => <StudentListItem student={item.student} stat={item.status} />}
+                renderItem={({ item }) => <StudentListItem student={item.student} stat={item.status} reason={item.reason} />}
                 keyExtractor={(item) => item.student.stu_id.toString()}
               />
             </View>

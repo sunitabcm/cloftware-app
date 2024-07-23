@@ -20,7 +20,7 @@ export default function Events() {
   useEffect(() => {
     if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)
-      fetchData(dayjs(new Date()).format('YYYY-MM'))
+      fetchData()
     } else {
       setShowCalender(false)
     }
@@ -29,7 +29,7 @@ export default function Events() {
 
   const fetchData = async (date) => {
     try {
-      const response = await getSchoolImportantDatesList(authToken);
+      const response = await getSchoolImportantDatesList(authToken , date);
       if (response) {
         // toast.show(response?.message, { type: "success" })
         setApiData(response)

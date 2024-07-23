@@ -45,7 +45,9 @@ const MarkAttendance = () => {
   const toggleSelectAll = () => {
     const newAttendance = {};
     students.forEach(student => {
+      if (student.attendance_status === 'pending') {
       newAttendance[student.stu_id] = selectAll ? null : 'Present';
+      }
     });
     setAttendance(newAttendance);
     setSelectAll(!selectAll);
@@ -119,26 +121,49 @@ const MarkAttendance = () => {
                 <Checkbox
                   value={attendance[item.stu_id] === 'Present' || attendance[item.stu_id] === 'Absent'}
                   onValueChange={() => toggleAttendance(item.stu_id)}
-                  disabled={selectedClass && selectedClass.is_class_teacher === 0}
+                  disabled={item.attendance_status !== "Pending"}
                 />
                 <Text className="text-body font-bold capitalize">{item.stu_first_name} {item.stu_last_name}</Text>
               </View>
-              <View className="flex flex-row gap-x-3">
-                <TouchableOpacity
-                  disabled={selectedClass && selectedClass.is_class_teacher === 0}
-                  className="rounded-[20px] bg-error p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center"
-                  onPress={() => markAsAbsent(item.stu_id)}
-                >
-                  {attendance[item.stu_id] === 'Absent' ? <AppIcon type="AntDesign" name="check" size={20} color="#ffffff" /> : <Text className="text-light font-bold">A</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity
-                  disabled={selectedClass && selectedClass.is_class_teacher === 0}
-                  className="rounded-[20px] bg-success p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center"
-                  onPress={() => markAsPresent(item.stu_id)}
-                >
-                  {attendance[item.stu_id] === 'Present' ? <AppIcon type="AntDesign" name="check" size={20} color="#ffffff" /> : <Text className="text-light font-bold">P</Text>}
-                </TouchableOpacity>
-              </View>
+              {item.attendance_status === "Pending" &&
+                <View className="flex flex-row gap-x-3">
+                  <TouchableOpacity
+                    disabled={item.attendance_status !== "Pending"}
+                    className="rounded-[20px] bg-error p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center"
+                    onPress={() => markAsAbsent(item.stu_id)}
+                  >
+                    {attendance[item.stu_id] === 'Absent' ? <AppIcon type="AntDesign" name="check" size={20} color="#ffffff" /> : <Text className="text-light font-bold">A</Text>}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={item.attendance_status !== "Pending"}
+                    className="rounded-[20px] bg-success p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center"
+                    onPress={() => markAsPresent(item.stu_id)}
+                  >
+                    {attendance[item.stu_id] === 'Present' ? <AppIcon type="AntDesign" name="check" size={20} color="#ffffff" /> : <Text className="text-light font-bold">P</Text>}
+                  </TouchableOpacity>
+                </View>
+              }
+              {item.attendance_status === "Absent" &&
+                <View className="flex flex-row gap-x-3">
+                  <View className="rounded-[20px] bg-error p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center">
+                    <Text className="text-light font-bold">A</Text>
+                  </View>
+                </View>
+              }
+              {item.attendance_status === "Present" &&
+                <View className="flex flex-row gap-x-3">
+                  <View className="rounded-[20px] bg-success p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center">
+                    <Text className="text-light font-bold">P</Text>
+                  </View>
+                </View>
+              }
+              {item.attendance_status === "Leave" &&
+                <View className="flex flex-row gap-x-3">
+                  <View className="rounded-[20px] bg-lightgrey p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center">
+                    <Text className="text-body font-bold">:</Text>
+                  </View>
+                </View>
+              }
             </View>
           )}
         />
