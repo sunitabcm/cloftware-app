@@ -172,7 +172,7 @@ export async function verifyLoginOtp(number, otp) {
 
 
 // Function to get school event list
-export async function getSchoolEventList(accessToken, year, date, limit = '5', offset = '0') {
+export async function getSchoolEventList(accessToken, year, date, limit = '100', offset = '0') {
     try {
         const response = await axios.post(
             `${baseURL}/event/get_event_list`,
@@ -201,7 +201,7 @@ export async function getSchoolEventList(accessToken, year, date, limit = '5', o
 }
 
 // Function to get school holiday list
-export async function getSchoolHolidayList(accessToken, year, date, limit = '5', offset = '0') {
+export async function getSchoolHolidayList(accessToken, year, date, limit = '100', offset = '0') {
     let formData;
     if (date) {
         formData = {
@@ -236,7 +236,7 @@ export async function getSchoolHolidayList(accessToken, year, date, limit = '5',
 }
 
 // Function to get student profile
-export async function getStudentProfile(dispatch, accessToken, limit = '5', offset = '0') {
+export async function getStudentProfile(dispatch, accessToken, limit = '100', offset = '0') {
     try {
         const response = await axios.post(`${baseURL}/get_profile`, {
             offset: offset,
@@ -671,7 +671,7 @@ export async function RaiseIssue(token, issue, schoolId, phone, lastname, firstN
     }
 }
 
-export async function getProfileTeacher(dispatch, accessToken, limit = '5', offset = '0') {
+export async function getProfileTeacher(dispatch, accessToken, limit = '100', offset = '0') {
     try {
         const response = await axios.post(`${baseURL}/teacher/get_teacher_details`, {
             offset: offset,
@@ -754,7 +754,7 @@ export async function ClassViewData(token, classId, sectionId) {
 
 
 
-export async function attendanceGetStudentList(token, classId, sectionId, offset = 0, limit = 20) {
+export async function attendanceGetStudentList(token, classId, sectionId, offset = 0, limit = 100) {
     try {
         const response = await axios.post(
             `${baseURL}/teacher/get_students_list`,
@@ -811,7 +811,7 @@ export async function getAssignmentList(token, classid, sectionid) {
             `${baseURL}/teacher/assignment_list`,
             {
                 offset: "0",
-                limit: "10",
+                limit: "100",
                 section_id: sectionid,
                 class_id: classid,
             },
@@ -981,7 +981,7 @@ export async function getScheduleList(token, classId, sectionId) {
             class_id: classId,
             section_id: sectionId,
             offset: '0',
-            limit: '50',
+            limit: '100',
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,

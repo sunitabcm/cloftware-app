@@ -104,10 +104,8 @@ const ForgotPassword = () => {
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                // Display the error message from the response
                 toast.show(error.response.data.message, { type: "danger" });
             } else {
-                // Display a generic error message
                 toast.show('An error occurred, Please try again', { type: "danger" });
             }
         }
