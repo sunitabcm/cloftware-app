@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -23,7 +23,7 @@ import NonLoggedInBlur from "../component/GlobalComps/NonLoggedInBlur";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import GlobalInputs from "../component/GlobalComps/GlobalInputs";
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 
 const ForgotPassword = () => {
     const params = useLocalSearchParams();
@@ -99,7 +99,7 @@ const ForgotPassword = () => {
 
     const forgotPass = async (valuee) => {
         try {
-            const response = await forgotPassword(valuee);
+            const response = await forgotPassword(valuee, params.roleid);
             if (response.success === true) {
                 toast.show(response?.message, { type: "success" });
                 setShowEmailButton(false);
