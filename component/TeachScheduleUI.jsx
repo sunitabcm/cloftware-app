@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Image } from 'expo-image'
 import AppIcon from './GlobalComps/AppIcon'
 import { Link } from 'expo-router'
 import PDFreader from './GlobalComps/PDFreader'
 import ModalScreen from './GlobalComps/ModalScreen'
 import dayjs from 'dayjs'
-export default function TeachScheduleUI({ schedule, index }) {
+export default function TeachScheduleUI({ schedule, index, titleHide = false }) {
     const [showPDF, setShowPDF] = useState(false);
     const [showPDFPath, setShowPDFPath] = useState('');
     const [showPDFName, setShowPDFName] = useState('');
@@ -24,10 +24,12 @@ export default function TeachScheduleUI({ schedule, index }) {
                         style={{ width: 45, height: 60 }}
                         contentFit="cover"
                     />
-                    <View key={index} className='flex flex-col ml-5'>
-                        <Text className=' text-body text-lg font-bold w-[80%]'>{schedule.title}</Text>
-                        <Text className=' text-body'>Uploaded on {dayjs(schedule.created_at).format('DD-MMM-YYYY')}</Text>
-                    </View>
+                    {titleHide === false &&
+                        <View key={index} className='flex flex-col ml-5'>
+                            <Text className=' text-body text-lg font-bold w-[80%]'>{schedule.title}</Text>
+                            <Text className=' text-body'>Uploaded on {dayjs(schedule.created_at).format('DD-MMM-YYYY')}</Text>
+                        </View>
+                    }
                 </TouchableOpacity>
                 <Link href={schedule.file_upload}><View className='w-[35px] h-[35px] rounded-full bg-[#10B98129] flex justify-center items-center'><AppIcon type='Feather' name='download-outline' size={18} color={'#10B981'} /></View></Link>
             </View>

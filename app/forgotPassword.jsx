@@ -111,7 +111,7 @@ const ForgotPassword = () => {
         }
         setbuttondisabled(true);
     };
-    
+
 
     const verifyForgotPassOtp = async (email, otp) => {
 
@@ -141,13 +141,16 @@ const ForgotPassword = () => {
                 toast.show(response?.message, { type: "success" })
                 router.replace('/login')
             } else {
-                toast.show('An error occured, Please try again', { type: "danger" })
-                // setErrors({});
+                toast.show(response?.message, { type: "danger" });
             }
         } catch (error) {
-            toast.show('An error occured, Please try again', { type: "danger" })
+            if (error.response && error.response.data) {
+                toast.show(error.response.data.message, { type: "danger" });
+            } else {
+                toast.show('An error occurred, Please try again', { type: "danger" });
+            }
         }
-    };
+    }
 
     const handleEmailSubmit = () => {
         forgotPass(email);

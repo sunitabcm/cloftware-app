@@ -8,18 +8,18 @@ import ModalScreen from './GlobalComps/ModalScreen';
 import { Link } from 'expo-router';
 
 const HolidayList = ({ data, fetchData }) => {
-  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM'));
+  const [selectedDate, setSelectedDate] = useState('Select Date');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
   const [showImage, setShowImage] = useState(false);
   const [showImagePath, setShowImagePath] = useState('');
   const screenWidthFull = Dimensions.get('window').width;
 
-  useEffect(() => {
-    if (fetchData) {
-      fetchData(dayjs(selectedDate).format('YYYY-MM'));
-    }
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (fetchData && selectedDate) {
+  //     fetchData(dayjs(selectedDate).format('YYYY-MM'));
+  //   }
+  // }, [selectedDate]);
 
   const openModal = (holiday) => {
     setSelectedHoliday(holiday);
@@ -31,13 +31,22 @@ const HolidayList = ({ data, fetchData }) => {
   };
 
   const onArrowPress = (increment) => {
-    const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM');
-    setSelectedDate(newDate);
+    let dateSelect;
+    if (selectedDate === 'Select Date') {
+      dateSelect = dayjs(new Date()).format('YYYY-MM')
+      const newDate = dayjs(dateSelect).add(increment, 'month').format('YYYY-MM');
+      setSelectedDate(newDate);
+      fetchData(dayjs(newDate).format('YYYY-MM'))
+    } else {
+      const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM');
+      setSelectedDate(newDate);
+      fetchData(dayjs(newDate).format('YYYY-MM'))
+    }
   };
 
   const filterDataByMonth = () => {
     const filteredData = data.filter((holiday) => {
-      return dayjs(holiday.date).format('YYYY-MM') === selectedDate;
+      return dayjs(holiday.date).format('YYYY-MM');
     });
     return filteredData;
   };
@@ -45,7 +54,7 @@ const HolidayList = ({ data, fetchData }) => {
   const renderHolidays = () => {
     const filteredData = filterDataByMonth();
     const sortedData = filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
-  
+
     return sortedData && sortedData.length > 0 ? sortedData.map((holiday) => (
       <View key={holiday.id} className='flex flex-col w-full justify-between items-center border-b border-b-lightgrey mb-4'>
         {holiday.image && holiday.image.length !== 0 &&
@@ -73,7 +82,7 @@ const HolidayList = ({ data, fetchData }) => {
       :
       <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today' />
   };
-    
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -81,12 +90,11 @@ const HolidayList = ({ data, fetchData }) => {
         <TouchableOpacity onPress={() => onArrowPress(-1)}>
           <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3' />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{dayjs(selectedDate).format('MMMM')}</Text>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{selectedDate !== 'Select Date' ? dayjs(selectedDate).format('MMMM'): selectedDate}</Text>
         <TouchableOpacity onPress={() => onArrowPress(1)}>
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>
       </View>
-      {data.length === 0 && <EmptyScreen url='https://clofterbucket.s3.ap-south-1.amazonaws.com/mobile-assets/pencil.png' text1='Looks like its a relaxing day' text2='The day is too long so no need of homework today' />}
       <ScrollView className='pb-10'>
         {renderHolidays()}
       </ScrollView>

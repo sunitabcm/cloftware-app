@@ -7,7 +7,7 @@ import BtnGlobal from '../../component/GlobalComps/BtnGlobal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToast } from 'react-native-toast-notifications';
 import { RaiseIssue } from '../../ApiCalls';
-import { getSupport } from '../../ApiCalls';
+import { fetchQuestionAnswers } from '../../ApiCalls';
 
 export default function Support() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,10 +32,9 @@ export default function Support() {
     }
   }, [authToken]);
 
-
   const fetchData = async () => {
     try {
-      const response = await getSupport(authToken);
+      const response = await fetchQuestionAnswers(authToken, userCred?.class_id, userCred?.section_id, userCred?.role_id);
       if (response) {
         setFilteredData(response?.body)
       } else {

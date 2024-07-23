@@ -20,7 +20,7 @@ export default function Events() {
   useEffect(() => {
     if (userCred && Object.keys(userCred).length > 0) {
       setShowCalender(true)
-      fetchData()
+      fetchData(null)
     } else {
       setShowCalender(false)
     }

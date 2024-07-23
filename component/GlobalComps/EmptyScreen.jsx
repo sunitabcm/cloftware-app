@@ -7,27 +7,13 @@ const EmptyScreen = ({ imageType = false, height = true, url = 'https://clofterb
 
     return (
         <View className={`${height ? 'h-full' : ''}bg-light w-full flex justify-center items-center py-16 px-5`}>
-            {imageType === true ?
-                <>
-                    <Image
+            <Image
                         source={{ uri: url }}
                         style={{ width: 135, height: 135 }}
                         contentFit="cover"
                     />
                     <Text className='text-body text-2xl font-bold mt-5 mb-2 text-center'>{text1}</Text>
                     <Text className='text-lightgrey text-lg text-center'>{text2}</Text>
-                </>
-                :
-                <>
-                    <Image
-                        source={{ uri: url }}
-                        style={{ width: 135, height: 135 }}
-                        contentFit="cover"
-                    />
-                    <Text className='text-body text-2xl font-bold mt-5 mb-2 text-center'>{text1}</Text>
-                    <Text className='text-lightgrey text-lg text-center'>{text2}</Text>
-                </>
-            }
         </View>
     );
 };

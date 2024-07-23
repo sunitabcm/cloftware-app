@@ -22,20 +22,15 @@ const MarkAttendance = () => {
     try {
       const response = await attendanceGetStudentList(authToken, selectedClass.class_id, selectedClass.section_id);
       if (response.body) {
-        return response.body;
+        setStudents(response.body)
       }
     } catch (error) {
       console.error(error);
-      return [];
     }
   };
 
   useEffect(() => {
-    const getStudents = async () => {
-      const studentList = await fetchStudents();
-      setStudents(studentList);
-    };
-    getStudents();
+    fetchStudents()
   }, []);
 
   useEffect(() => {
@@ -44,14 +39,17 @@ const MarkAttendance = () => {
 
   const toggleSelectAll = () => {
     const newAttendance = {};
-    students.forEach(student => {
-      if (student.attendance_status === 'pending') {
-      newAttendance[student.stu_id] = selectAll ? null : 'Present';
+      students.forEach(student => {
+      if (student.attendance_status === 'Pending') {
+        newAttendance[student.stu_id] = selectAll ? null : 'Present';
       }
     });
-    setAttendance(newAttendance);
-    setSelectAll(!selectAll);
+      setAttendance(prevAttendance => ({
+      ...newAttendance,
+    }));
+      setSelectAll(!selectAll);
   };
+  
 
   const toggleAttendance = (studentId) => {
     setAttendance((prevState) => ({
@@ -94,6 +92,7 @@ const MarkAttendance = () => {
     }
     setAttendance({});
     setSelectAll(false);
+    fetchStudents()
   };
 
   return (
@@ -160,7 +159,7 @@ const MarkAttendance = () => {
               {item.attendance_status === "Leave" &&
                 <View className="flex flex-row gap-x-3">
                   <View className="rounded-[20px] bg-lightgrey p-2.5 w-[40px] h-[40px] flex justify-center items-center text-center">
-                    <Text className="text-body font-bold">:</Text>
+                    <Text className="text-body font-bold">L</Text>
                   </View>
                 </View>
               }
