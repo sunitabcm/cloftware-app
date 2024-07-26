@@ -36,9 +36,17 @@ const SchedukeTeacher = () => {
   const [selectedID, setSelectedId] = useState('');
   const [showPDFName, setShowPDFName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const params = useLocalSearchParams();
 
+
+  useEffect(() => {
+    if(Object.keys(params).length > 0 && params.assignment_id){
+      setSelectedId(params.assignment_id)
+    }
+  }, [params]);
 
   const clearData = () => {
+    router.push('/scheduleTeacher');
     loginPostFunc()
   };
 

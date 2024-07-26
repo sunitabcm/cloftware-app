@@ -7,7 +7,7 @@ import EmptyScreen from './GlobalComps/EmptyScreen';
 const HolidayList = ({ data, fetchData, date }) => {
   const currentYear = dayjs().year();
   const academicYearStart = currentYear - 1;
-  const [selectedDate, setSelectedDate] = useState(date !== '' ? date : dayjs(new Date()).format('YYYY-MM-DD'));
+  const [selectedDate, setSelectedDate] = useState(date !== '' ? date : 'Select Date');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
 
@@ -20,8 +20,15 @@ const HolidayList = ({ data, fetchData, date }) => {
     setModalVisible(false);
   };
   const onArrowPress = (increment) => {
-    const newDate = dayjs(selectedDate).add(increment, 'month');
-    const newYear = newDate.year();
+    let dateSelect;
+    let newDate;
+    let newYear = newDate.year();
+    if (selectedDate === 'Select Date') {
+      dateSelect = dayjs(new Date()).format('YYYY-MM')
+      newDate = dayjs(dateSelect).add(increment, 'month');
+    } else {
+      newDate = dayjs(selectedDate).add(increment, 'month');
+    }
 
     if (newYear >= academicYearStart && newYear <= currentYear) {
       setSelectedDate(newDate.format('YYYY-MM'));
@@ -74,7 +81,7 @@ const HolidayList = ({ data, fetchData, date }) => {
         <TouchableOpacity onPress={() => onArrowPress(-1)}>
           <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3' />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{dayjs(selectedDate).format('MMMM YYYY')}</Text>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{selectedDate !== 'Select Date' ? dayjs(selectedDate).format('MMMM YYYY'): selectedDate}</Text>
         <TouchableOpacity onPress={() => onArrowPress(1)}>
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>

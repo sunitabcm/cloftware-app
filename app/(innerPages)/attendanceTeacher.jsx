@@ -15,13 +15,14 @@ export default function HomeAssignment() {
   const [showCalender, setShowCalender] = useState(false);
   const toast = useToast();
   const selectedClass = useSelector((state) => state.class.selectedClass);
+  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
 
   const [apiData, setApiData] = useState(null);
   const router = useRouter();
   useEffect(() => {
     if (selectedClass && Object.keys(selectedClass).length > 0) {
       setShowCalender(true)
-      fetchData(dayjs(new Date()).format('YYYY-MM-DD'))
+      fetchData(selectedDate)
     } else {
       setShowCalender(false)
     }
@@ -48,7 +49,7 @@ export default function HomeAssignment() {
       <ScrollView className='h-full bg-lightergrey'>
         <View>
           {showCalender && apiData && apiData?.code === 200 ?
-            <TeacherHomeAssignment data={apiData} fetchData={fetchData} />
+            <TeacherHomeAssignment data={apiData} fetchData={fetchData} setSelectedDate={setSelectedDate} selectedDate={selectedDate} />
             :
             <LoadingAnimation />
           }

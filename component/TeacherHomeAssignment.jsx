@@ -72,8 +72,7 @@ const StudentListItem = ({ student, stat, reason }) => {
   );
 };
 
-const TeacherHomeAssignment = ({ data, fetchData }) => {
-  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+const TeacherHomeAssignment = ({ data, fetchData, selectedDate, setSelectedDate }) => {
 
   const onArrowPress = (increment) => {
     const newDate = dayjs(selectedDate).add(increment, 'month').format('YYYY-MM-DD');

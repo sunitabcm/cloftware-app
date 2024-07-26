@@ -90,7 +90,7 @@ const HolidayList = ({ data, fetchData }) => {
         <TouchableOpacity onPress={() => onArrowPress(-1)}>
           <AppIcon type='AntDesign' name='caretleft' size={20} color='#A3A3A3' />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{selectedDate !== 'Select Date' ? dayjs(selectedDate).format('MMMM'): selectedDate}</Text>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{selectedDate !== 'Select Date' ? dayjs(selectedDate).format('MMMM YYYY'): selectedDate}</Text>
         <TouchableOpacity onPress={() => onArrowPress(1)}>
           <AppIcon type='AntDesign' name='caretright' size={20} color='#A3A3A3' />
         </TouchableOpacity>

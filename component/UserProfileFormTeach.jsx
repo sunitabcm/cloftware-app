@@ -159,7 +159,7 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
         drug_test_results: apiData?.teacher_other_details.drug_test_results || '',
         driving_record: apiData?.teacher_other_details.driving_record || '',
         teacher_id: apiData?.teacher_id || '',
-        profile_image: apiData?.profile_image || ''
+        // profile_image: apiData?.profile_image || ''
     };
     
     const handleFilePicker = async () => {
@@ -184,7 +184,7 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
             const resultImage = await uploadFileAPI(formData, authToken);
 
             if (resultImage) {
-                const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL);
+                const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL, apiData?.teacher_id, apiData?.scl_id);
 
                 if (value) {
                     toast.show(resultImage?.message, { type: 'success' });
@@ -217,7 +217,7 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
                 const resultImage = await imageUpload(cameraResult.path, `cameraPic${randomNumber}.jpg`, authToken, 'profile_images/teacher');
 
                 if (resultImage) {
-                    const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL);
+                    const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL, apiData?.teacher_id, apiData?.scl_id);
 
                     if (value) {
                         toast.show(resultImage?.message, { type: 'success' });

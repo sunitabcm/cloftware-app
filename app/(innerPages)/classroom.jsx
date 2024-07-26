@@ -95,8 +95,8 @@ const Board = () => {
           {dataView && dataView.schedule_list.length > 0 && (
             <View className='p-5 pt-0'>
               {dataView.schedule_list.slice(0, 3).map((schedule, index) => (
-                <TeachScheduleUI schedule={schedule} index={index}/>
-              ))}
+                  <TeachAssignmentUI assignment={schedule} index={index} pressFunction={()=> router.push({ pathname: "/scheduleTeacher", params: { assignment_id: schedule.id } })}/>
+                ))}
               <Link href={'/scheduleTeacher'} className='text-body font-bold text-xl'>{`See All Scheduled books`} <AppIcon type='AntDesign' name='right' size={18} color='#2A2D32' /></Link>
             </View>
           )}

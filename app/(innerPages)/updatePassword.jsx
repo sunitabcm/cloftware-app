@@ -18,6 +18,10 @@ export default function UpdatePassword() {
     oldPassword: yup.string().required('Old Password is required'),
     newPassword: yup
       .string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 numeric digit, and be at least 8 characters long'
+      )
       .min(3, 'New Password must be at least 3 characters')
       .notOneOf([yup.ref('oldPassword')], 'New Password must be different from Old Password')
       .required('New Password is required'),
@@ -26,7 +30,7 @@ export default function UpdatePassword() {
       .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
       .required('Confirm Password is required'),
   });
-  
+
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const ResetPass = async (oldPass, newPass, confirmPass) => {
     try {
@@ -48,7 +52,7 @@ export default function UpdatePassword() {
 
   const enableButton = () => {
     setButtonDisabled(false);
-};
+  };
 
   return (
     <ScrollView className='h-full bg-light p-5'>
@@ -71,7 +75,7 @@ export default function UpdatePassword() {
               touched={touched}
               styleChange={'mb-1'}
               mainClass={'mt-4'}
-              enableButton={enableButton}
+              enableButton={()=> values.oldPassword !== '' && values.confirmPassword !== '' && values.newPassword !== '' ? enableButton() : {}}
             />
 
             <GlobalInputs
@@ -86,9 +90,8 @@ export default function UpdatePassword() {
               touched={touched}
               styleChange={'mb-1'}
               mainClass={'mt-4'}
-              enableButton={enableButton}
+              enableButton={()=> values.oldPassword !== '' && values.confirmPassword !== '' && values.newPassword !== '' ? enableButton() : {}}
             />
-
             <GlobalInputs
               placeholder={`Confirm Password`}
               name="confirmPassword"
@@ -101,7 +104,7 @@ export default function UpdatePassword() {
               touched={touched}
               styleChange={'mb-1'}
               mainClass={'mt-4'}
-              enableButton={enableButton}
+              enableButton={()=> values.oldPassword !== '' && values.confirmPassword !== '' && values.newPassword !== '' ? enableButton() : {}}
             />
 
             <BtnGlobal

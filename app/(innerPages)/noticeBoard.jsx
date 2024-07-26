@@ -23,7 +23,7 @@ const months = [
   { label: 'November', value: '11' }, { label: 'December', value: '12' }
 ];
 
-const years = Array.from(new Array(30), (val, index) => ({ label: (2024 - index).toString(), value: (2024 - index).toString() }));
+const years = Array.from(new Array(1), (val, index) => ({ label: (2024 - index).toString(), value: (2024 - index).toString() }));
 
 export default function NoticeBoard() {
   const authToken = useSelector((state) => state.auth.authToken);
