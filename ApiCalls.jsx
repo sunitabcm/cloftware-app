@@ -1113,12 +1113,22 @@ export const getSubjectListAPI = async (classId, sectionId, accessToken) => {
 };
 
 
-export const updateTeacher = async (accessToken, values, image, teacher_id, scl_id) => {
+export const updateTeacher = async (accessToken, values, image, data) => {
     const formData = new FormData();
     if (image) {
-        formData.append('teacher_id', values.teacher_id);
-        formData.append('school_id', values.scl_id);
+        formData.append('teacher_id', data.teacher_id);
+        formData.append('school_id', data.scl_id);
+        formData.append('title', data.title);
         formData.append('profile_image', image);
+        formData.append('phone_number', data.phone_number);
+        formData.append('marital_status', data.marital_status);
+        formData.append('languages_spoken', data.languages_spoken);
+        formData.append('address_line1', data.address_line1);
+        formData.append('state', data.state);
+        formData.append('city', data.city);
+        formData.append('pin_code', data.pin_code);
+        formData.append('country', data.country);
+        formData.append('job_title', data.job_title);
     }
     else {
         // formData.append('email', values.email);

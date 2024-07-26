@@ -85,7 +85,7 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
     const userTeacherCred = useSelector((state) => state.userDetailsTeacher.user);
 
     const generateRandomNumber = () => {
-        const newRandomNumber = Math.floor(Math.random() * 100) + 1;
+        const newRandomNumber = Math.floor(Math.random() * 10000) + 1;
         setRandomNumber(newRandomNumber);
     };
 
@@ -184,10 +184,10 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
             const resultImage = await uploadFileAPI(formData, authToken);
 
             if (resultImage) {
-                const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL, apiData?.teacher_id, apiData?.scl_id);
-
+                const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL, apiData);
+                closeModal()
                 if (value) {
-                    toast.show(resultImage?.message, { type: 'success' });
+                    toast.show(value?.message, { type: 'success' });
                     const data = await getProfileTeacher(dispatch, authToken);
                 }
             } else {
@@ -214,13 +214,13 @@ const UserProfileFormTeach = ({ apiData, onSubmit, disabled, setDisabled }) => {
                 cropperToolbarColor: '#3498db',
             });
             if (cameraResult) {
-                const resultImage = await imageUpload(cameraResult.path, `cameraPic${randomNumber}.jpg`, authToken, 'profile_images/teacher');
-
+                const resultImage = await imageUpload(cameraResult.path, `cameraPicteach${randomNumber}.jpg`, authToken, 'profile_images/teacher');
+                closeModal()
                 if (resultImage) {
-                    const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL, apiData?.teacher_id, apiData?.scl_id);
+                    const value = await updateTeacher(authToken, userTeacherCred, resultImage?.body.fileURL, apiData);
 
                     if (value) {
-                        toast.show(resultImage?.message, { type: 'success' });
+                        toast.show(value?.message, { type: 'success' });
                         const data = await getProfileTeacher(dispatch, authToken);
                     }
                 } else {

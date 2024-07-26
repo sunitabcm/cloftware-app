@@ -32,7 +32,7 @@ const UserProfileForm = ({ apiData, onSubmit, disabled, setDisabled }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const generateRandomNumber = () => {
-        const newRandomNumber = Math.floor(Math.random() * 100) + 1;
+        const newRandomNumber = Math.floor(Math.random() * 100000) + 1;
         setRandomNumber(newRandomNumber);
     };
 
