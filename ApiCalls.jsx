@@ -6,7 +6,7 @@ import { updateUserTeacher } from './store/slices/teacherSlice';
 import { setSelectedClass } from './store/slices/classSlice';
 
 const baseURL = "https://apidev.cloftware.com/api/app";
-const Schoolid = 13
+const Schoolid = 22
 // const roleId = 4;
 export async function login(email, password, roleId) {
     const response = await axios.post(
@@ -613,9 +613,9 @@ export async function getNotificationList(accessToken) {
 
 export async function getFeeList(token) {
     try {
-        const response = await axios.get(`${baseURL}/get_fee_list`, {
+        const response = await axios.post(`${baseURL}/fees/get_config_fees_list`, null, {
             headers: {
-                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
